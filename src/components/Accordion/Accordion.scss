@@ -1,0 +1,56 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap");
+@import "./../../utils/AppColors";
+
+.ri-accordion-item {
+  border: 1px solid $black-color;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  border-radius: 15px;
+  margin-top: 20px;
+  background-color: $text-color;
+  width: 100%;
+}
+.ri-inactive-accordion-item {
+  border: 1px solid $border-color;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  border-radius: 15px;
+  margin-top: 20px;
+  background-color: $text-color;
+  width: 100%;
+}
+.ri-accordion-item:hover {
+  border: 1px solid $primary-color;
+}
+.ri-accordion-item-active:hover {
+  border: 1px solid $primary-color;
+}
+.accordion-title {
+  flex: 1;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  cursor: pointer;
+}
+
+.cl-down-arrow {
+  height: 40px;
+  width: 40px;
+  padding-left: 10px;
+}
+.cl-right-arrow {
+  height: 40px;
+  width: 40px;
+  padding-left: 10px;
+}
+.accordion-content {
+  margin-top: 10px;
+  padding: 0px 10px 0px 10px;
+}
+.ri-accordion-title-txt {
+  color: $black-color;
+  font-weight: bold;
+}
+.ri-inactive-accordion-title-txt {
+  color: $accent-color;
+}

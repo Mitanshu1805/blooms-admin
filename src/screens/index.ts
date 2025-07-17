@@ -1,0 +1,17 @@
+export { default as Login } from "./Login/LoginController";
+export { default as Dashboard } from "./Dashboard/DashboardController";
+export { default as User } from "./User/UserController";
+export { default as Crew } from "./Crew/CrewController";
+export { default as RolesAndRights } from "./RolesAndRights/RolesController";
+export { default as Location } from "./Location/LocationController";
+export { default as TimeSlots } from "./TimeSlots/TimeSlotController";
+export { default as Services } from "./Services/ServiceController";
+export { default as ServiceDetails } from "./ServiceDetails/ServiceDetailsController";
+export { default as Orders } from "./Order/OrderController";
+export { default as Codes } from "./Codes/CodeController";
+export { default as OrderDetails } from "./OrderDetails/ODController";
+export { default as Notification } from "./Notification/NotificationController";
+export { default as Feedback } from "./Feedback/FeedbackController";
+export { default as Client } from "./Client/ClientController";
+export { default as CrewOrders } from "./CrewOrders/COController";
+export { default as PinkDates } from "./PinkDates/PinkDateController";

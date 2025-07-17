@@ -1,0 +1,54 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap");
+@import "./../../utils/AppColors";
+
+.content-top-right-searchbar {
+  display: flex;
+  margin-top: 2rem;
+}
+.content-searchBar {
+  display: flex;
+  align-items: center;
+  width: 230px;
+  height: 40px;
+  background: $text-color;
+  border: 1px solid $dark-gray-color;
+  border-radius: 5px;
+  box-shadow: 0px 10px 60px rgba(79, 79, 79, 0.2);
+}
+.drop-search {
+  margin-left: 15px;
+  flex-grow: 0;
+  display: flex;
+  flex-direction: column;
+  min-height: 40px;
+  background: $text-color;
+}
+.drop-search-container {
+  flex-grow: 0;
+  border-radius: 5px 0px 0px 5px;
+  background: $text-color;
+  position: relative;
+  border: 1px solid $dark-gray-color;
+  width: 81px;
+  height: 40px;
+  min-height: 40px;
+  display: flex;
+  padding-right: 10px;
+  padding-left: 10px;
+  font-size: 12px;
+}
+.content-searchBar-input {
+  height: 100%;
+  width: 100%;
+  outline: none;
+  background: $text-color;
+  border: none;
+  font-size: 16px;
+  margin-right: 10px;
+  margin-left: 15px;
+}
+.content-searchBar-search {
+  height: 30px;
+  width: 30px;
+  padding-left: 10px;
+}

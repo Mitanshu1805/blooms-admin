@@ -1,0 +1,507 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap");
+@import "./../../utils/AppColors";
+
+.content {
+  margin-right: 0;
+  padding-right: 0;
+  background: $background-color;
+  display: flex;
+  padding-left: 0;
+}
+.ag-header-row {
+  background-color: $primary-color; /* Change this to your desired header color */
+}
+.ag-header-cell-text {
+  color: #fff; /* Optional: change the text color */
+}
+
+.sidebar {
+  background: $primary-color;
+  width: auto;
+  height: 100%;
+}
+
+.sidebar-title {
+  color: $text-color;
+  margin: 0;
+  text-transform: uppercase;
+  font-size: 24px;
+  font-weight: 700;
+  text-align: center;
+  padding-top: 30px;
+}
+
+.sidebar-tab {
+  padding-top: 35px;
+}
+.side-bar-navigate {
+  color: $text-color;
+  display: block;
+  width: 100%;
+  line-height: 60px;
+  text-decoration: none;
+  padding-left: 40px;
+  box-sizing: border-box;
+  transition: 0.5s;
+  font-size: 16px;
+  font-family: "Poppins";
+  font-style: normal;
+  cursor: pointer;
+}
+
+.side-bar-navigate:hover,
+.active {
+  background: $sidebar-hover;
+  font-weight: bold;
+  user-select: none;
+}
+
+.sidebar a img {
+  height: 22px;
+  width: 22px;
+}
+.sb-text {
+  text-align: center;
+  font-size: 16px;
+}
+
+.sb-content {
+  height: 100vh;
+}
+.icon-white-color {
+  color: $text-color;
+}
+.icon-primary-color {
+  color: $primary-color;
+}
+
+/* Content-Header */
+.content-header-menu {
+  margin-left: 20px;
+  visibility: hidden;
+}
+.home-section nav {
+  display: flex;
+  height: 60px;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  z-index: 100;
+  padding: 0 20px;
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
+  transition: all 0.5s ease;
+  background: #ffffff;
+  box-shadow: 0px 10px 15px -3px rgba(17, 17, 17, 0.1),
+    0px 4px 6px -2px rgba(17, 17, 17, 0.05);
+  border-radius: 12px;
+}
+.sidebar.active ~ .home-section nav {
+  left: 60px;
+  width: calc(100% - 60px);
+}
+.home-section nav .sidebar-button {
+  display: flex;
+  align-items: center;
+  font-size: 24px;
+  font-weight: 500;
+}
+nav .sidebar-button i {
+  font-size: 35px;
+  margin-right: 10px;
+}
+.home-section nav .search-box {
+  position: relative;
+  height: 50px;
+  max-width: 550px;
+  width: 100%;
+  margin: 0 20px;
+  border: #ffffff;
+  padding-left: 20px;
+}
+nav .search-box input {
+  height: 100%;
+  width: 100%;
+  outline: none;
+  background: #f5f6fa;
+  border: 2px solid #efeef1;
+  border-radius: 20px;
+  font-size: 18px;
+  padding: 0 15px;
+}
+nav .search-box .bx-search-alt-2 {
+  position: absolute;
+  height: 40px;
+  width: 40px;
+  right: 5px;
+  top: 50%;
+  transform: translateY(-50%);
+  border-radius: 4px;
+  line-height: 40px;
+  text-align: center;
+  font-size: 22px;
+  transition: all 0.4 ease;
+}
+.home-section nav .profile-details {
+  display: flex;
+  align-items: center;
+  border-radius: 6px;
+  height: 50px;
+}
+.home-section .home-content {
+  position: relative;
+}
+.content-header-user-icon {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 40px;
+  width: 40px;
+  background: $primary-color;
+  border-radius: 50px;
+}
+.content-header-user {
+  color: $text-color;
+  font-weight: 500;
+  font-size: 20px;
+}
+.content-header-user-name {
+  font-weight: 500;
+  font-size: 20px;
+  margin-left: 10px;
+}
+.content-header-button {
+  background: $text-color;
+  outline: none;
+  border-width: 0;
+}
+
+.content-header-button:focus {
+  outline: none;
+}
+.header-up-down-icon {
+  margin: 10px;
+}
+
+.menu {
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  list-style-type: none;
+  margin: 15px 0;
+  margin-right: 10px;
+  padding: 0;
+  border: 1px solid $text-color;
+  border-radius: 7px;
+  margin-left: -2rem;
+  border-color: transparent;
+  z-index: 100;
+  background-color: $text-color;
+}
+.menu-btn {
+  border: $accent-color;
+}
+.menu-title {
+  font-family: "Karla";
+  font-style: normal;
+  font-weight: 600;
+  font-size: 18px;
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+.menu > li {
+  margin: 0;
+  background-color: $text-color;
+  border-color: transparent;
+  font-family: "Karla";
+  font-style: normal;
+  font-weight: 300;
+  font-size: 16px;
+}
+
+.menu > li:hover {
+  background-color: $accent-color;
+  border-color: transparent;
+}
+
+.menu > li > button {
+  width: 100%;
+  height: 100%;
+  text-align: left;
+  border-color: transparent;
+  background: none;
+  color: inherit;
+  border: none;
+  padding: 5px;
+  margin: 0;
+  font: inherit;
+  cursor: pointer;
+}
+.menu-item {
+  display: flex;
+  align-self: center;
+  padding-left: 20px;
+  padding-right: 20px;
+  width: 100%;
+}
+
+.content-index {
+  margin-top: 2rem;
+  height: calc(100vh - 70px);
+  overflow-y: auto;
+}
+
+// popup css
+.popup-box-wrapper {
+  position: fixed;
+  background: rgba(0, 0, 0, 0.5);
+  width: 100%;
+  height: 100vh;
+  top: 0;
+  left: 0;
+  z-index: 100;
+}
+
+.popup-box-container {
+  position: relative;
+  width: 90%;
+  max-height: calc(100% - 10rem);
+  margin: 1rem auto 8rem;
+  background: $text-color;
+  border-radius: 4px;
+  border: 1px solid $dark-gray-color;
+  overflow: auto;
+  padding: 20px;
+}
+
+.add-service-popup-container {
+  overflow: unset !important;
+  display: flex;
+  flex-direction: column;
+}
+
+.property-type-container {
+  border: 2px dotted #00000050; /* You can adjust the color and thickness as needed */
+  border-radius: 10px;
+  padding: 1rem 0;
+  margin: 0 0 2rem 0;
+}
+
+.add-details-submit-btn {
+  font-weight: 500;
+  font-size: 14px;
+  color: $text-color;
+  background: $primary-color;
+  border: $primary-color;
+  border-radius: 10px;
+  padding: 10px 20px 10px 20px;
+  transition: box-shadow 0.33s ease-in-out;
+}
+.add-details-submit-btn:hover {
+  outline: none;
+  box-shadow: 3px 3px 15px 3px $primary-dark-color;
+}
+.add-details-cancel-btn {
+  margin-left: 10px;
+  padding: 10px 20px 10px 20px;
+  background: $text-color;
+  color: black;
+  border-radius: 10px;
+  font-weight: 500;
+  font-size: 14px;
+  border: 1px $black-color solid;
+}
+.add-details-cancel-btn:focus {
+  outline: none;
+}
+
+.add-doc-row {
+  padding: 10px;
+}
+
+.add-doc-main-div {
+  overflow-x: hidden;
+  padding: 10px;
+  margin: 0 10px 0 10px;
+}
+.add-doc-main-div-margin {
+  margin: 0.3rem 1rem 0.3rem 1rem;
+}
+.add-doc {
+  height: 150px;
+  min-width: 320px;
+  border: 1px $border-color solid;
+  border-radius: 10px;
+}
+.doc-img {
+  height: 60px;
+  width: 60px;
+}
+.doc-title {
+  margin-top: 10px;
+  font-weight: 500;
+  font-size: 14px;
+}
+.doc-sub {
+  margin-top: 10px;
+  font-weight: 500;
+  font-size: 10px;
+}
+.doc-container-style {
+  display: flex;
+  flex-direction: column;
+}
+.input-label {
+  align-self: self-start;
+}
+.selected-img {
+  position: relative;
+  height: 150px;
+  width: 320px;
+  border: 1px $border-color solid;
+  border-radius: 10px;
+  background-size: contain;
+}
+
+.selected-img:hover .edit {
+  display: block;
+}
+
+.edit {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  cursor: pointer;
+  display: none;
+}
+
+.edit img {
+  height: 50px;
+  width: 50px;
+}
+
+.add-details-container {
+  height: auto;
+  max-height: 70vh;
+  overflow-y: auto;
+}
+.add-service-details-container {
+  flex: 1;
+  overflow-y: scroll;
+  overflow-x: hidden;
+}
+
+.add-details-input-container {
+  align-items: flex-start;
+}
+.add-details-text-field-container {
+  width: 100% !important;
+}
+.react-datepicker__input-container {
+  display: flex !important;
+  flex: 1;
+  padding: 0;
+  border: 0;
+}
+
+.popup-box-title {
+  color: $primary-color;
+  font-weight: 500;
+  font-size: 20px;
+}
+
+.underline {
+  border-bottom: 1px solid $black-color;
+  margin: 1rem 0;
+  // margin-left: -10px;
+}
+.blooms-breadcrumb {
+  margin-left: 1rem;
+  display: flex;
+  align-items: center;
+}
+
+@media (max-width: 768px) {
+  .popup-box-container {
+    margin: 1rem auto 4rem;
+  }
+  .add-doc-main-div {
+    display: flex;
+    flex-direction: column;
+  }
+}
+
+@media (max-width: 576px) {
+  .popup-box-container {
+    width: 90%;
+    margin: 1rem auto 2rem;
+    padding: 10px;
+  }
+}
+
+@media (max-width: 1200px) {
+  .sidebar-main {
+    display: flex;
+    position: absolute;
+    z-index: 100;
+    left: -100vw;
+    height: 200vh;
+  }
+  .sidebar-close {
+    position: absolute;
+    animation: close;
+    animation-duration: 200ms;
+    animation-timing-function: linear;
+    animation-direction: normal;
+  }
+  @keyframes close {
+    0% {
+      left: 0vw;
+      top: 0px;
+    }
+    100% {
+      left: -100vw;
+      top: 0px;
+    }
+  }
+  .sidebar {
+    width: 100%;
+    display: flex;
+    align-items: center;
+  }
+  .open-sidebar {
+    left: 0;
+    position: absolute;
+    animation: MyDiv;
+    animation-duration: 200ms;
+    animation-timing-function: linear;
+    animation-direction: normal;
+  }
+  @keyframes MyDiv {
+    0% {
+      left: -100vw;
+      top: 0px;
+    }
+    100% {
+      left: 0vw;
+      top: 0px;
+    }
+  }
+  .close-icon {
+    color: $text-color;
+    height: 25px;
+    width: 25px;
+    margin-top: 20px;
+    display: flex;
+    align-self: flex-end;
+    margin-right: 20px;
+  }
+  .sidebar-tab {
+    padding-top: 35px;
+    width: 100%;
+  }
+  .content-header-menu {
+    visibility: visible;
+  }
+}

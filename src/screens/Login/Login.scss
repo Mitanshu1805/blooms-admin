@@ -1,0 +1,73 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap");
+@import "./../../utils/AppColors";
+
+.login-main-container {
+  height: 100vh;
+  width: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-image: url("./../../assets/pngs/Albg.png");
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+.card {
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.1);
+  transition: 0.3s;
+  height: auto;
+  margin: auto;
+  background-color: #f8f8f8;
+  border-radius: 10px;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.card:hover {
+  box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.1);
+}
+.al-title {
+  color: $dark-gray-color;
+  margin-top: 10px;
+  margin-bottom: 5px;
+  align-self: flex-start;
+  font-family: "Inter";
+  font-style: normal;
+  font-weight: 600;
+  font-size: 40px;
+  margin-left: 30px;
+}
+.button {
+  color: $text-color;
+  background: $primary-color;
+  border: $primary-color;
+  height: 40px;
+  width: 200px;
+  font-size: 18px;
+  border-radius: 5px;
+  margin-top: 10px;
+  margin-bottom: 20px;
+  font-weight: 500;
+  text-align: center;
+}
+.button-container {
+  display: flex;
+  align-items: center;
+}
+.button-container a {
+  margin-top: 10px;
+}
+@media (max-width: 1300px) {
+  .login-main-container {
+    display: flex;
+    justify-content: center;
+  }
+}
+@media (max-width: 800px) {
+  .login-main-container {
+    display: flex;
+    justify-content: center;
+    background-position: center;
+  }
+}

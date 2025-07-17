@@ -1,0 +1,18 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap");
+@import "./../../utils/AppColors";
+
+.button-class {
+  box-shadow: 0px 4px 6px -1px rgba(17, 17, 17, 0.1),
+    0px 2px 4px -1px rgba(17, 17, 17, 0.06);
+  border-radius: 5px;
+  font-weight: 500;
+  font-size: 14px;
+  padding-left: 15px;
+  padding-right: 15px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  transition: box-shadow 0.33s ease-in-out;
+}
+.left {
+  margin-left: 10px;
+}

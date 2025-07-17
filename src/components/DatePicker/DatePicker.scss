@@ -1,0 +1,48 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap");
+@import "./../../utils/AppColors";
+
+.ac-inputText-date-container {
+  flex-grow: 0;
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  border-radius: 4px;
+  position: relative;
+  height: 35px;
+  min-height: 40px;
+  display: flex;
+  align-items: center;
+  padding-right: 10px;
+  padding-left: 10px;
+  font-size: 20px;
+}
+.ac-inputText-input-date {
+  flex-grow: 0;
+  border: 1px solid $border-color;
+  margin-left: -10px;
+  position: relative;
+  height: 35px;
+  min-height: 40px;
+  display: flex;
+  align-items: center;
+  padding-right: 10px;
+  padding-left: 10px;
+  font-size: 20px;
+  flex: 1;
+}
+.ac-inputText-date-container :focus-visible {
+  outline: none;
+}
+.ac-inputText-input-date :focus-visible {
+  outline: none;
+}
+.ac-inputText-date-label {
+  font-size: 15px;
+  align-self: flex-start;
+  margin-bottom: 0;
+}
+.ac-inputText-input-date-icon {
+  padding-left: 6px;
+}
+.ac-container-wrapper {
+  display: flex;
+  flex: 1;
+}

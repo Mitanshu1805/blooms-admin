@@ -1,0 +1,126 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap");
+@import "./../../utils/AppColors";
+
+.table-main-div {
+  overflow: auto;
+}
+Th {
+  text-align: center;
+  color: $text-color;
+  padding: 0.2rem;
+  font-size: 15px;
+}
+Td {
+  text-align: center;
+  font-size: 15px;
+  padding: 0.5rem;
+}
+
+Table {
+  border-collapse: separate;
+  border-spacing: 0;
+}
+Table Tr Th,
+Table Tr Td {
+  border-right: 1px solid $black-color;
+  border-bottom: 1px solid $black-color;
+  padding: 10px;
+}
+
+Table Tr Th:first-child,
+Table Tr Td:first-child {
+  border-left: 1px solid $black-color;
+}
+Table Tr Th {
+  background-color: $primary-color;
+  text-align: center;
+  border-top: solid 1px $black-color;
+}
+
+Table Tr:first-child Th:first-child {
+  border-top-left-radius: 6px;
+}
+
+Table Tr:first-child Th:last-child {
+  border-top-right-radius: 6px;
+}
+
+.table-verify {
+  text-align: center;
+  background: $black-color;
+  border-radius: 5px;
+  color: $text-color;
+  font-weight: 500;
+  font-size: 15px;
+  padding: 5px;
+  width: 100px;
+}
+.table-verified {
+  text-align: center;
+  border-radius: 5px;
+  color: $black-color;
+  font-weight: 500;
+  font-size: 15px;
+  padding: 5px;
+  width: 100px;
+}
+.table-denied {
+  text-align: center;
+  border-radius: 5px;
+  color: $black-color;
+  font-weight: 500;
+  font-size: 15px;
+  padding: 5px;
+  width: 100px;
+  text-decoration: underline;
+  cursor: pointer;
+}
+.cl-content-middle-action-data-div-delete {
+  padding-left: 10px;
+}
+.sort-main {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.table-business-logo {
+  height: 50px;
+  width: 50px;
+  border-radius: 50%;
+  overflow: hidden;
+}
+.table-business-logo img {
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+}
+.navigate-text {
+  cursor: pointer;
+}
+.navigate-text:hover {
+  color: $primary-color;
+}
+.content-middle-action-data-div {
+  flex:1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.hover-underline:hover {
+  cursor: pointer;
+  text-decoration: underline;
+  font-weight: 600;
+}
+
+@media (max-width: 575px) {
+  Td {
+    text-align: center;
+    font-size: 12px;
+    padding: 0.5rem;
+    border: 1px solid $black-color;
+    min-width: 10rem;
+  }
+  .content-middle-action-data-div {
+    margin-left: -10px;
+  }
+}

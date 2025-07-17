@@ -1,0 +1,74 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap");
+@import "./../../utils/AppColors";
+
+.content-bottam {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 1rem;
+}
+.pagination {
+  list-style: none;
+  display: inline-block;
+  padding: 0;
+  margin-top: 10px;
+}
+.content-bottam-arrow {
+  height: 25px;
+  width: 25px;
+  align-items: center;
+}
+.pagination li {
+  display: inline;
+  text-align: center;
+}
+.pagination a {
+  float: left;
+  display: block;
+  font-size: 14px;
+  text-decoration: none;
+  padding: 5px 12px;
+  font-weight: 500;
+  color: #667085;
+  margin-left: 2px;
+  border: 1px solid transparent;
+  line-height: 1.5;
+}
+.pagination a.active {
+  cursor: pointer;
+}
+.pagination a:active {
+  outline: none;
+}
+
+.pagination > .active > a,
+.pagination > .active > span,
+.pagination > .active > a:hover,
+.pagination > .active > span:hover,
+.pagination > .active > a:focus,
+.pagination > .active > span:focus {
+  background: $primary-color;
+  color: $text-color;
+  border-radius: 8px;
+}
+.pagination :hover {
+  background: $primary-color;
+  color: $text-color;
+  border-radius: 8px;
+}
+.pagination-hr {
+  margin-left: 10px;
+  margin-right: 10px;
+  border: 1px solid lightgray;
+}
+.icon-div {
+  display: flex;
+  align-items: center;
+}
+.prev-icon {
+  font-size: 24px;
+  margin-right: 5px;
+}
+.next-icon {
+  font-size: 24px;
+  margin-left: 5px;
+}
