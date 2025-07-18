@@ -1,12 +1,16 @@
 import moment from "moment";
+import { hasPermission } from "../../utils/permissions.utils";
 
 export const NotificationTableData = (
   notificationListData: any,
   selectedPage: number,
   size: number
 ) => {
+  // const canUpdate = hasPermission("Notification", "update");
+  const canDelete = hasPermission("Notification", "delete");
+  const showActionColumn = canDelete;
   return notificationListData?.crews?.map((item: any, index: number) => {
-    return [
+    const row = [
       {
         title: "No.",
         data:
@@ -26,10 +30,13 @@ export const NotificationTableData = (
         title: "CreatedAt",
         data: moment(item?.created_at).format("DD-MM-YYYY, h:mm:ss A"),
       },
-      {
+    ];
+    if (showActionColumn) {
+      row.push({
         title: "Action",
         data: item,
-      },
-    ];
+      });
+    }
+    return row;
   });
 };

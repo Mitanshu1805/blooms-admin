@@ -5,6 +5,7 @@ import {
   TableComp,
 } from "../../components";
 import { FeedbackTableData } from "./FeedbackTableData";
+import { hasPermission } from "../../utils/permissions.utils";
 
 interface FeedbackProps {
   selectedPage: number;
@@ -31,17 +32,28 @@ function FeedbackComponent({
   handleChangeSearch,
   handleSwitchChange,
 }: FeedbackProps) {
+  const canUpdate = hasPermission("Feedback", "update");
+  const canDelete = hasPermission("Feedback", "delete");
+  const canView = hasPermission("Feedback", "read");
+  const showActionColumn = canDelete;
+  const showReviewerColumn = canUpdate;
   const HeaderData = [
     "No",
     "Feedback",
     "Rating",
     "Customer Phone",
-    "Reviewer",
+    ...(showReviewerColumn ? ["Reviewer"] : []),
+    // "Reviewer",
     "Posted At",
-    "Action",
+    // "Action",
+    ...(showActionColumn ? ["Action"] : []),
   ];
 
   const listData = FeedbackTableData(feedbackListData, selectedPage, size);
+
+  if (!canView) {
+    return <div>You do not have permission to view this page.</div>;
+  }
 
   return (
     <div className="details-list-card card">
@@ -67,8 +79,12 @@ function FeedbackComponent({
           isLoading={isLoading}
           listHeaderData={HeaderData}
           listData={listData}
-          onDeleteHandler={(value: any) => onDeleteHandler(value)}
-          handleChange={(value: any) => handleSwitchChange(value)}
+          onDeleteHandler={
+            hasPermission("Feedback", "delete") ? onDeleteHandler : undefined
+          }
+          handleChange={
+            canUpdate ? (value: any) => handleSwitchChange(value) : undefined
+          }
         />
       </div>
       {listData?.length > 0 ? (

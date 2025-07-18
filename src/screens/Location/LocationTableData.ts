@@ -1,10 +1,15 @@
+import { hasPermission } from "../../utils/permissions.utils";
+
 export const LocationTableData = (
   crewListData: any,
   selectedPage: number,
   size: number
 ) => {
+  const canUpdate = hasPermission("Territories", "update");
+  const canDelete = hasPermission("Territories", "delete");
+  const showActionColumn = canDelete || canUpdate;
   return crewListData?.roles?.map((item: any, index: number) => {
-    return [
+    const row = [
       {
         title: "No.",
         data:
@@ -32,10 +37,14 @@ export const LocationTableData = (
         title: "Share Count",
         data: item?.share_count,
       },
-      {
+    ];
+
+    if (showActionColumn) {
+      row.push({
         title: "Action",
         data: item,
-      },
-    ];
+      });
+    }
+    return row;
   });
 };

@@ -13,7 +13,7 @@ function LoginController() {
 
   useEffect(() => {
     if (sessionStorage.getItem("auth_token")) {
-      navigate("/user", { replace: true });
+      navigate("/dashboard", { replace: true });
     }
   }, [navigate]);
 
@@ -22,7 +22,7 @@ function LoginController() {
     if (response?.status === 200) {
       sessionStorage.setItem("auth_token", response?.data?.auth_token);
       sessionStorage.setItem("phone_number", response?.data?.phone_number);
-      navigate("/user", { replace: true });
+      navigate("/dashboard", { replace: true });
     }
   };
 

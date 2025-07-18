@@ -1,91 +1,109 @@
-import { useLocation, useNavigate } from 'react-router-dom';
-import { Close } from '../../../assets';
-import './../General.scss';
-import Image from '../../Image/Image';
+import { useLocation, useNavigate } from "react-router-dom";
+import { Close } from "../../../assets";
+import "./../General.scss";
+import Image from "../../Image/Image";
+import { hasPermission } from "../../../utils/permissions.utils";
 
 const Sidebar = ({ sidebarOpen, handleToggleSidebar, setIsLogout }: any) => {
   const navigate = useNavigate();
   const { pathname } = useLocation();
 
-  const currentTab = '/' + pathname.split('/').at(1);
+  const currentTab = "/" + pathname.split("/").at(1);
 
   const sidebarMenu_data = [
     {
       id: 1,
-      name: 'Dashboard',
-      icon: 'bx bxs-dashboard',
-      path: '/dashboard',
+      name: "Dashboard",
+      icon: "bx bxs-dashboard",
+      path: "/dashboard",
     },
     {
       id: 2,
-      name: 'User',
-      icon: 'bx bx-user',
-      path: '/user',
+      name: "User",
+      icon: "bx bx-user",
+      path: "/user",
+      permissionKey: "User",
     },
     {
       id: 3,
-      name: 'Crew',
-      icon: 'bx bx-briefcase-alt-2',
-      path: '/crew',
+      name: "Crew",
+      icon: "bx bx-briefcase-alt-2",
+      path: "/crew",
+      permissionKey: "Crew",
     },
     {
       id: 4,
-      name: 'Roles And Rights',
-      icon: 'bx bx-pie-chart-alt-2',
-      path: '/roles',
+      name: "Roles And Rights",
+      icon: "bx bx-pie-chart-alt-2",
+      path: "/roles",
     },
     {
       id: 5,
-      name: 'Territories',
-      icon: 'bx bx-location-plus',
-      path: '/territories',
+      name: "Territories",
+      icon: "bx bx-location-plus",
+      path: "/territories",
+      permissionKey: "Territories",
     },
     {
       id: 6,
-      name: 'Disable TimeSlots',
-      icon: 'bx bx-tone',
-      path: '/time-slots',
+      name: "Disable TimeSlots",
+      icon: "bx bx-tone",
+      path: "/time-slots",
+      permissionKey: "Disable_timeslots",
     },
     {
       id: 7,
-      name: 'Pink Dates',
-      icon: 'bx bx-calendar-event',
-      path: '/pink-dates',
+      name: "Pink Dates",
+      icon: "bx bx-calendar-event",
+      path: "/pink-dates",
+      permissionKey: "Pink_dates",
     },
     {
       id: 8,
-      name: 'Orders',
-      icon: 'bx bx-cart',
-      path: '/orders',
+      name: "Orders",
+      icon: "bx bx-cart",
+      path: "/orders",
+      permissionKey: "Orders",
     },
     {
       id: 9,
-      name: 'Discount Codes',
-      icon: 'bx bxs-discount',
-      path: '/codes',
+      name: "Discount Codes",
+      icon: "bx bxs-discount",
+      path: "/codes",
+      permissionKey: "Discount_codes",
     },
     {
       id: 10,
-      name: 'Notification',
-      icon: 'bx bxs-bell-plus',
-      path: '/notification',
+      name: "Notification",
+      icon: "bx bxs-bell-plus",
+      path: "/notification",
+      permissionKey: "Notification",
     },
     {
       id: 11,
-      name: 'Feedback',
-      icon: 'bx bxs-star-half',
-      path: '/feedback',
+      name: "Feedback",
+      icon: "bx bxs-star-half",
+      path: "/feedback",
+      permissionKey: "Feedback",
     },
     {
       id: 12,
-      name: 'Client',
-      icon: 'bx bx-user',
-      path: '/client',
+      name: "Client",
+      icon: "bx bx-user",
+      path: "/client",
+      permissionKey: "Client",
     },
     {
       id: 13,
-      name: 'Log out',
-      icon: 'bx bx-log-out',
+      name: "Permissions",
+      icon: "bx bx-user",
+      path: "/permissions",
+      // permissionKey: "Permission",
+    },
+    {
+      id: 14,
+      name: "Log out",
+      icon: "bx bx-log-out",
     },
   ];
 
@@ -96,42 +114,52 @@ const Sidebar = ({ sidebarOpen, handleToggleSidebar, setIsLogout }: any) => {
     navigate(path);
   };
 
+  const filteredSidebarMenu = sidebarMenu_data.filter((item) => {
+    // Show logout always
+    if (item.name === "Log out") return true;
+
+    // Show only if permissionKey exists and user has 'read' permission
+    return item.permissionKey
+      ? hasPermission(item.permissionKey, "read")
+      : true;
+  });
+
   return (
     <div
       className={`col-xl-2 col-12 px-0 sidebar-main ${
-        sidebarOpen ? 'open-sidebar' : ''
+        sidebarOpen ? "open-sidebar" : ""
       }`}
     >
-      <div className='flex-col-div sidebar'>
+      <div className="flex-col-div sidebar">
         {sidebarOpen ? (
           <Image
             onClick={handleToggleSidebar}
-            className='close-icon'
+            className="close-icon"
             src={Close}
           />
         ) : (
-          ''
+          ""
         )}
         <div>
-          <h3 className='sidebar-title'>BLOOMS</h3>
+          <h3 className="sidebar-title">BLOOMS</h3>
         </div>
         <div
-          className='sidebar-tab'
-          style={{ overflowY: 'auto', height: '90vh' }}
+          className="sidebar-tab"
+          style={{ overflowY: "auto", height: "90vh" }}
         >
-          {sidebarMenu_data.map((item, index) => (
+          {filteredSidebarMenu.map((item, index) => (
             <div
               className={`side-bar-navigate ${
-                currentTab === item?.path ? 'active' : ''
+                currentTab === item?.path ? "active" : ""
               }`}
               onClick={() =>
-                item?.id === 13
+                item?.id === 14
                   ? setIsLogout(true)
-                  : handleTabClick(item?.path ? item?.path : '')
+                  : handleTabClick(item?.path ? item?.path : "")
               }
             >
               <i className={`${item.icon} icon-white-color`}></i>
-              &nbsp; <span className='sb-text'>{item.name}</span>
+              &nbsp; <span className="sb-text">{item.name}</span>
             </div>
           ))}
         </div>

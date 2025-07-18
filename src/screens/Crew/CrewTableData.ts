@@ -1,12 +1,16 @@
 import moment from "moment";
+import { hasPermission } from "../../utils/permissions.utils";
 
 export const CrewTableData = (
   crewListData: any,
   selectedPage: number,
   size: number
 ) => {
+  const canUpdate = hasPermission("Crew", "update");
+  const canDelete = hasPermission("Crew", "delete");
+  const showActionColumn = canDelete || canUpdate;
   return crewListData?.crews?.map((item: any, index: number) => {
-    return [
+    const row = [
       {
         title: "No.",
         data:
@@ -42,10 +46,15 @@ export const CrewTableData = (
         title: "Address",
         data: item?.address,
       },
-      {
+    ];
+
+    if (showActionColumn) {
+      row.push({
         title: "Action",
         data: item,
-      },
-    ];
+      });
+    }
+
+    return row;
   });
 };

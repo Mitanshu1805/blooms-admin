@@ -1,12 +1,17 @@
 import moment from "moment";
+import { hasPermission } from "../../utils/permissions.utils";
 
 export const FeedbackTableData = (
   feedbackListData: any,
   selectedPage: number,
   size: number
 ) => {
+  const canDelete = hasPermission("Feedback", "delete");
+  const canUpdate = hasPermission("Feedback", "update");
+  const showActionColumn = canDelete;
+
   return feedbackListData?.crews?.map((item: any, index: number) => {
-    return [
+    const row = [
       {
         title: "No.",
         data:
@@ -26,18 +31,27 @@ export const FeedbackTableData = (
         title: "Customer Phone",
         data: item?.customer_no,
       },
-      {
-        title: "Is Active",
-        data: item,
-      },
+
       {
         title: "Posted At",
         data: moment(item?.created_at).format("DD-MM-YYYY, h:mm:ss A"),
       },
-      {
+    ];
+
+    if (canUpdate) {
+      row.push({
+        title: "Is Active",
+        data: item,
+      });
+    }
+
+    if (showActionColumn) {
+      row.push({
         title: "Action",
         data: item,
-      },
-    ];
+      });
+    }
+
+    return row;
   });
 };

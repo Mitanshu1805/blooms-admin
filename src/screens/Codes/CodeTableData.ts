@@ -1,12 +1,16 @@
 import moment from "moment";
+import { hasPermission } from "../../utils/permissions.utils";
 
 export const CodeTableData = (
   userListData: any,
   selectedPage: number,
   size: number
 ) => {
+  const canUpdate = hasPermission("Discount_codes", "update");
+  const canDelete = hasPermission("Discount_codes", "delete");
+  const showActionColumn = canDelete || canUpdate;
   return userListData?.list?.map((item: any, index: number) => {
-    return [
+    const row = [
       {
         title: "No.",
         data:
@@ -46,10 +50,13 @@ export const CodeTableData = (
           ? moment(item?.date_end).format("DD-MM-YYYY")
           : "-",
       },
-      {
+    ];
+    if (showActionColumn) {
+      row.push({
         title: "Action",
         data: item,
-      },
-    ];
+      });
+    }
+    return row;
   });
 };

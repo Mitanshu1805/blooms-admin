@@ -6,6 +6,7 @@ import {
   TableComp,
 } from "../../components";
 import { UserTableData } from "./UserTableData";
+import { hasPermission } from "../../utils/permissions.utils";
 
 interface UserProps {
   selectedPage: number;
@@ -38,6 +39,10 @@ function UserComponent({
   searchInput,
   handleSwitchChange,
 }: UserProps) {
+  const canUpdate = hasPermission("User", "update");
+  const canDelete = hasPermission("User", "delete");
+  const canView = hasPermission("User", "read");
+  const showActionColumn = canDelete || canUpdate;
   const HeaderData = [
     "No",
     "First Name",
@@ -48,10 +53,15 @@ function UserComponent({
     "Date Of Birth",
     "Employee Type",
     "Service Type",
-    "Action",
+    ...(showActionColumn ? ["Action"] : []),
+    // "Action",
   ];
 
   const listData = UserTableData(userListData, selectedPage, limit);
+
+  if (!canView) {
+    return <div>You do not have permission to view this page.</div>;
+  }
 
   return (
     <div className="details-list-card card">
@@ -69,11 +79,13 @@ function UserComponent({
           </div>
         </div>
         <div className="details-list-top-right">
-          <Button
-            className="details-list-btn"
-            name={"Add User"}
-            onClick={toggleUserPopup}
-          />
+          {hasPermission("User", "write") && (
+            <Button
+              className="details-list-btn"
+              name={"Add User"}
+              onClick={toggleUserPopup}
+            />
+          )}
           <SearchBar onChange={handleChangeSearch} value={searchInput} />
         </div>
       </div>
@@ -82,9 +94,15 @@ function UserComponent({
           isLoading={isLoading}
           listHeaderData={HeaderData}
           listData={listData}
-          onEditHandler={(value: any) => onEditHandler(value)}
-          onEditOurselves={(value: any) => onEditOurselves(value)}
-          onDeleteHandler={(value: any) => onDeleteHandler(value)}
+          onEditHandler={
+            hasPermission("User", "update") ? onEditHandler : undefined
+          }
+          onEditOurselves={
+            hasPermission("User", "update") ? onEditOurselves : undefined
+          }
+          onDeleteHandler={
+            hasPermission("User", "delete") ? onDeleteHandler : undefined
+          }
           handleChange={(value: any) => handleSwitchChange(value)}
         />
       </div>

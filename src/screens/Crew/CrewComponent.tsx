@@ -7,6 +7,7 @@ import {
 } from "../../components";
 import "./Crew.scss";
 import { CrewTableData } from "./CrewTableData";
+import { hasPermission } from "../../utils/permissions.utils";
 
 interface CrewProps {
   selectedPage: number;
@@ -41,6 +42,10 @@ function CrewComponent({
   handleChangeSearch,
   navigation,
 }: CrewProps) {
+  const canUpdate = hasPermission("Crew", "update");
+  const canDelete = hasPermission("Crew", "delete");
+  const canView = hasPermission("Crew", "read");
+  const showActionColumn = canDelete || canUpdate;
   const HeaderData = [
     "No",
     "Name",
@@ -50,10 +55,15 @@ function CrewComponent({
     "Special Service",
     "Start Work Date",
     "Address",
-    "Action",
+    ...(showActionColumn ? ["Action"] : []),
+    // "Action",
   ];
 
   const listData = CrewTableData(crewListData, selectedPage, size);
+
+  if (!canView) {
+    return <div>You do not have permission to view this page.</div>;
+  }
 
   return (
     <div className="details-list-card card">
@@ -71,11 +81,13 @@ function CrewComponent({
           </div>
         </div>
         <div className="details-list-top-right">
-          <Button
-            className="details-list-btn"
-            name={"Add Crew"}
-            onClick={toggleCrewPopup}
-          />
+          {hasPermission("Crew", "write") && (
+            <Button
+              className="details-list-btn"
+              name={"Add Crew"}
+              onClick={toggleCrewPopup}
+            />
+          )}
           <SearchBar onChange={handleChangeSearch} value={searchInput} />
         </div>
       </div>
@@ -84,8 +96,12 @@ function CrewComponent({
           isLoading={isLoading}
           listHeaderData={HeaderData}
           listData={listData}
-          onEditHandler={(value: any) => onEditHandler(value)}
-          onDeleteHandler={(value: any) => onDeleteHandler(value)}
+          onEditHandler={
+            hasPermission("Crew", "update") ? onEditHandler : undefined
+          }
+          onDeleteHandler={
+            hasPermission("Crew", "delete") ? onDeleteHandler : undefined
+          }
           handleChange={(value: any) => handleSwitchChange(value)}
           isView={true}
           isViewPayment={true}

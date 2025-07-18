@@ -18,6 +18,7 @@ import {
   Services,
   TimeSlots,
   User,
+  Permissions,
 } from "../screens";
 import PrivateRoute from "./ProtectedRoute";
 
@@ -143,6 +144,14 @@ function RootRouter() {
           element={
             <PrivateRoute>
               <General Component={CrewOrders} />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/permissions"
+          element={
+            <PrivateRoute>
+              <General Component={Permissions} />
             </PrivateRoute>
           }
         />

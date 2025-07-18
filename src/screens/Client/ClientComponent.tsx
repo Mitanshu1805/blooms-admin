@@ -5,6 +5,7 @@ import {
   TableComp,
 } from "../../components";
 import { ClientTableData } from "./ClientTableData";
+import { hasPermission } from "../../utils/permissions.utils";
 
 interface ClientProps {
   selectedPage: number;
@@ -32,9 +33,25 @@ function ClientComponent({
   handleChangeSearch,
   handleSwitchChange,
 }: ClientProps) {
-  const HeaderData = ["No", "Phone Number", "Status", "Action"];
+  const canUpdate = hasPermission("Client", "update");
+  const canDelete = hasPermission("Client", "delete");
+  const canView = hasPermission("Client", "read");
+  const showActionColumn = canDelete;
+  const showStatusColumn = canUpdate;
+  const HeaderData = [
+    "No",
+    "Phone Number",
+    // "Status",
+    ...(showStatusColumn ? ["Status"] : []),
+    // Action,
+    ...(showActionColumn ? ["Action"] : []),
+  ];
 
   const listData = ClientTableData(userListData, selectedPage, size);
+
+  if (!canView) {
+    return <div>You do not have permission to view this page.</div>;
+  }
 
   return (
     <div className="details-list-card card">
@@ -60,8 +77,12 @@ function ClientComponent({
           isLoading={isLoading}
           listHeaderData={HeaderData}
           listData={listData}
-          onDeleteHandler={(value: any) => onDeleteHandler(value)}
-          handleChange={(value: any) => handleSwitchChange(value)}
+          onDeleteHandler={
+            hasPermission("Client", "delete") ? onDeleteHandler : undefined
+          }
+          handleChange={
+            canUpdate ? (value: any) => handleSwitchChange(value) : undefined
+          }
         />
       </div>
       {listData?.length > 0 ? (

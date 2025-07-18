@@ -6,6 +6,7 @@ import {
   TableComp,
 } from "../../components";
 import { NotificationTableData } from "./NotificationTableData";
+import { hasPermission } from "../../utils/permissions.utils";
 
 interface NotificationProps {
   selectedPage: number;
@@ -32,6 +33,10 @@ function NotificationComponent({
   searchInput,
   handleChangeSearch,
 }: NotificationProps) {
+  const canUpdate = hasPermission("Notification", "update");
+  const canDelete = hasPermission("Notification", "delete");
+  const canView = hasPermission("Notification", "read");
+  const showActionColumn = canDelete || canUpdate;
   const HeaderData = ["No", "Title", "Context", "CreatedAt", "Action"];
 
   const listData = NotificationTableData(
@@ -56,11 +61,13 @@ function NotificationComponent({
           </div>
         </div>
         <div className="details-list-top-right">
-          <Button
-            className="not-details-list-btn"
-            name={"Send Notification"}
-            onClick={toggleCrewPopup}
-          />
+          {hasPermission("Notification", "write") && (
+            <Button
+              className="not-details-list-btn"
+              name={"Send Notification"}
+              onClick={toggleCrewPopup}
+            />
+          )}
           <SearchBar onChange={handleChangeSearch} value={searchInput} />
         </div>
       </div>
@@ -69,7 +76,11 @@ function NotificationComponent({
           isLoading={isLoading}
           listHeaderData={HeaderData}
           listData={listData}
-          onDeleteHandler={(value: any) => onDeleteHandler(value)}
+          onDeleteHandler={
+            hasPermission("Notification", "delete")
+              ? onDeleteHandler
+              : undefined
+          }
         />
       </div>
       {listData?.length > 0 ? (

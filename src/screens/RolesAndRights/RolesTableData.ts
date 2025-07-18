@@ -3,6 +3,8 @@ export const RolesTableData = (
   selectedPage: number,
   size: number
 ) => {
+  // console.log("userListData???>>>>>>", userListData);
+
   return userListData?.roles?.map((item: any, index: number) => {
     return [
       {
@@ -21,11 +23,19 @@ export const RolesTableData = (
         data: item.role_code,
       },
       {
-        title: "Access Type",
+        title: "Read",
+        data: item.role_code,
+      },
+      {
+        title: "Write",
+        data: item.role_code,
+      },
+      {
+        title: "Update",
         data: item?.access_type,
       },
       {
-        title: "Permission Type",
+        title: "Delete",
         data: item?.permission_type,
       },
 

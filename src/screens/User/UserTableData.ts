@@ -1,12 +1,17 @@
 import moment from "moment";
+import { hasPermission } from "../../utils/permissions.utils";
 
 export const UserTableData = (
   userListData: any,
   selectedPage: number,
   size: number
 ) => {
+  const canUpdate = hasPermission("User", "update");
+  const canDelete = hasPermission("User", "delete");
+  const showActionColumn = canDelete || canUpdate;
+
   return userListData?.users?.map((item: any, index: number) => {
-    return [
+    const row = [
       {
         title: "No.",
         data:
@@ -46,10 +51,15 @@ export const UserTableData = (
         title: "Service Type",
         data: item?.service_type,
       },
-      {
+    ];
+
+    if (showActionColumn) {
+      row.push({
         title: "Action",
         data: item,
-      },
-    ];
+      });
+    }
+
+    return row;
   });
 };

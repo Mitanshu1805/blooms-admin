@@ -6,6 +6,7 @@ import {
 } from "../../components";
 import "./Order.scss";
 import { OrderTableData } from "./OrderTableData";
+import { hasPermission } from "../../utils/permissions.utils";
 
 interface OrderProps {
   selectedPage: number;
@@ -32,6 +33,9 @@ function OrderComponent({
   handleChangeSearch,
   navigation,
 }: OrderProps) {
+  const canDelete = hasPermission("Orders", "delete");
+  const canView = hasPermission("Orders", "read");
+  const showActionColumn = canDelete;
   const HeaderData = [
     "No",
     "Location Name",
@@ -43,10 +47,15 @@ function OrderComponent({
     "Status",
     "Code",
     "Time Slot",
-    "Action",
+    // "Action",
+    ...(showActionColumn ? ["Action"] : []),
   ];
 
   const listData = OrderTableData(userListData, selectedPage, size);
+
+  if (!canView) {
+    return <div>You do not have permission to view this page.</div>;
+  }
 
   return (
     <div className="details-list-card card">
@@ -72,7 +81,9 @@ function OrderComponent({
           isLoading={isLoading}
           listHeaderData={HeaderData}
           listData={listData}
-          onDeleteHandler={(value: any) => onDeleteHandler(value)}
+          onDeleteHandler={
+            hasPermission("Orders", "delete") ? onDeleteHandler : undefined
+          }
           navigationClick={(value: any) =>
             navigation("/orders/details", {
               state: value,

@@ -1,10 +1,15 @@
+import { hasPermission } from "../../utils/permissions.utils";
+
 export const ClientTableData = (
   userListData: any,
   selectedPage: number,
   limit: number
 ) => {
+  const canDelete = hasPermission("Client", "delete");
+  const canUpdate = hasPermission("Client", "update");
+
   return userListData?.data?.map((item: any, index: number) => {
-    return [
+    const row = [
       {
         title: "No.",
         data:
@@ -16,14 +21,22 @@ export const ClientTableData = (
         title: "Phone Number",
         data: item?.phone_number,
       },
-      {
+    ];
+
+    if (canUpdate) {
+      row.push({
         title: "Is Active",
         data: item,
-      },
-      {
+      });
+    }
+
+    if (canDelete) {
+      row.push({
         title: "Action",
         data: item,
-      },
-    ];
+      });
+    }
+
+    return row;
   });
 };

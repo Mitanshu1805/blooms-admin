@@ -1,12 +1,15 @@
 import moment from "moment";
+import { hasPermission } from "../../utils/permissions.utils";
 
 export const OrderTableData = (
   userListData: any,
   selectedPage: number,
   size: number
 ) => {
+  const canDelete = hasPermission("Orders", "delete");
+  const showActionColumn = canDelete;
   return userListData?.data?.map((item: any, index: number) => {
-    return [
+    const row = [
       {
         title: "No.",
         data:
@@ -50,10 +53,13 @@ export const OrderTableData = (
         title: "Time slot",
         data: moment.utc(item?.time_slot).format("YYYY-MM-DD h:mm:ss A"),
       },
-      {
+    ];
+    if (showActionColumn) {
+      row.push({
         title: "Action",
         data: item,
-      },
-    ];
+      });
+    }
+    return row;
   });
 };

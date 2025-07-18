@@ -6,6 +6,7 @@ import {
   TableComp,
 } from "../../components";
 import { CodeTableData } from "./CodeTableData";
+import { hasPermission } from "../../utils/permissions.utils";
 
 interface RolesProps {
   selectedPage: number;
@@ -34,6 +35,10 @@ function CodeComponent({
   searchInput,
   handleChangeSearch,
 }: RolesProps) {
+  const canUpdate = hasPermission("Discount_codes", "update");
+  const canDelete = hasPermission("Discount_codes", "delete");
+  const canView = hasPermission("Discount_codes", "read");
+  const showActionColumn = canDelete || canUpdate;
   const HeaderData = [
     "No",
     "Name",
@@ -43,10 +48,15 @@ function CodeComponent({
     "Discount Type",
     "Start Date",
     "End Date",
-    "Action",
+    // "Action",
+    ...(showActionColumn ? ["Action"] : []),
   ];
 
   const listData = CodeTableData(userListData, selectedPage, size);
+
+  if (!canView) {
+    return <div>You do not have permission to view this page.</div>;
+  }
 
   return (
     <div className="details-list-card card">
@@ -66,11 +76,13 @@ function CodeComponent({
           </div>
         </div>
         <div className="details-list-top-right">
-          <Button
-            className="details-list-btn"
-            name={"Add Code"}
-            onClick={toggleUserPopup}
-          />
+          {hasPermission("Discount_codes", "write") && (
+            <Button
+              className="details-list-btn"
+              name={"Add Code"}
+              onClick={toggleUserPopup}
+            />
+          )}
           <SearchBar onChange={handleChangeSearch} value={searchInput} />
         </div>
       </div>
@@ -79,8 +91,16 @@ function CodeComponent({
           isLoading={isLoading}
           listHeaderData={HeaderData}
           listData={listData}
-          onEditHandler={(value: any) => onEditHandler(value)}
-          onDeleteHandler={(value: any) => onDeleteHandler(value)}
+          onEditHandler={
+            hasPermission("Discount_codes", "update")
+              ? onEditHandler
+              : undefined
+          }
+          onDeleteHandler={
+            hasPermission("Discount_codes", "delete")
+              ? onDeleteHandler
+              : undefined
+          }
         />
       </div>
       {listData?.length > 0 ? (

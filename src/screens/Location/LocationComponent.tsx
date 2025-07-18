@@ -7,6 +7,7 @@ import {
   TableComp,
 } from "../../components";
 import { LocationTableData } from "./LocationTableData";
+import { hasPermission } from "../../utils/permissions.utils";
 
 interface LocationProps {
   selectedPage: number;
@@ -35,6 +36,10 @@ function LocationComponent({
   searchInput,
   handleChangeSearch,
 }: LocationProps) {
+  const canUpdate = hasPermission("Territories", "update");
+  const canDelete = hasPermission("Territories", "delete");
+  const canView = hasPermission("Territories", "read");
+  const showActionColumn = canDelete || canUpdate;
   const navigation = useNavigate();
   const HeaderData = [
     "No",
@@ -43,10 +48,15 @@ function LocationComponent({
     "Template Name",
     "Currency",
     "Share Count",
-    "Action",
+    // "Action",
+    ...(showActionColumn ? ["Action"] : []),
   ];
 
   const listData = LocationTableData(crewListData, selectedPage, size);
+
+  if (!canView) {
+    return <div>You do not have permission to view this page.</div>;
+  }
 
   return (
     <div className="details-list-card card">
@@ -64,11 +74,13 @@ function LocationComponent({
           </div>
         </div>
         <div className="details-list-top-right">
-          <Button
-            className="details-list-btn"
-            name={"Add Territory"}
-            onClick={toggleCrewPopup}
-          />
+          {hasPermission("Territories", "write") && (
+            <Button
+              className="details-list-btn"
+              name={"Add Territory"}
+              onClick={toggleCrewPopup}
+            />
+          )}
           <SearchBar onChange={handleChangeSearch} value={searchInput} />
         </div>
       </div>
@@ -77,8 +89,12 @@ function LocationComponent({
           isLoading={isLoading}
           listHeaderData={HeaderData}
           listData={listData}
-          onEditHandler={(value: any) => onEditHandler(value)}
-          onDeleteHandler={(value: any) => onDeleteHandler(value)}
+          onEditHandler={
+            hasPermission("Territories", "update") ? onEditHandler : undefined
+          }
+          onDeleteHandler={
+            hasPermission("Territories", "delete") ? onDeleteHandler : undefined
+          }
           navigationClick={(value: any) =>
             navigation("/territories/services", {
               state: value,
