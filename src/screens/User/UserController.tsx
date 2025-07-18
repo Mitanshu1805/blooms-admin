@@ -320,7 +320,7 @@ function UserController() {
           editItem={editItem}
           setEditItem={setEditItem}
           errors={errors}
-          OurselvesEditFormSubmitHandler={OurselvesEditFormSubmitHandler}
+          UserEditFormSubmitHandler={UserEditFormSubmitHandler}
           toggleEditUserPopup={toggleEditUserPopup}
           dateOfBirth={dateOfBirth}
           setDateOfBirth={setDateOfBirth}
@@ -334,7 +334,7 @@ function UserController() {
           editItem={editItem}
           setEditItem={setEditItem}
           errors={errors}
-          UserEditFormSubmitHandler={UserEditFormSubmitHandler}
+          OurselvesEditFormSubmitHandler={OurselvesEditFormSubmitHandler}
           toggleEditOurselvesPopup={toggleEditOurselvesPopup}
           dateOfBirth={dateOfBirth}
           setDateOfBirth={setDateOfBirth}

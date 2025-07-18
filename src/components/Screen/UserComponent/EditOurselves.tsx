@@ -156,6 +156,18 @@ function EditOurselves({
                 }}
               />
             </div>
+            <div className='col-md-4'>
+              <Input
+                className={'add-details-input-container'}
+                inputContainerClassName={'add-details-text-field-container'}
+                label='Phone Number'
+                type='text'
+                placeholder='Phone Number'
+                maxLength={10}
+                value={editItem.phone_number}
+                disabled
+              />
+            </div>
           </div>
         </div>
         <div className="underline" />
