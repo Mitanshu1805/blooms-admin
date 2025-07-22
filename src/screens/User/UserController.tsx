@@ -31,7 +31,7 @@ function UserController() {
     phone_number: "",
     employee_type: "",
     service_type: "",
-    role: "",
+    role_id: "",
     id_card: "",
   };
   const phone_number = sessionStorage.getItem("phone_number");
@@ -136,7 +136,7 @@ function UserController() {
     const statusPhone = ValidateMobile(userData.phone_number);
     const statusEmployeeType = ValidateName(userData.employee_type);
     const statusServiceType = ValidateName(userData.service_type);
-    const statusRole = ValidateName(userData.role);
+    const statusRole = ValidateName(userData.role_id);
     const statusIdCard = ValidateName(userData.id_card);
 
     if (statusFirstName) {
@@ -283,6 +283,8 @@ function UserController() {
     e.preventDefault();
     setSearchInput(e.target.value);
   };
+
+  console.log("editItem>>", editItem);
 
   return (
     <div>

@@ -1,4 +1,6 @@
-import { Button, DropDown, Input } from '../..';
+import { useState } from "react";
+import { Button, Input } from "../..";
+import RolesPermissionTable from "./RolesPermissionTable"; // create this
 
 function AddRoles({
   userData,
@@ -7,97 +9,79 @@ function AddRoles({
   UserFormSubmitHandler,
   toggleUserPopup,
   isLoading,
+  selectedPermissions,
+  setSelectedPermissions,
+  handleCheckboxChange,
 }: any) {
+  const handleSelectAll = () => {
+    const permissionModules = [
+      "sub_services",
+      "roles",
+      "pink_dates",
+      "disable_timeslots",
+    ];
+
+    const allPermissions: Record<string, string[]> = {};
+
+    permissionModules.forEach((module) => {
+      allPermissions[module] = ["create", "read", "update", "delete"];
+    });
+
+    setSelectedPermissions(allPermissions);
+    console.log("Selected All Permissions:", allPermissions);
+  };
+
   return (
-    <div className='popup-box-wrapper'>
-      <div className='popup-box-container'>
-        <div className='flex-col-div'>
-          <span className='popup-box-title'>ADD ROLES AND RIGHTS DETAILS</span>
+    <div className="popup-box-wrapper">
+      <div className="popup-box-container">
+        <div className="flex-col-div">
+          <span className="popup-box-title">ADD ROLES AND RIGHTS DETAILS</span>
         </div>
-        <div className='underline' />
-        <div className='container'>
-          <div className='row'>
-            <div className='row justify-content-center'>
-              <div className='col-md-4'>
-                <Input
-                  className={'add-details-input-container'}
-                  inputContainerClassName={'add-details-text-field-container'}
-                  label='Role Name'
-                  type='text'
-                  placeholder='Role Name'
-                  value={userData.role_name}
-                  onChange={(e: any) => {
-                    setUserData((prevValue: any) => ({
-                      ...prevValue,
-                      role_name: e.target.value,
-                    }));
-                  }}
-                  error={errors?.role_name}
-                />
-              </div>
+        <div className="underline" />
 
-              <div className='col-md-4'>
-                <DropDown
-                  label={'Access Type'}
-                  data={['Read', 'Read & write']}
-                  value={userData.access_type}
-                  onChange={(e: any) =>
-                    setUserData((prevValue: any) => ({
-                      ...prevValue,
-                      access_type: e.target.value,
-                    }))
-                  }
-                  error={errors?.access_type}
-                />
-              </div>
-            </div>
-            <div className='row justify-content-center'>
-              <div className='col-md-4'>
-                <Input
-                  className={'add-details-input-container'}
-                  inputContainerClassName={'add-details-text-field-container'}
-                  label='Role Code'
-                  type='text'
-                  placeholder='Role Code'
-                  value={userData.role_code}
-                  onChange={(e: any) => {
-                    setUserData((prevValue: any) => ({
-                      ...prevValue,
-                      role_code: e.target.value,
-                    }));
-                  }}
-                  error={errors?.role_code}
-                />
-              </div>
-
-              <div className='col-md-4'>
-                <DropDown
-                  label={'Permission Type'}
-                  data={['View', 'Add', 'Update', 'Delete']}
-                  value={userData.permission_type}
-                  onChange={(e: any) =>
-                    setUserData((prevValue: any) => ({
-                      ...prevValue,
-                      permission_type: e.target.value,
-                    }))
-                  }
-                  error={errors?.permission_type}
-                />
-              </div>
+        <div className="container">
+          <div className="row justify-content-center">
+            <div className="col-md-4">
+              <Input
+                className={"add-details-input-container"}
+                inputContainerClassName={"add-details-text-field-container"}
+                label="Role Name"
+                type="text"
+                placeholder="Role Name"
+                value={userData.role_name}
+                onChange={(e: any) => {
+                  setUserData((prev: any) => ({
+                    ...prev,
+                    role_name: e.target.value,
+                  }));
+                }}
+                error={errors?.role_name}
+              />
             </div>
           </div>
+
+          {/* <div className="row justify-content-end mt-3">
+            <div className="col-auto">
+              <Button name="Select All" onClick={handleSelectAll} />
+            </div>
+          </div> */}
+          <RolesPermissionTable
+            handleCheckboxChange={handleCheckboxChange}
+            selectedPermissions={selectedPermissions}
+          />
         </div>
-        <div className='underline' />
-        <div className='flex-row-cen-cen-div'>
+
+        <div className="underline" />
+        <div className="flex-row-cen-cen-div">
           <Button
             isLoading={isLoading}
-            className='add-details-submit-btn'
-            name='Submit'
+            className="add-details-submit-btn"
+            name="Submit"
             onClick={UserFormSubmitHandler}
           />
           <Button
-            className='add-details-cancel-btn'
-            name='Cancel'
+            className="add-details-cancel-btn"
+            name="Cancel"
             onClick={toggleUserPopup}
           />
         </div>

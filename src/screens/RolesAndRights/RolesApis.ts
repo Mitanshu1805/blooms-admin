@@ -11,7 +11,7 @@ export const RolesList = async (
     setIsLoading(true);
     const response = await ApiCall({
       endpoint: "role/list",
-      method: "POST",
+      method: "GET",
       data: {
         limit: size,
         page: selectedPage ?? 1,
@@ -33,6 +33,7 @@ export const RolesList = async (
 
 export const AddRolesA = async (
   rolesData: any,
+  permissions: any,
   setIsLoading: (val: boolean) => void
 ) => {
   try {
@@ -42,9 +43,7 @@ export const AddRolesA = async (
       method: "POST",
       data: {
         role_name: rolesData.role_name,
-        role_code: rolesData.role_code,
-        access_type: rolesData.access_type,
-        permission_type: rolesData.permission_type,
+        permissions: permissions,
       },
     });
     if (response?.status === 200) {
@@ -102,6 +101,39 @@ export const EditRolesA = async (
   }
 };
 
+export const AssignRoles = async (
+  assignItem: any,
+  setIsLoading: (val: boolean) => void
+) => {
+  try {
+    setIsLoading(true);
+    const response = await ApiCall({
+      endpoint: "role/assign",
+      method: "POST",
+      data: {
+        role_id: assignItem?.role_id,
+        user_id: assignItem?.user_id,
+      },
+    });
+    if (response?.status === 200) {
+      alertService.alert({
+        type: AlertType.Success,
+        message: response?.data?.message,
+      });
+    }
+    return response;
+  } catch (error: any) {
+    if (error?.data?.message) {
+      alertService.alert({
+        type: AlertType.Error,
+        message: error?.data?.message,
+      });
+    }
+  } finally {
+    setIsLoading(false);
+  }
+};
+
 export const DeleteRoles = async (
   deleteItem: any,
   setIsLoading: (val: boolean) => void
@@ -110,7 +142,7 @@ export const DeleteRoles = async (
     setIsLoading(true);
     const response = await ApiCall({
       endpoint: "role/delete",
-      method: "POST",
+      method: "DELETE",
       data: {
         role_id: deleteItem?.role_id,
       },
@@ -121,6 +153,36 @@ export const DeleteRoles = async (
         message: response?.data?.message,
       });
     }
+    return response;
+  } catch (error: any) {
+    if (error?.data?.message) {
+      alertService.alert({
+        type: AlertType.Error,
+        message: error?.data?.message,
+      });
+    }
+  } finally {
+    setIsLoading(false);
+  }
+};
+
+export const ModulesList = async (
+  size: number,
+  selectedPage: number,
+  searchInput: string,
+  setIsLoading: (val: boolean) => void
+) => {
+  try {
+    setIsLoading(true);
+    const response = await ApiCall({
+      endpoint: "module/list",
+      method: "GET",
+      data: {
+        limit: size,
+        page: selectedPage ?? 1,
+        search: searchInput,
+      },
+    });
     return response;
   } catch (error: any) {
     if (error?.data?.message) {

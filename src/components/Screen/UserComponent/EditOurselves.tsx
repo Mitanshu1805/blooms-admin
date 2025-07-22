@@ -1,4 +1,6 @@
 import { Button, DatePickerComponent, Input } from "../..";
+import { useEffect, useState } from "react";
+import { RolesList } from "../../../screens/RolesAndRights/RolesApis";
 
 function EditOurselves({
   errors,
@@ -10,8 +12,18 @@ function EditOurselves({
   setEditItem,
   OurselvesEditFormSubmitHandler,
   toggleEditOurselvesPopup,
-  isLoading,
-}: any) {
+}: // isLoading,
+any) {
+  const [rolesListData, setRolesListData] = useState<any>([]);
+  const [isLoading, setIsLoading] = useState(false);
+  useEffect(() => {
+    fetchRoles();
+  }, []);
+
+  const fetchRoles = async () => {
+    const rolesDataResponse = await RolesList(10, 1, "", setIsLoading);
+    setRolesListData(rolesDataResponse?.data?.data?.roles || []);
+  };
   return (
     <div className="popup-box-wrapper">
       <div className="popup-box-container">
@@ -124,20 +136,31 @@ function EditOurselves({
             </div>
 
             <div className="col-md-4">
-              <Input
-                className={"add-details-input-container"}
-                inputContainerClassName={"add-details-text-field-container"}
-                label="Role"
-                type="text"
-                placeholder="Role"
-                value={editItem.role}
-                onChange={(e: any) => {
-                  setEditItem((prevValue: any) => ({
-                    ...prevValue,
-                    role: e.target.value,
-                  }));
-                }}
-              />
+              <div className="add-details-input-container">
+                <div className="add-details-text-field-container">
+                  <label className="input-label">Role</label>
+                  <select
+                    className="form-control custom-select"
+                    value={editItem.role_id}
+                    onChange={(e) => {
+                      setEditItem((prev: any) => ({
+                        ...prev,
+                        role_id: e.target.value,
+                      }));
+                    }}
+                  >
+                    <option value="">Select Role</option>
+                    {rolesListData?.map((role: any) => (
+                      <option key={role.role_id} value={role.role_id}>
+                        {role.role_name}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+                {errors?.role_id && (
+                  <span className="error-message">{errors.role_id}</span>
+                )}
+              </div>
             </div>
 
             <div className="col-md-4">
@@ -156,13 +179,13 @@ function EditOurselves({
                 }}
               />
             </div>
-            <div className='col-md-4'>
+            <div className="col-md-4">
               <Input
-                className={'add-details-input-container'}
-                inputContainerClassName={'add-details-text-field-container'}
-                label='Phone Number'
-                type='text'
-                placeholder='Phone Number'
+                className={"add-details-input-container"}
+                inputContainerClassName={"add-details-text-field-container"}
+                label="Phone Number"
+                type="text"
+                placeholder="Phone Number"
                 maxLength={10}
                 value={editItem.phone_number}
                 disabled

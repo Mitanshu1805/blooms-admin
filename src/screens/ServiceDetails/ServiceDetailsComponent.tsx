@@ -6,23 +6,24 @@ import {
   LotiFiles,
   ServiceDetails,
   TableLoader,
-} from '../../components';
-import Breadcrumbs from '../../components/General/common/BreadCrumbs';
-import ModalDetails from '../../components/Screen/ServiceComponent/ModalDetails';
-import { IconButton } from '../../components/Screen/ServiceComponent/ServiceDetails';
-import PropertyComponent from './PropertyComponent';
-import './Service.scss';
-import { SubServiceTableData } from './ServiceTableData';
+} from "../../components";
+import Breadcrumbs from "../../components/General/common/BreadCrumbs";
+import ModalDetails from "../../components/Screen/ServiceComponent/ModalDetails";
+import { IconButton } from "../../components/Screen/ServiceComponent/ServiceDetails";
+import PropertyComponent from "./PropertyComponent";
+import "./Service.scss";
+import { SubServiceTableData } from "./ServiceTableData";
 
-import DeleteButton from '../../assets/svgs/DeleteButton.svg';
-import EditButton from '../../assets/svgs/EditButton.svg';
+import DeleteButton from "../../assets/svgs/DeleteButton.svg";
+import EditButton from "../../assets/svgs/EditButton.svg";
 
-import 'ag-grid-community/styles/ag-grid.css'; // Mandatory CSS required by the Data Grid
-import 'ag-grid-community/styles/ag-theme-quartz.css'; // Optional Theme applied to the Data Grid
-import { AgGridReact } from 'ag-grid-react'; // React Data Grid Component
+import "ag-grid-community/styles/ag-grid.css"; // Mandatory CSS required by the Data Grid
+import "ag-grid-community/styles/ag-theme-quartz.css"; // Optional Theme applied to the Data Grid
+import { AgGridReact } from "ag-grid-react"; // React Data Grid Component
 
-import Switch from 'react-switch';
-import { DeleteIcon, EditIcon } from '../../assets';
+import Switch from "react-switch";
+import { DeleteIcon, EditIcon } from "../../assets";
+import { hasPermission } from "../../utils/permissions.utils";
 
 interface ServiceProps {
   serviceDetails: any;
@@ -103,26 +104,31 @@ function ServiceComponent({
   onPropertyTypeAdd,
   updatePosition,
 }: ServiceProps) {
+  const canUpdate = hasPermission("sub_services", "update");
+  const canDelete = hasPermission("sub_services", "delete");
   const HeaderData = [
-    'No',
-    'label',
-    'order_label',
-    'cost',
-    'currency',
-    'Cost',
-    'Transport Fees',
-    'Description',
-    'Q. Label',
-    'Q. Minimum',
-    'Q. Maximum',
-    'Q. Default',
-    'Q. Base',
-    'Q. Increment',
-    'Action',
+    "No",
+    "label",
+    "order_label",
+    "cost",
+    "currency",
+    "Cost",
+    "Transport Fees",
+    "Description",
+    "Q. Label",
+    "Q. Minimum",
+    "Q. Maximum",
+    "Q. Default",
+    "Q. Base",
+    "Q. Increment",
+    "Action",
   ];
 
   const SwitchRenderer = (props: any) => {
     const { value, api, data, colDef } = props;
+
+    const canUpdate = hasPermission("sub_services", "update");
+    if (!canUpdate) return null;
 
     const handleChange = (checked: boolean) => {
       handleSubServiceSwitchChange({
@@ -145,115 +151,121 @@ function ServiceComponent({
   const ActionRenderer = (props: any) => {
     const { data } = props;
 
+    const hasUpdate = hasPermission("sub_services", "update");
+    const hasDelete = hasPermission("sub_services", "delete");
+
     return (
-      <div className='content-middle-action-data-div'>
-        {onSubEditHandler ? (
+      <div className="content-middle-action-data-div">
+        {hasUpdate && onSubEditHandler && (
           <Image
-            style={{ paddingLeft: '10px' }}
+            style={{ paddingLeft: "10px" }}
             src={EditIcon}
             onClick={() => onSubEditHandler(data)}
           />
-        ) : null}
-        {onSubDeleteHandler ? (
-          <>
-            <Image
-              style={{ paddingLeft: '10px' }}
-              src={DeleteIcon}
-              onClick={() => onSubDeleteHandler(data)}
-            />
-          </>
-        ) : null}
+        )}
+        {hasDelete && onSubDeleteHandler && (
+          <Image
+            style={{ paddingLeft: "10px" }}
+            src={DeleteIcon}
+            onClick={() => onSubDeleteHandler(data)}
+          />
+        )}
       </div>
     );
   };
+
   // Column Definitions: Defines the columns to be displayed.
   const colDefs: any = [
     {
-      headerName: '-',
+      headerName: "-",
       rowDrag: true, // Enable row drag in this column
       width: 60,
     },
     {
-      headerName: '#',
-      valueGetter: 'node.rowIndex + 1', // Dynamically generate row number
+      headerName: "#",
+      valueGetter: "node.rowIndex + 1", // Dynamically generate row number
       width: 50,
     },
     {
-      headerName: 'Label',
-      field: 'label',
+      headerName: "Label",
+      field: "label",
     },
     {
-      headerName: 'Order Label',
-      field: 'order_label',
+      headerName: "Order Label",
+      field: "order_label",
     },
     {
-      headerName: 'Cost',
-      field: 'cost',
+      headerName: "Cost",
+      field: "cost",
       valueFormatter: (params: any) => {
         const { cost, currency } = params.data;
-        return cost + ' ' + currency;
+        return cost + " " + currency;
       },
     },
     {
-      headerName: 'Is Active',
-      field: 'is_active',
+      headerName: "Is Active",
+      field: "is_active",
       cellRenderer: SwitchRenderer,
       width: 100,
+      hide: !hasPermission("sub_services", "update"),
     },
     {
-      field: 'transport_fees',
-      headerName: 'Transport Fees',
+      field: "transport_fees",
+      headerName: "Transport Fees",
       valueFormatter: (params: any) => {
         const { transport_fees } = params.data;
-        return transport_fees === 'fee'
-          ? 'This is a Transport Fee'
-          : transport_fees === 'required'
-          ? 'Transport Fee Required'
-          : 'Transport Fee Not Required';
+        return transport_fees === "fee"
+          ? "This is a Transport Fee"
+          : transport_fees === "required"
+          ? "Transport Fee Required"
+          : "Transport Fee Not Required";
       },
     },
     {
-      headerName: 'Description',
-      field: 'description',
+      headerName: "Description",
+      field: "description",
     },
     {
-      headerName: 'Q. Label',
-      field: 'quantity_label',
+      headerName: "Q. Label",
+      field: "quantity_label",
       width: 100,
     },
     {
-      headerName: 'Q. Minimum',
-      field: 'quantity_min',
+      headerName: "Q. Minimum",
+      field: "quantity_min",
       width: 120,
     },
     {
-      headerName: 'Q. Maximum',
-      field: 'quantity_max',
+      headerName: "Q. Maximum",
+      field: "quantity_max",
       width: 130,
     },
     {
-      headerName: 'Q. Default',
-      field: 'quantity_default',
+      headerName: "Q. Default",
+      field: "quantity_default",
       width: 110,
     },
     {
-      headerName: 'Q. Base',
-      field: 'quantity_base',
+      headerName: "Q. Base",
+      field: "quantity_base",
       width: 100,
     },
     {
-      headerName: 'Q. Increment',
-      field: 'quantity_increment',
+      headerName: "Q. Increment",
+      field: "quantity_increment",
       width: 130,
     },
     {
-      field: 'option_id',
+      field: "option_id",
       hide: true,
     },
     {
-      headerName: 'Action',
+      headerName: "Action",
       cellRenderer: ActionRenderer,
       width: 100,
+      hide:
+        !hasPermission("sub_services", "update") &&
+        !hasPermission("sub_services", "delete"),
     },
   ];
 
@@ -261,12 +273,12 @@ function ServiceComponent({
     <>
       <Breadcrumbs
         breadcrumbs={[
-          'Territories',
+          "Territories",
           serviceDetails?.location_name,
           serviceDetails?.service_name,
         ]}
       />
-      <div className='details-list-card card'>
+      <div className="details-list-card card">
         {/* {isLoading ? (
           <TableLoader />
         ) : ( */}
@@ -283,17 +295,17 @@ function ServiceComponent({
           />
           {locationListData ? (
             <Accordion
-              name={locationListData?.label ?? ''}
+              name={locationListData?.label ?? ""}
               titleContent={
-                <div className='property-accordion-btn-container'>
+                <div className="property-accordion-btn-container">
                   <IconButton icon={EditButton} onClick={onPropertyTypeEdit} />
                   <IconButton
                     icon={DeleteButton}
                     onClick={onPropertyTypeDelete}
                   />
                   <Button
-                    className='details-list-btn mr-2'
-                    name={'+ Add Property option'}
+                    className="details-list-btn mr-2"
+                    name={"+ Add Property option"}
                     onClick={toggleLocationPopup}
                   />
                 </div>
@@ -335,10 +347,10 @@ function ServiceComponent({
                                 onBrandPress(brand.service_brand_id);
                               }}
                               brand={
-                                brand?.service_brand_id ? ' ( Brand ) ' : ''
+                                brand?.service_brand_id ? " ( Brand ) " : ""
                               }
                               details={
-                                <div className='service-card-main-view'>
+                                <div className="service-card-main-view">
                                   <BrandDetails
                                     data={brand}
                                     onEditHandler={(value: any) =>
@@ -378,11 +390,11 @@ function ServiceComponent({
                                                 }}
                                                 brand={
                                                   model?.brands_model_id
-                                                    ? ' ( Model ) '
-                                                    : ''
+                                                    ? " ( Model ) "
+                                                    : ""
                                                 }
                                                 details={
-                                                  <div className='service-card-main-view'>
+                                                  <div className="service-card-main-view">
                                                     <ModalDetails
                                                       data={model}
                                                       onEditHandler={(
@@ -411,9 +423,9 @@ function ServiceComponent({
                                                 }
                                                 content={
                                                   <div
-                                                    className='ag-theme-quartz' // applying the Data Grid theme
+                                                    className="ag-theme-quartz" // applying the Data Grid theme
                                                     style={{
-                                                      height: '50vh',
+                                                      height: "50vh",
                                                       marginTop: 20,
                                                     }} // the Data Grid will fill the size of the parent container
                                                   >
@@ -452,7 +464,7 @@ function ServiceComponent({
                                       )}
                                     </div>
                                   ) : (
-                                    <LotiFiles message='No Data Found!' />
+                                    <LotiFiles message="No Data Found!" />
                                   )}
                                 </div>
                               }
@@ -462,13 +474,13 @@ function ServiceComponent({
                       )}
                     </div>
                   ) : (
-                    <LotiFiles message={'No Data Found!'} />
+                    <LotiFiles message={"No Data Found!"} />
                   )}
                 </div>
               ) : (
                 <div
-                  className='ag-theme-quartz' // applying the Data Grid theme
-                  style={{ height: '50vh', marginTop: 20 }} // the Data Grid will fill the size of the parent container
+                  className="ag-theme-quartz" // applying the Data Grid theme
+                  style={{ height: "50vh", marginTop: 20 }} // the Data Grid will fill the size of the parent container
                 >
                   <AgGridReact
                     loading={isLoading}
@@ -492,7 +504,7 @@ function ServiceComponent({
               )}
             </div>
           ) : (
-            <LotiFiles message={'No Data Found!'} />
+            <LotiFiles message={"No Data Found!"} />
           )}
         </div>
         {/* )} */}

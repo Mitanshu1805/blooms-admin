@@ -1,6 +1,7 @@
 import { DocIcon, RemoveIcon } from "../../assets";
 import { Button, Image, Input, TableLoader } from "../../components";
 import "./Dashboard.scss";
+import { hasPermission } from "../../utils/permissions.utils";
 
 interface DashboardProps {
   onChangeSplash: (value: any) => void;
@@ -19,6 +20,15 @@ function DashboardComponent({
   setSplashListData,
   toggleResetPop,
 }: DashboardProps) {
+  const canUpdate = hasPermission("dashboard", "update");
+  const canDelete = hasPermission("dashboard", "delete");
+  const canView = hasPermission("dashboard", "read");
+  const showActionColumn = canDelete || canUpdate;
+
+  if (!canView) {
+    return <div>You do not have permission to view this page.</div>;
+  }
+
   return (
     <div className="dash-list-card card">
       {isLoading ? (
@@ -90,17 +100,21 @@ function DashboardComponent({
               }}
             />
             <div className="flex-row-cen-cen-div">
-              <Button
-                className="info-edit-btn"
-                name="Update"
-                isLoading={isLoading}
-                onClick={UpdateSplashImageHandler}
-              />
-              <Button
-                className="info-reset-btn"
-                name="Reset"
-                onClick={toggleResetPop}
-              />
+              {hasPermission("dashboard", "update") && (
+                <Button
+                  className="info-edit-btn"
+                  name="Update"
+                  isLoading={isLoading}
+                  onClick={UpdateSplashImageHandler}
+                />
+              )}
+              {hasPermission("dashboard", "delete") && (
+                <Button
+                  className="info-reset-btn"
+                  name="Reset"
+                  onClick={toggleResetPop}
+                />
+              )}
             </div>
           </div>
         </div>

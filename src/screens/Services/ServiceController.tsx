@@ -29,7 +29,7 @@ function ServiceController() {
         },
       ],
     },
-    waiver: "",
+    waiver: 10,
   };
   const subInitialValue = {
     quantity_base: "",
@@ -80,7 +80,10 @@ function ServiceController() {
     );
   };
 
+  console.log("serviceData>>>>", serviceData);
+
   const AddServiceApi = async () => {
+    console.log("serviceData>>>>", serviceData);
     const response = await AddServiceA(
       state?.data?.location_id,
       serviceData,
@@ -90,6 +93,9 @@ function ServiceController() {
       isBrand,
       setIsLoading
     );
+    console.log("serviceData>>>>", serviceData);
+    console.log("response>>>>>", response);
+
     if (response?.status === 201) {
       serviceFetchData();
       toggleServicePopup();
@@ -131,16 +137,30 @@ function ServiceController() {
     setServiceImage({ preview: "", raw: "" });
   };
 
+  // const ServiceFormSubmitHandler = () => {
+  //   if (
+  //     AddServiceValidator(
+  //       serviceData,
+  //       endTime,
+  //       startTime,
+  //       serviceImage,
+  //       setErrors
+  //     )
+  //   ) {
+  //     AddServiceApi();
+  //   }
+  // };
+
   const ServiceFormSubmitHandler = () => {
-    if (
-      AddServiceValidator(
-        serviceData,
-        endTime,
-        startTime,
-        serviceImage,
-        setErrors
-      )
-    ) {
+    const isValid = AddServiceValidator(
+      serviceData,
+      endTime,
+      startTime,
+      serviceImage,
+      setErrors
+    );
+    console.log("Validation result:", isValid);
+    if (isValid) {
       AddServiceApi();
     }
   };

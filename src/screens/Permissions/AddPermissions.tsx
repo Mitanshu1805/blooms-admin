@@ -8,7 +8,7 @@ interface AddPermissionModalProps {
   moduleId: string;
 }
 
-const PERMISSIONS = ["read", "write", "update", "delete"];
+const PERMISSIONS = ["read", "create", "update", "delete"];
 
 const AddPermissionModal: React.FC<AddPermissionModalProps> = ({
   onClose,

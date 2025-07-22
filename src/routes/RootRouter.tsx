@@ -18,7 +18,7 @@ import {
   Services,
   TimeSlots,
   User,
-  Permissions,
+  // Permissions,
 } from "../screens";
 import PrivateRoute from "./ProtectedRoute";
 
@@ -68,7 +68,7 @@ function RootRouter() {
           }
         />
         <Route
-          path="/time-slots"
+          path="/disable_timeslots"
           element={
             <PrivateRoute>
               <General Component={TimeSlots} />
@@ -100,7 +100,7 @@ function RootRouter() {
           }
         />
         <Route
-          path="/codes"
+          path="/discount_codes"
           element={
             <PrivateRoute>
               <General Component={Codes} />
@@ -147,16 +147,16 @@ function RootRouter() {
             </PrivateRoute>
           }
         />
-        <Route
+        {/* <Route
           path="/permissions"
           element={
             <PrivateRoute>
               <General Component={Permissions} />
             </PrivateRoute>
           }
-        />
+        /> */}
         <Route
-          path="/pink-dates"
+          path="/pink_dates"
           element={
             <PrivateRoute>
               <General Component={PinkDates} />

@@ -1,5 +1,5 @@
-import { useEffect, useState } from 'react';
-import TimeSlotComponent from '../TimeSlots/TimeSlotComponent';
+import { useEffect, useState } from "react";
+import TimeSlotComponent from "../TimeSlots/TimeSlotComponent";
 
 import {
   format,
@@ -7,18 +7,18 @@ import {
   startOfMonth,
   endOfMonth,
   eachDayOfInterval,
-} from 'date-fns';
-import { TimeSlotPopup } from '../../components';
-import PinkDateComponent from './PinkDateComponent';
+} from "date-fns";
+import { TimeSlotPopup } from "../../components";
+import PinkDateComponent from "./PinkDateComponent";
 import {
   PinkDateList,
   PinkDiscountUpdate,
   SpecializeServiceList,
   SpecializeTerritoryList,
   UpdatePinkDateList,
-} from './PinkDateApis';
-import moment from 'moment';
-import { TimeSlotList } from '../TimeSlots/TimeSlotApis';
+} from "./PinkDateApis";
+import moment from "moment";
+import { TimeSlotList } from "../TimeSlots/TimeSlotApis";
 
 function PinkDateController() {
   const [location_id, setLocation_id] = useState<any>(null);
@@ -104,7 +104,7 @@ function PinkDateController() {
       PinkDiscountUpdate(service_id, newDiscount);
       setCurrDiscount(newDiscount);
     } else {
-      setError('Invalid discount amount');
+      setError("Invalid discount amount");
     }
   };
 
@@ -116,15 +116,15 @@ function PinkDateController() {
     setSpecificDate(day);
     setPinkTimeSlots(
       pinkTimeSlotsOld &&
-        Object.hasOwnProperty.call(pinkTimeSlotsOld, format(day, 'dd-MM-yyyy'))
-        ? pinkTimeSlotsOld[format(day, 'dd-MM-yyyy')]
+        Object.hasOwnProperty.call(pinkTimeSlotsOld, format(day, "dd-MM-yyyy"))
+        ? pinkTimeSlotsOld[format(day, "dd-MM-yyyy")]
         : []
     );
-    if (disabledTimeSlots[format(day, 'dd-MM-yyyy')]) {
+    if (disabledTimeSlots[format(day, "dd-MM-yyyy")]) {
       setFilteredTimeslots(
         timeSlots.filter(
           (time: string) =>
-            !disabledTimeSlots[format(day, 'dd-MM-yyyy')].includes(time)
+            !disabledTimeSlots[format(day, "dd-MM-yyyy")].includes(time)
         )
       );
     } else {
@@ -139,26 +139,26 @@ function PinkDateController() {
     const days = eachDayOfInterval({ start, end });
 
     return (
-      <div className='dates-container'>
+      <div className="dates-container">
         {days.map((day) => (
           <div
             onClick={() => toggleTimePopup(day)}
-            className={'date-card'}
-            key={format(day, 'yyyy-MM-dd')}
+            className={"date-card"}
+            key={format(day, "yyyy-MM-dd")}
           >
-            {format(day, 'dd-MM-yyyy')}
+            {format(day, "dd-MM-yyyy")}
             <br />
-            {format(day, 'EEEE')}
+            {format(day, "EEEE")}
             <br />
             {pinkTimeSlotsOld &&
             Object.hasOwnProperty.call(
               pinkTimeSlotsOld,
-              format(day, 'dd-MM-yyyy')
+              format(day, "dd-MM-yyyy")
             ) ? (
-              <div className='time-slots'>
-                {pinkTimeSlotsOld![format(day, 'dd-MM-yyyy')]?.map(
+              <div className="time-slots">
+                {pinkTimeSlotsOld![format(day, "dd-MM-yyyy")]?.map(
                   (slot: any, index: number) => (
-                    <div key={index} className='time-slot month-card selected'>
+                    <div key={index} className="time-slot month-card selected">
                       {slot}
                     </div>
                   )
@@ -179,15 +179,15 @@ function PinkDateController() {
     const timeSlots = [];
     let currentTime = new Date(`2024-01-01T${selectedService.first_slot}:00`);
     const end = new Date(`2024-01-01T${selectedService.last_slot}:00`);
-    const eachTimeParts = selectedService.timing_of_each_slot.split(':');
+    const eachTimeParts = selectedService.timing_of_each_slot.split(":");
     const eachTimeHours = parseInt(eachTimeParts[0]);
     const eachTimeMinutes = parseInt(eachTimeParts[1]);
 
     while (currentTime <= end) {
       timeSlots.push(
         currentTime.toLocaleTimeString([], {
-          hour: '2-digit',
-          minute: '2-digit',
+          hour: "2-digit",
+          minute: "2-digit",
           hour12: false,
         })
       );
@@ -201,16 +201,16 @@ function PinkDateController() {
   const timeSlots = generateTimeSlots();
 
   const TimeSlotSubmitHandler = async () => {
-    console.log(moment(specificDate).format('DD-MM-YYYY'));
+    console.log(moment(specificDate).format("DD-MM-YYYY"));
     const response = await UpdatePinkDateList(
       service_id,
-      moment(specificDate).format('DD-MM-YYYY'),
+      moment(specificDate).format("DD-MM-YYYY"),
       pinkTimeSlots
     );
 
     if (response?.status === 200) {
       setIsOpenPop(!isOpenPop);
-      const formatDate = moment(specificDate).format('DD-MM-YYYY');
+      const formatDate = moment(specificDate).format("DD-MM-YYYY");
       setPinkTimeSlotsOld((prev: any) => ({
         ...prev,
         [formatDate]: pinkTimeSlots.sort(),
@@ -248,6 +248,7 @@ function PinkDateController() {
           setIsOpenPop={setIsOpenPop}
           isOpenPop={isOpenPop}
           isDisableTimeslot={false}
+          moduleName="pink_dates"
         />
       )}
     </div>

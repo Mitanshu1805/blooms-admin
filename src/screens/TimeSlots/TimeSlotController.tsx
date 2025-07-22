@@ -208,6 +208,7 @@ function TimeSlotController() {
           setDisabledTimeSlots={setDisabledTimeSlots}
           setIsOpenPop={setIsOpenPop}
           isOpenPop={isOpenPop}
+          moduleName="disable_timeslots"
         />
       ) : null}
     </div>

@@ -33,11 +33,18 @@ function NotificationComponent({
   searchInput,
   handleChangeSearch,
 }: NotificationProps) {
-  const canUpdate = hasPermission("Notification", "update");
-  const canDelete = hasPermission("Notification", "delete");
-  const canView = hasPermission("Notification", "read");
+  const canUpdate = hasPermission("notification", "update");
+  const canDelete = hasPermission("notification", "delete");
+  const canView = hasPermission("notification", "read");
   const showActionColumn = canDelete || canUpdate;
-  const HeaderData = ["No", "Title", "Context", "CreatedAt", "Action"];
+  const HeaderData = [
+    "No",
+    "Title",
+    "Context",
+    "CreatedAt",
+    //  "Action",
+    ...(canDelete ? ["Action"] : []),
+  ];
 
   const listData = NotificationTableData(
     notificationListData,
@@ -61,7 +68,7 @@ function NotificationComponent({
           </div>
         </div>
         <div className="details-list-top-right">
-          {hasPermission("Notification", "write") && (
+          {hasPermission("notification", "create") && (
             <Button
               className="not-details-list-btn"
               name={"Send Notification"}
@@ -77,7 +84,7 @@ function NotificationComponent({
           listHeaderData={HeaderData}
           listData={listData}
           onDeleteHandler={
-            hasPermission("Notification", "delete")
+            hasPermission("notification", "delete")
               ? onDeleteHandler
               : undefined
           }

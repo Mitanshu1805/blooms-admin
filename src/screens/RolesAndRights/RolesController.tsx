@@ -1,19 +1,27 @@
 import { useEffect, useState } from "react";
 import { AddRoles, DeletePopup, EditRoles } from "../../components";
 import { ValidateName } from "../../helpers/Validators";
-import { AddRolesA, DeleteRoles, EditRolesA, RolesList } from "./RolesApis";
+import {
+  AddRolesA,
+  DeleteRoles,
+  EditRolesA,
+  RolesList,
+  ModulesList,
+} from "./RolesApis";
 import RolesComponent from "./RolesComponent";
+import RolesPermissionTable from "../../components/Screen/RolesComponent/RolesPermissionTable";
 
 function RolesController() {
   const initialValue = {
     role_name: "",
-    role_code: "",
-    access_type: "",
-    permission_type: "",
+    // role_code: "",
+    // access_type: "",
+    // permission_type: "",
   };
   const [rolesData, setRolesData] = useState(initialValue);
   const [errors, setErrors] = useState(initialValue);
   const [rolesListData, setRolesListData] = useState<any>([]);
+
   const [selectedPage, setSelectedPage] = useState(1);
   const [size, setSize] = useState(10);
   const [isLoading, setIsLoading] = useState(false);
@@ -23,6 +31,51 @@ function RolesController() {
   const [openDeleteRolesPop, setOpenDeleteRolesPop] = useState(false);
   const [deleteItem, setDeleteItem] = useState<any>("");
   const [searchInput, setSearchInput] = useState("");
+
+  const [selectedPermissions, setSelectedPermissions] = useState<any>({});
+
+  const handleCheckboxChange = (
+    moduleName: string,
+    permission: string,
+    checked: boolean
+  ) => {
+    setSelectedPermissions((prev: any) => {
+      const currentPerms = prev[moduleName] || [];
+      let updatedPerms = [...currentPerms];
+
+      if (checked) {
+        // Add the current permission
+        if (!updatedPerms.includes(permission)) {
+          updatedPerms.push(permission);
+        }
+
+        // If selecting 'update', 'create', or 'delete', ensure 'read' is selected
+        if (
+          (permission === "update" ||
+            permission === "delete" ||
+            permission === "create") &&
+          !updatedPerms.includes("read")
+        ) {
+          updatedPerms.push("read");
+        }
+      } else {
+        // Remove the current permission
+        updatedPerms = updatedPerms.filter((p) => p !== permission);
+
+        // If unchecking 'read', also remove 'update', 'create', and 'delete'
+        if (permission === "read") {
+          updatedPerms = updatedPerms.filter(
+            (p) => p !== "update" && p !== "create" && p !== "delete"
+          );
+        }
+      }
+
+      return {
+        ...prev,
+        [moduleName]: updatedPerms,
+      };
+    });
+  };
 
   useEffect(() => {
     fetchData();
@@ -37,8 +90,22 @@ function RolesController() {
     );
     setRolesListData(rolesDataResponse?.data);
   };
+
+  const parsePermissions = () => {
+    const parsedPermissions = Object.keys(selectedPermissions).map((item) => ({
+      module_id: item,
+      access: selectedPermissions[item],
+    }));
+    console.log("parsedPermissions -> ", parsedPermissions);
+    return parsedPermissions;
+  };
+
   const AddRolesApi = async () => {
-    const response = await AddRolesA(rolesData, setIsLoading);
+    const response = await AddRolesA(
+      rolesData,
+      parsePermissions(),
+      setIsLoading
+    );
     if (response?.status === 201) {
       fetchData();
       toggleRolesPopup();
@@ -65,31 +132,18 @@ function RolesController() {
     let newErrors: any = {};
     let isValid: boolean = true;
     const statusRoleName = ValidateName(rolesData.role_name);
-    const statusRoleCode = ValidateName(rolesData.role_code);
-    const statusAcType = ValidateName(rolesData.access_type);
-    const statusPermissionType = ValidateName(rolesData.permission_type);
+
+    // const statusPermissionType = ValidateName(rolesData.permission_type);
 
     if (statusRoleName) {
       newErrors.role_name = statusRoleName === 1 ? "Role Name is Required" : "";
       isValid = false;
     }
-
-    if (statusRoleCode) {
-      newErrors.role_code = statusRoleCode === 1 ? "Role Code is Required" : "";
-      isValid = false;
-    }
-
-    if (statusAcType) {
-      newErrors.access_type =
-        statusAcType === 1 ? "Access Type is Required" : "";
-      isValid = false;
-    }
-
-    if (statusPermissionType) {
-      newErrors.permission_type =
-        statusPermissionType === 1 ? "Permission Type is Required" : "";
-      isValid = false;
-    }
+    // if (statusPermissionType) {
+    //   newErrors.permission_type =
+    //     statusPermissionType === 1 ? "Permission Type is Required" : "";
+    //   isValid = false;
+    // }
 
     setErrors(newErrors);
     return isValid;
@@ -98,6 +152,7 @@ function RolesController() {
   const toggleRolesPopup = () => {
     setOpenRolesForm(!openRolesForm);
     setRolesData(initialValue);
+    setSelectedPermissions({});
   };
 
   const RolesFormSubmitHandler = () => {
@@ -151,7 +206,9 @@ function RolesController() {
         setSize={setSize}
         searchInput={searchInput}
         handleChangeSearch={handleChangeSearch}
+        onClose={toggleRolesPopup}
       />
+
       {openRolesForm ? (
         <AddRoles
           userData={rolesData}
@@ -159,10 +216,13 @@ function RolesController() {
           errors={errors}
           UserFormSubmitHandler={RolesFormSubmitHandler}
           toggleUserPopup={toggleRolesPopup}
+          selectedPermissions={selectedPermissions}
+          setSelectedPermissions={setSelectedPermissions}
+          handleCheckboxChange={handleCheckboxChange}
           isLoading={isLoading}
         />
       ) : null}
-      {openEditRolesPop ? (
+      {/* {openEditRolesPop ? (
         <EditRoles
           editItem={editItem}
           setEditItem={setEditItem}
@@ -171,7 +231,7 @@ function RolesController() {
           toggleUserPopup={toggleEditUserPopup}
           isLoading={isLoading}
         />
-      ) : null}
+      ) : null} */}
       {openDeleteRolesPop ? (
         <DeletePopup
           isLoading={isLoading}

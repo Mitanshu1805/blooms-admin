@@ -1,0 +1,102 @@
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.4);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  background: white;
+  padding: 24px;
+  border-radius: 10px;
+  width: 350px;
+}
+
+.modal-form {
+  display: flex;
+  flex-direction: column;
+
+  label {
+    margin-top: 12px;
+    font-size: 14px;
+  }
+
+  input {
+    padding: 8px;
+    margin-top: 4px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+  }
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 20px;
+
+  .cancel-btn {
+    background-color: #ccc;
+    padding: 6px 14px;
+    border: none;
+    border-radius: 6px;
+  }
+
+  .save-btn {
+    background-color: #fd8f82;
+    color: white;
+    padding: 6px 14px;
+    border: none;
+    border-radius: 6px;
+  }
+}
+.password-field {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  input {
+    flex: 1;
+  }
+
+  .show-pass-btn {
+    background-color: transparent;
+    border: none;
+    color: #fd8f82;
+    cursor: pointer;
+    font-size: 14px;
+    padding: 4px;
+  }
+}
+.input-icon-wrapper {
+  position: relative;
+
+  input {
+    width: 100%;
+    padding-right: 35px; // space for the eye icon
+    padding-left: 8px;
+    height: 36px;
+    box-sizing: border-box;
+  }
+
+  .eye-icon {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    color: #555;
+  }
+}
+
+.error-text {
+  color: red;
+  font-size: 12px;
+  margin-top: 4px;
+}

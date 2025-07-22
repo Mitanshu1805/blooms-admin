@@ -33,17 +33,17 @@ function ClientComponent({
   handleChangeSearch,
   handleSwitchChange,
 }: ClientProps) {
-  const canUpdate = hasPermission("Client", "update");
-  const canDelete = hasPermission("Client", "delete");
-  const canView = hasPermission("Client", "read");
+  const canUpdate = hasPermission("client", "update");
+  const canDelete = hasPermission("client", "delete");
+  const canView = hasPermission("client", "read");
   const showActionColumn = canDelete;
   const showStatusColumn = canUpdate;
   const HeaderData = [
     "No",
     "Phone Number",
     // "Status",
+    // "Action",
     ...(showStatusColumn ? ["Status"] : []),
-    // Action,
     ...(showActionColumn ? ["Action"] : []),
   ];
 
@@ -78,7 +78,7 @@ function ClientComponent({
           listHeaderData={HeaderData}
           listData={listData}
           onDeleteHandler={
-            hasPermission("Client", "delete") ? onDeleteHandler : undefined
+            hasPermission("client", "delete") ? onDeleteHandler : undefined
           }
           handleChange={
             canUpdate ? (value: any) => handleSwitchChange(value) : undefined

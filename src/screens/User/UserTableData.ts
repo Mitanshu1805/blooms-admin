@@ -6,11 +6,12 @@ export const UserTableData = (
   selectedPage: number,
   size: number
 ) => {
-  const canUpdate = hasPermission("User", "update");
-  const canDelete = hasPermission("User", "delete");
+  const canUpdate = hasPermission("user", "update");
+  const canDelete = hasPermission("user", "delete");
   const showActionColumn = canDelete || canUpdate;
 
   return userListData?.users?.map((item: any, index: number) => {
+    console.log("userListData>>", userListData);
     const row = [
       {
         title: "No.",
@@ -33,12 +34,9 @@ export const UserTableData = (
       },
       {
         title: "Role",
-        data: item?.role,
+        data: item?.role_name,
       },
-      {
-        title: "Is Active",
-        data: item,
-      },
+
       {
         title: "Date of Birth",
         data: moment(item.dob).format("DD-MM-YYYY"),
@@ -52,6 +50,13 @@ export const UserTableData = (
         data: item?.service_type,
       },
     ];
+
+    if (canUpdate) {
+      row.push({
+        title: "Is Active",
+        data: item,
+      });
+    }
 
     if (showActionColumn) {
       row.push({

@@ -39,9 +39,9 @@ function UserComponent({
   searchInput,
   handleSwitchChange,
 }: UserProps) {
-  const canUpdate = hasPermission("User", "update");
-  const canDelete = hasPermission("User", "delete");
-  const canView = hasPermission("User", "read");
+  const canUpdate = hasPermission("user", "update");
+  const canDelete = hasPermission("user", "delete");
+  const canView = hasPermission("user", "read");
   const showActionColumn = canDelete || canUpdate;
   const HeaderData = [
     "No",
@@ -49,10 +49,12 @@ function UserComponent({
     "Last Name",
     "Phone Number",
     "Role",
-    "Status",
+    // "Status",
+
     "Date Of Birth",
     "Employee Type",
     "Service Type",
+    ...(canUpdate ? ["Status"] : []),
     ...(showActionColumn ? ["Action"] : []),
     // "Action",
   ];
@@ -79,7 +81,7 @@ function UserComponent({
           </div>
         </div>
         <div className="details-list-top-right">
-          {hasPermission("User", "write") && (
+          {hasPermission("user", "create") && (
             <Button
               className="details-list-btn"
               name={"Add User"}
@@ -95,15 +97,18 @@ function UserComponent({
           listHeaderData={HeaderData}
           listData={listData}
           onEditHandler={
-            hasPermission("User", "update") ? onEditHandler : undefined
+            hasPermission("user", "update") ? onEditHandler : undefined
           }
           onEditOurselves={
-            hasPermission("User", "update") ? onEditOurselves : undefined
+            hasPermission("user", "update") ? onEditOurselves : undefined
           }
           onDeleteHandler={
-            hasPermission("User", "delete") ? onDeleteHandler : undefined
+            hasPermission("user", "delete") ? onDeleteHandler : undefined
           }
-          handleChange={(value: any) => handleSwitchChange(value)}
+          // handleChange={(value: any) => handleSwitchChange(value)}
+          handleChange={
+            hasPermission("user", "update") ? handleSwitchChange : undefined
+          }
         />
       </div>
       {listData?.length > 0 ? (

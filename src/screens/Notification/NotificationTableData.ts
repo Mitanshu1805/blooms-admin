@@ -6,8 +6,8 @@ export const NotificationTableData = (
   selectedPage: number,
   size: number
 ) => {
-  // const canUpdate = hasPermission("Notification", "update");
-  const canDelete = hasPermission("Notification", "delete");
+  // const canUpdate = hasPermission("notification", "update");
+  const canDelete = hasPermission("notification", "delete");
   const showActionColumn = canDelete;
   return notificationListData?.crews?.map((item: any, index: number) => {
     const row = [

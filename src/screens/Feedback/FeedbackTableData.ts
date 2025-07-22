@@ -6,8 +6,8 @@ export const FeedbackTableData = (
   selectedPage: number,
   size: number
 ) => {
-  const canDelete = hasPermission("Feedback", "delete");
-  const canUpdate = hasPermission("Feedback", "update");
+  const canDelete = hasPermission("feedback", "delete");
+  const canUpdate = hasPermission("feedback", "update");
   const showActionColumn = canDelete;
 
   return feedbackListData?.crews?.map((item: any, index: number) => {

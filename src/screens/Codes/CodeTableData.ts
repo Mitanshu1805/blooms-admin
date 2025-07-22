@@ -6,8 +6,8 @@ export const CodeTableData = (
   selectedPage: number,
   size: number
 ) => {
-  const canUpdate = hasPermission("Discount_codes", "update");
-  const canDelete = hasPermission("Discount_codes", "delete");
+  const canUpdate = hasPermission("discount_codes", "update");
+  const canDelete = hasPermission("discount_codes", "delete");
   const showActionColumn = canDelete || canUpdate;
   return userListData?.list?.map((item: any, index: number) => {
     const row = [

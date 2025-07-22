@@ -1,4 +1,4 @@
-import { Button, DropDown, Input } from '../..';
+import { Button, DropDown, Input } from "../..";
 
 function EditRoles({
   editItem,
@@ -9,22 +9,22 @@ function EditRoles({
   isLoading,
 }: any) {
   return (
-    <div className='popup-box-wrapper'>
-      <div className='popup-box-container'>
-        <div className='flex-col-div'>
-          <span className='popup-box-title'>EDIT ROLES AND RIGHTS DETAILS</span>
+    <div className="popup-box-wrapper">
+      <div className="popup-box-container">
+        <div className="flex-col-div">
+          <span className="popup-box-title">EDIT ROLES AND RIGHTS DETAILS</span>
         </div>
-        <div className='underline' />
-        <div className='container'>
-          <div className='row'>
-            <div className='row justify-content-center'>
-              <div className='col-md-4'>
+        <div className="underline" />
+        <div className="container">
+          <div className="row">
+            <div className="row justify-content-center">
+              <div className="col-md-4">
                 <Input
-                  className={'add-details-input-container'}
-                  inputContainerClassName={'add-details-text-field-container'}
-                  label='Role Name'
-                  type='text'
-                  placeholder='Role Name'
+                  className={"add-details-input-container"}
+                  inputContainerClassName={"add-details-text-field-container"}
+                  label="Role Name"
+                  type="text"
+                  placeholder="Role Name"
                   value={editItem.role_name}
                   onChange={(e: any) => {
                     setEditItem((prevValue: any) => ({
@@ -36,10 +36,10 @@ function EditRoles({
                 />
               </div>
 
-              <div className='col-md-4'>
+              <div className="col-md-4">
                 <DropDown
-                  label={'Access Type'}
-                  data={['Read', 'Read & write']}
+                  label={"Access Type"}
+                  data={["Read", "Read & create"]}
                   value={editItem.access_type}
                   onChange={(e: any) =>
                     setEditItem((prevValue: any) => ({
@@ -52,14 +52,14 @@ function EditRoles({
               </div>
             </div>
 
-            <div className='row justify-content-center'>
-              <div className='col-md-4'>
+            <div className="row justify-content-center">
+              <div className="col-md-4">
                 <Input
-                  className={'add-details-input-container'}
-                  inputContainerClassName={'add-details-text-field-container'}
-                  label='Role Code'
-                  type='text'
-                  placeholder='Role Code'
+                  className={"add-details-input-container"}
+                  inputContainerClassName={"add-details-text-field-container"}
+                  label="Role Code"
+                  type="text"
+                  placeholder="Role Code"
                   value={editItem.role_code}
                   onChange={(e: any) => {
                     setEditItem((prevValue: any) => ({
@@ -70,10 +70,10 @@ function EditRoles({
                 />
               </div>
 
-              <div className='col-md-4'>
+              <div className="col-md-4">
                 <DropDown
-                  label={'Permission Type'}
-                  data={['View', 'Add', 'Update', 'Delete']}
+                  label={"Permission Type"}
+                  data={["View", "Add", "Update", "Delete"]}
                   value={editItem.permission_type}
                   onChange={(e: any) =>
                     setEditItem((prevValue: any) => ({
@@ -87,17 +87,17 @@ function EditRoles({
             </div>
           </div>
         </div>
-        <div className='underline' />
-        <div className='flex-row-cen-cen-div'>
+        <div className="underline" />
+        <div className="flex-row-cen-cen-div">
           <Button
             isLoading={isLoading}
-            className='add-details-submit-btn'
-            name='Submit'
+            className="add-details-submit-btn"
+            name="Submit"
             onClick={UserFormSubmitHandler}
           />
           <Button
-            className='add-details-cancel-btn'
-            name='Cancel'
+            className="add-details-cancel-btn"
+            name="Cancel"
             onClick={toggleUserPopup}
           />
         </div>

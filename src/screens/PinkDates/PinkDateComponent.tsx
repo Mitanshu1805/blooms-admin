@@ -1,6 +1,7 @@
 import moment from "moment";
 import { DropDown, Input } from "../../components";
 import "./PinkDate.scss";
+import { hasPermission } from "../../utils/permissions.utils";
 
 interface PinkDateProps {
   territoryOptions: any;
@@ -41,6 +42,7 @@ function PinkDateComponent({
   discount,
   error,
 }: PinkDateProps) {
+  const canCreate = hasPermission("pink_dates", "create");
   return (
     <div className="details-list-card card">
       <div className="details-list-top">
@@ -92,7 +94,7 @@ function PinkDateComponent({
           </div>
         )}
       </div>
-      {selectedMonth && (
+      {selectedMonth && canCreate && (
         <div className="selected-month">
           <h4>{format(selectedMonth, "MMMM yyyy")}</h4>
           <Input

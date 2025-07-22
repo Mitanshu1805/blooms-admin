@@ -21,32 +21,58 @@ export const Login = async (
         type: AlertType.Success,
         message: response?.data?.message,
       });
-
-      // ✅ Extract permissions and store
       const rawPermissions = response?.data?.permissions || [];
+      // console.log("response>>", response);
 
-      console.log("rawPermissions>>>>>", rawPermissions);
+      // console.log("rawPermissions>>>>>", rawPermissions);
 
-      // Convert to object like: { User: ["read", "write", "update", "delete"] }
-      const formattedPermissions: Record<string, string[]> = {};
+      const formattedPermissions: any = {};
 
-      rawPermissions.forEach((perm: any) => {
-        const moduleName = perm.module_name;
-        const perms = perm.permissions
-          ?.replace(/[{}]/g, "") // remove { and }
-          .split(",")
-          .map((p: string) => p.trim());
-
-        formattedPermissions[moduleName] = perms;
-      });
+      for (const element of response?.data?.permissions) {
+        formattedPermissions[element.module_name] = element.permissions;
+      }
 
       localStorage.setItem("permissions", JSON.stringify(formattedPermissions));
-      localStorage.setItem("authToken", response?.data?.auth_token); // if not already
-      console.log("Stored permissions:", formattedPermissions);
-    }
+      localStorage.setItem("authToken", response?.data?.auth_token);
 
+      return response;
+    }
+  } catch (error: any) {
+    if (error?.data?.message) {
+      alertService.alert({
+        type: AlertType.Error,
+        message: error?.data?.message,
+      });
+    }
+    return error;
+  } finally {
+    setIsLoading(false);
+  }
+};
+
+export const ChangePass = async (
+  userData: any,
+  setIsLoading: (val: boolean) => void
+) => {
+  try {
+    setIsLoading(true);
+    const response = await ApiCall({
+      endpoint: "user/change/password",
+      method: "POST",
+      data: {
+        old_password: userData.old_pass,
+        new_password: userData.new_pass,
+      },
+    });
+    if (response?.status === 200) {
+      alertService.alert({
+        type: AlertType.Success,
+        message: response?.data?.message,
+      });
+    }
     return response;
   } catch (error: any) {
+    setIsLoading(false);
     if (error?.data?.message) {
       alertService.alert({
         type: AlertType.Error,

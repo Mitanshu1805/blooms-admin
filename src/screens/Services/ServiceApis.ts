@@ -46,7 +46,7 @@ export const AddServiceA = async (
     form_data.append("last_slot", endTime);
     form_data.append("first_slot", startTime);
     form_data.append("has_brand", has_brand);
-    form_data.append("waiver", serviceData.waiver);
+    form_data.append("waiver", "0");
     if (
       serviceData?.property_type?.label &&
       serviceData?.property_type?.label?.trim() !== ""

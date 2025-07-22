@@ -33,8 +33,8 @@ function OrderComponent({
   handleChangeSearch,
   navigation,
 }: OrderProps) {
-  const canDelete = hasPermission("Orders", "delete");
-  const canView = hasPermission("Orders", "read");
+  const canDelete = hasPermission("orders", "delete");
+  const canView = hasPermission("orders", "read");
   const showActionColumn = canDelete;
   const HeaderData = [
     "No",
@@ -82,7 +82,7 @@ function OrderComponent({
           listHeaderData={HeaderData}
           listData={listData}
           onDeleteHandler={
-            hasPermission("Orders", "delete") ? onDeleteHandler : undefined
+            hasPermission("orders", "delete") ? onDeleteHandler : undefined
           }
           navigationClick={(value: any) =>
             navigation("/orders/details", {

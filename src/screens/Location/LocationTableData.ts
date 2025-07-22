@@ -5,8 +5,8 @@ export const LocationTableData = (
   selectedPage: number,
   size: number
 ) => {
-  const canUpdate = hasPermission("Territories", "update");
-  const canDelete = hasPermission("Territories", "delete");
+  const canUpdate = hasPermission("territories", "update");
+  const canDelete = hasPermission("territories", "delete");
   const showActionColumn = canDelete || canUpdate;
   return crewListData?.roles?.map((item: any, index: number) => {
     const row = [

@@ -6,6 +6,7 @@ import {
   TableComp,
 } from "../../components";
 import { RolesTableData } from "./RolesTableData";
+import { hasPermission } from "../../utils/permissions.utils";
 
 interface RolesProps {
   selectedPage: number;
@@ -18,6 +19,7 @@ interface RolesProps {
   size: number;
   setSize: (value: any) => void;
   searchInput: string;
+  onClose: () => void;
   handleChangeSearch: (value: string) => void;
 }
 
@@ -33,17 +35,25 @@ function RolesComponent({
   setSize,
   searchInput,
   handleChangeSearch,
+  onClose,
 }: RolesProps) {
+  const canUpdate = hasPermission("roles", "update");
+  const canDelete = hasPermission("roles", "delete");
+  const canView = hasPermission("roles", "read");
+  const showActionColumn = canDelete || canUpdate;
   const HeaderData = [
     "No",
     "Role Name",
-    "Role Code",
-    "Access Type",
-    "Permission Type",
-    "Action",
+    //  "Actions",
+    "Permissions",
+    ...(canDelete ? ["Action"] : []),
   ];
 
   const listData = RolesTableData(userListData, selectedPage, size);
+
+  if (!canView) {
+    return <div>You do not have permission to view this page.</div>;
+  }
 
   return (
     <div className="details-list-card card">
@@ -63,11 +73,17 @@ function RolesComponent({
           </div>
         </div>
         <div className="details-list-top-right">
-          <Button
-            className="details-list-btn"
-            name={"Add Roles"}
-            onClick={toggleUserPopup}
-          />
+          {hasPermission("roles", "create") && (
+            <Button
+              className="details-list-btn"
+              name={"Add Roles"}
+              onClick={() => {
+                onClose();
+                toggleUserPopup();
+              }}
+            />
+          )}
+
           <SearchBar onChange={handleChangeSearch} value={searchInput} />
         </div>
       </div>
@@ -76,8 +92,11 @@ function RolesComponent({
           isLoading={isLoading}
           listHeaderData={HeaderData}
           listData={listData}
-          onEditHandler={(value: any) => onEditHandler(value)}
-          onDeleteHandler={(value: any) => onDeleteHandler(value)}
+          // onEditHandler={(value: any) => onEditHandler(value)}
+
+          onDeleteHandler={
+            hasPermission("roles", "delete") ? onDeleteHandler : undefined
+          }
         />
       </div>
       {listData?.length > 0 ? (

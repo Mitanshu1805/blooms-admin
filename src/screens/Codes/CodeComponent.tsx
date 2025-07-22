@@ -35,9 +35,9 @@ function CodeComponent({
   searchInput,
   handleChangeSearch,
 }: RolesProps) {
-  const canUpdate = hasPermission("Discount_codes", "update");
-  const canDelete = hasPermission("Discount_codes", "delete");
-  const canView = hasPermission("Discount_codes", "read");
+  const canUpdate = hasPermission("discount_codes", "update");
+  const canDelete = hasPermission("discount_codes", "delete");
+  const canView = hasPermission("discount_codes", "read");
   const showActionColumn = canDelete || canUpdate;
   const HeaderData = [
     "No",
@@ -76,7 +76,7 @@ function CodeComponent({
           </div>
         </div>
         <div className="details-list-top-right">
-          {hasPermission("Discount_codes", "write") && (
+          {hasPermission("discount_codes", "create") && (
             <Button
               className="details-list-btn"
               name={"Add Code"}
@@ -92,12 +92,12 @@ function CodeComponent({
           listHeaderData={HeaderData}
           listData={listData}
           onEditHandler={
-            hasPermission("Discount_codes", "update")
+            hasPermission("discount_codes", "update")
               ? onEditHandler
               : undefined
           }
           onDeleteHandler={
-            hasPermission("Discount_codes", "delete")
+            hasPermission("discount_codes", "delete")
               ? onDeleteHandler
               : undefined
           }

@@ -5,8 +5,8 @@ export const ClientTableData = (
   selectedPage: number,
   limit: number
 ) => {
-  const canDelete = hasPermission("Client", "delete");
-  const canUpdate = hasPermission("Client", "update");
+  const canDelete = hasPermission("client", "delete");
+  const canUpdate = hasPermission("client", "update");
 
   return userListData?.data?.map((item: any, index: number) => {
     const row = [

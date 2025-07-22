@@ -6,8 +6,8 @@ export const CrewTableData = (
   selectedPage: number,
   size: number
 ) => {
-  const canUpdate = hasPermission("Crew", "update");
-  const canDelete = hasPermission("Crew", "delete");
+  const canUpdate = hasPermission("crew", "update");
+  const canDelete = hasPermission("crew", "delete");
   const showActionColumn = canDelete || canUpdate;
   return crewListData?.crews?.map((item: any, index: number) => {
     const row = [
@@ -27,10 +27,6 @@ export const CrewTableData = (
         data: item?.phone_number,
       },
       {
-        title: "Is Active",
-        data: item,
-      },
-      {
         title: "Preferred Location",
         data: item?.preferred_work_territory,
       },
@@ -47,6 +43,13 @@ export const CrewTableData = (
         data: item?.address,
       },
     ];
+
+    if (canUpdate) {
+      row.push({
+        title: "Is Active",
+        data: item,
+      });
+    }
 
     if (showActionColumn) {
       row.push({

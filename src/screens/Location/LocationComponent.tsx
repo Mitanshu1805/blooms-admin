@@ -36,9 +36,9 @@ function LocationComponent({
   searchInput,
   handleChangeSearch,
 }: LocationProps) {
-  const canUpdate = hasPermission("Territories", "update");
-  const canDelete = hasPermission("Territories", "delete");
-  const canView = hasPermission("Territories", "read");
+  const canUpdate = hasPermission("territories", "update");
+  const canDelete = hasPermission("territories", "delete");
+  const canView = hasPermission("territories", "read");
   const showActionColumn = canDelete || canUpdate;
   const navigation = useNavigate();
   const HeaderData = [
@@ -74,7 +74,7 @@ function LocationComponent({
           </div>
         </div>
         <div className="details-list-top-right">
-          {hasPermission("Territories", "write") && (
+          {hasPermission("territories", "create") && (
             <Button
               className="details-list-btn"
               name={"Add Territory"}
@@ -90,10 +90,10 @@ function LocationComponent({
           listHeaderData={HeaderData}
           listData={listData}
           onEditHandler={
-            hasPermission("Territories", "update") ? onEditHandler : undefined
+            hasPermission("territories", "update") ? onEditHandler : undefined
           }
           onDeleteHandler={
-            hasPermission("Territories", "delete") ? onDeleteHandler : undefined
+            hasPermission("territories", "delete") ? onDeleteHandler : undefined
           }
           navigationClick={(value: any) =>
             navigation("/territories/services", {

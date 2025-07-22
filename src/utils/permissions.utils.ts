@@ -11,6 +11,8 @@ export const hasPermission = (
 
     const modulePermissions = parsedPermissions[moduleName];
 
+    // console.log("modulePermissions -> ", modulePermissions);
+
     if (!modulePermissions || !Array.isArray(modulePermissions)) return false;
 
     return modulePermissions.includes(permissionType);

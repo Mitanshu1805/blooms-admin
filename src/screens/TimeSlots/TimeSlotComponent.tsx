@@ -2,6 +2,7 @@ import moment from "moment";
 import { DropDown } from "../../components";
 import "./TimeSlot.scss";
 import TimePicker from "react-time-picker";
+import { hasPermission } from "../../utils/permissions.utils";
 
 interface TimeSlotsProps {
   territoryOptions: any;
@@ -36,6 +37,13 @@ function TimeSlotComponent({
   handleTimelimitChange,
   globalTimelimitSubmitHandler,
 }: TimeSlotsProps) {
+  const canUpdate = hasPermission("disable_timeslots", "update");
+  const canDelete = hasPermission("disable_timeslots", "delete");
+  const canView = hasPermission("disable_timeslots", "read");
+
+  if (!canView) {
+    return <div>You do not have permission to view this page.</div>;
+  }
   return (
     <div className="details-list-card card">
       <div className="details-list-top">
@@ -57,12 +65,14 @@ function TimeSlotComponent({
             clockIcon={true}
             disableClock={true}
           />
-          <button
-            onClick={globalTimelimitSubmitHandler}
-            className="month-button"
-          >
-            <div className="month-card selected">Save</div>
-          </button>
+          {hasPermission("disable_timeslots", "update") && (
+            <button
+              onClick={globalTimelimitSubmitHandler}
+              className="month-button"
+            >
+              <div className="month-card selected">Save</div>
+            </button>
+          )}
         </div>
       </div>
       <div className="details-list-table">

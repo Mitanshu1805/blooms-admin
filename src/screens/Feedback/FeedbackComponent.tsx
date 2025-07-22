@@ -32,9 +32,9 @@ function FeedbackComponent({
   handleChangeSearch,
   handleSwitchChange,
 }: FeedbackProps) {
-  const canUpdate = hasPermission("Feedback", "update");
-  const canDelete = hasPermission("Feedback", "delete");
-  const canView = hasPermission("Feedback", "read");
+  const canUpdate = hasPermission("feedback", "update");
+  const canDelete = hasPermission("feedback", "delete");
+  const canView = hasPermission("feedback", "read");
   const showActionColumn = canDelete;
   const showReviewerColumn = canUpdate;
   const HeaderData = [
@@ -80,7 +80,7 @@ function FeedbackComponent({
           listHeaderData={HeaderData}
           listData={listData}
           onDeleteHandler={
-            hasPermission("Feedback", "delete") ? onDeleteHandler : undefined
+            hasPermission("feedback", "delete") ? onDeleteHandler : undefined
           }
           handleChange={
             canUpdate ? (value: any) => handleSwitchChange(value) : undefined

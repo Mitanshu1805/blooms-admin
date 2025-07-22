@@ -42,19 +42,20 @@ function CrewComponent({
   handleChangeSearch,
   navigation,
 }: CrewProps) {
-  const canUpdate = hasPermission("Crew", "update");
-  const canDelete = hasPermission("Crew", "delete");
-  const canView = hasPermission("Crew", "read");
+  const canUpdate = hasPermission("crew", "update");
+  const canDelete = hasPermission("crew", "delete");
+  const canView = hasPermission("crew", "read");
   const showActionColumn = canDelete || canUpdate;
   const HeaderData = [
     "No",
     "Name",
     "Phone Number",
-    "Status",
+    // "Status",
     "Preferred Location",
     "Special Service",
     "Start Work Date",
     "Address",
+    ...(canUpdate ? ["Status"] : []),
     ...(showActionColumn ? ["Action"] : []),
     // "Action",
   ];
@@ -81,7 +82,7 @@ function CrewComponent({
           </div>
         </div>
         <div className="details-list-top-right">
-          {hasPermission("Crew", "write") && (
+          {hasPermission("crew", "create") && (
             <Button
               className="details-list-btn"
               name={"Add Crew"}
@@ -97,12 +98,15 @@ function CrewComponent({
           listHeaderData={HeaderData}
           listData={listData}
           onEditHandler={
-            hasPermission("Crew", "update") ? onEditHandler : undefined
+            hasPermission("crew", "update") ? onEditHandler : undefined
           }
           onDeleteHandler={
-            hasPermission("Crew", "delete") ? onDeleteHandler : undefined
+            hasPermission("crew", "delete") ? onDeleteHandler : undefined
           }
-          handleChange={(value: any) => handleSwitchChange(value)}
+          // handleChange={(value: any) => handleSwitchChange(value)}
+          handleChange={
+            hasPermission("crew", "update") ? handleSwitchChange : undefined
+          }
           isView={true}
           isViewPayment={true}
           onDetailsViewHandler={(value: any) => onDetailsViewHandler(value)}

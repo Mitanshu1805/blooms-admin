@@ -6,7 +6,7 @@ export const OrderTableData = (
   selectedPage: number,
   size: number
 ) => {
-  const canDelete = hasPermission("Orders", "delete");
+  const canDelete = hasPermission("orders", "delete");
   const showActionColumn = canDelete;
   return userListData?.data?.map((item: any, index: number) => {
     const row = [

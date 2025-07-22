@@ -52,7 +52,7 @@ export const AddUserA = async (
         joining_date: joiningDate,
         employee_type: userData.employee_type,
         service_type: userData.service_type,
-        role: userData.role,
+        role_id: userData.role_id,
         id_card: userData.id_card,
       },
     });
@@ -99,8 +99,9 @@ export const EditUserA = async (
         joining_date: joiningDate,
         employee_type: editItem.employee_type,
         service_type: editItem.service_type,
-        role: editItem.role,
+        role_id: editItem.role_id,
         id_card: editItem.id_card,
+        // password: editItem.password,
       },
     });
     if (response?.status === 200) {
