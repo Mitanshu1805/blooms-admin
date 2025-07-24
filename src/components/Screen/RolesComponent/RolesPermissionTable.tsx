@@ -12,6 +12,7 @@ import { RolesPermissionTableData } from "./RolesPermissionsTableData";
 function RolesPermissionTable({
   handleCheckboxChange,
   selectedPermissions,
+  editItem,
 }: any) {
   const [modulesListData, setModulesListData] = useState<any>([]);
   const [selectedPage, setSelectedPage] = useState(1);
@@ -28,6 +29,8 @@ function RolesPermissionTable({
     "Delete",
     "Select All",
   ];
+
+  // console.log("editItem in perm table", editItem);
 
   const fetchModules = async () => {
     setIsLoading(true);
@@ -55,6 +58,7 @@ function RolesPermissionTable({
     modulesListData,
     selectedPermissions,
     handleCheckboxChange,
+    editItem,
   });
 
   return (
@@ -64,6 +68,7 @@ function RolesPermissionTable({
           isLoading={isLoading}
           listHeaderData={HeaderData}
           listData={listData}
+          // editItem={editItem}
         />
       </div>
     </div>

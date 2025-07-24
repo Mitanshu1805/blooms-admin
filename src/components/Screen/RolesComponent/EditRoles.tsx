@@ -1,4 +1,5 @@
 import { Button, DropDown, Input } from "../..";
+import RolesPermissionTable from "./RolesPermissionTable";
 
 function EditRoles({
   editItem,
@@ -7,7 +8,10 @@ function EditRoles({
   UserFormSubmitHandler,
   toggleUserPopup,
   isLoading,
+  handleCheckboxChange,
+  selectedPermissions,
 }: any) {
+  // console.log("editItem>>", editItem);
   return (
     <div className="popup-box-wrapper">
       <div className="popup-box-container">
@@ -35,56 +39,13 @@ function EditRoles({
                   error={errors?.role_name}
                 />
               </div>
-
-              <div className="col-md-4">
-                <DropDown
-                  label={"Access Type"}
-                  data={["Read", "Read & create"]}
-                  value={editItem.access_type}
-                  onChange={(e: any) =>
-                    setEditItem((prevValue: any) => ({
-                      ...prevValue,
-                      access_type: e.target.value,
-                    }))
-                  }
-                  error={errors?.access_type}
-                />
-              </div>
             </div>
 
-            <div className="row justify-content-center">
-              <div className="col-md-4">
-                <Input
-                  className={"add-details-input-container"}
-                  inputContainerClassName={"add-details-text-field-container"}
-                  label="Role Code"
-                  type="text"
-                  placeholder="Role Code"
-                  value={editItem.role_code}
-                  onChange={(e: any) => {
-                    setEditItem((prevValue: any) => ({
-                      ...prevValue,
-                      role_code: e.target.value,
-                    }));
-                  }}
-                />
-              </div>
-
-              <div className="col-md-4">
-                <DropDown
-                  label={"Permission Type"}
-                  data={["View", "Add", "Update", "Delete"]}
-                  value={editItem.permission_type}
-                  onChange={(e: any) =>
-                    setEditItem((prevValue: any) => ({
-                      ...prevValue,
-                      permission_type: e.target.value,
-                    }))
-                  }
-                  error={errors?.permission_type}
-                />
-              </div>
-            </div>
+            <RolesPermissionTable
+              handleCheckboxChange={handleCheckboxChange}
+              selectedPermissions={selectedPermissions}
+              editItem={editItem}
+            />
           </div>
         </div>
         <div className="underline" />

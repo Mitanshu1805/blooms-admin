@@ -20,7 +20,9 @@ const TableComponent = ({
   isViewPayment,
   navigationClick,
   paymentNavigate,
-}: any) => {
+}: // editItem,
+any) => {
+  // console.log("editItem in perm table data >>>", editItem);
   return (
     <>
       {isLoading ? (

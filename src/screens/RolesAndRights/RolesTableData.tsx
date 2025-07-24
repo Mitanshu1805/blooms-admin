@@ -10,7 +10,7 @@ export const RolesTableData = (
   const showActionColumn = canDelete;
   return userListData?.data?.roles?.map((item: any, index: number) => {
     // console.log("userListData?>>>>>", userListData);
-    console.log("item?>>", item);
+    // console.log("item?>>", item);
     const formatModuleName = (name: string) => {
       return name
         .split("_")

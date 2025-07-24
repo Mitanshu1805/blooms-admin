@@ -6,31 +6,16 @@ function AddRoles({
   userData,
   setUserData,
   errors,
-  UserFormSubmitHandler,
+  handleSubmit,
   toggleUserPopup,
   isLoading,
   selectedPermissions,
   setSelectedPermissions,
   handleCheckboxChange,
+  mode,
+  editItem,
+  setEditItem,
 }: any) {
-  const handleSelectAll = () => {
-    const permissionModules = [
-      "sub_services",
-      "roles",
-      "pink_dates",
-      "disable_timeslots",
-    ];
-
-    const allPermissions: Record<string, string[]> = {};
-
-    permissionModules.forEach((module) => {
-      allPermissions[module] = ["create", "read", "update", "delete"];
-    });
-
-    setSelectedPermissions(allPermissions);
-    console.log("Selected All Permissions:", allPermissions);
-  };
-
   return (
     <div className="popup-box-wrapper">
       <div className="popup-box-container">
@@ -42,32 +27,28 @@ function AddRoles({
         <div className="container">
           <div className="row justify-content-center">
             <div className="col-md-4">
+              <h2>{mode === "edit" ? "Edit Role" : "Add Role"}</h2>
               <Input
                 className={"add-details-input-container"}
                 inputContainerClassName={"add-details-text-field-container"}
                 label="Role Name"
                 type="text"
                 placeholder="Role Name"
-                value={userData.role_name}
+                value={editItem.role_name}
                 onChange={(e: any) => {
-                  setUserData((prev: any) => ({
+                  setEditItem((prev: any) => ({
                     ...prev,
-                    role_name: e.target.value,
+                    editItem: e.target.value,
                   }));
                 }}
                 error={errors?.role_name}
               />
             </div>
           </div>
-
-          {/* <div className="row justify-content-end mt-3">
-            <div className="col-auto">
-              <Button name="Select All" onClick={handleSelectAll} />
-            </div>
-          </div> */}
           <RolesPermissionTable
             handleCheckboxChange={handleCheckboxChange}
             selectedPermissions={selectedPermissions}
+            editItem={editItem}
           />
         </div>
 
@@ -77,7 +58,7 @@ function AddRoles({
             isLoading={isLoading}
             className="add-details-submit-btn"
             name="Submit"
-            onClick={UserFormSubmitHandler}
+            onClick={handleSubmit}
           />
           <Button
             className="add-details-cancel-btn"

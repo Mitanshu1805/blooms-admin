@@ -116,10 +116,11 @@ function ODComponent({
   const LeftOrderDetailsData = [
     { label: "Contact Person", title: item?.contact_person },
     { label: "Contact no.", title: item?.contact_no },
-    { label: "Location Name", title: item?.location_name },
-    { label: "City", title: item?.city },
-    { label: "Address", title: item?.address },
-    { label: "Unit", title: item?.unit },
+    { label: "Block No.", title: item?.block },
+    { label: "Street Address", title: item?.address },
+    { label: "Unit No.", title: item?.unit },
+    { label: "Constituency", title: item?.city },
+    { label: "Country", title: item?.location_name },
     { label: "Note", title: item?.note },
   ];
 

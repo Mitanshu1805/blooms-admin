@@ -92,8 +92,9 @@ function RolesComponent({
           isLoading={isLoading}
           listHeaderData={HeaderData}
           listData={listData}
-          // onEditHandler={(value: any) => onEditHandler(value)}
-
+          onEditHandler={
+            hasPermission("roles", "update") ? onEditHandler : undefined
+          }
           onDeleteHandler={
             hasPermission("roles", "delete") ? onDeleteHandler : undefined
           }

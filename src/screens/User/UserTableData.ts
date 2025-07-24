@@ -11,7 +11,7 @@ export const UserTableData = (
   const showActionColumn = canDelete || canUpdate;
 
   return userListData?.users?.map((item: any, index: number) => {
-    console.log("userListData>>", userListData);
+    // console.log("userListData>>", userListData);
     const row = [
       {
         title: "No.",

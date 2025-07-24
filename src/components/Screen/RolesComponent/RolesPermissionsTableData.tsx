@@ -2,6 +2,7 @@ export const RolesPermissionTableData = ({
   modulesListData,
   selectedPermissions,
   handleCheckboxChange,
+  editItem,
 }: any) => {
   const formatModuleName = (name: string) => {
     return name
@@ -11,6 +12,23 @@ export const RolesPermissionTableData = ({
   };
 
   return modulesListData?.map((module: any, index: number) => {
+    const modulePerm = selectedPermissions[module.module_name] || {
+      module_id: module.module_id,
+      actions: [],
+    };
+    console.log("modulePerm>>", modulePerm);
+
+    console.log("modulesListData>>", module.module_id);
+    // console.log("selectedPermissions>>", selectedPermissions);
+    // console.log(
+    //   "selectedPermissions[module.module_name]>>",
+    //   selectedPermissions[module.module_name]
+    // );
+    // console.log(
+    //   "selectedPermissions[module.module_name] FLAT>>",
+    //   (selectedPermissions[module.module_name] || []).flat()
+    // );
+
     return [
       {
         title: "No.",
@@ -25,9 +43,14 @@ export const RolesPermissionTableData = ({
         data: (
           <input
             type="checkbox"
-            checked={selectedPermissions[module.module_id]?.includes?.("read")}
+            checked={modulePerm.actions.includes("read")}
             onChange={(e) =>
-              handleCheckboxChange(module.module_id, "read", e.target.checked)
+              handleCheckboxChange(
+                module.module_name,
+                module.module_id,
+                "read",
+                e.target.checked
+              )
             }
           />
         ),
@@ -37,12 +60,14 @@ export const RolesPermissionTableData = ({
         data: (
           <input
             type="checkbox"
-            checked={
-              selectedPermissions[module.module_id]?.includes?.("create") ||
-              false
-            }
+            checked={modulePerm.actions.includes("create")}
             onChange={(e) =>
-              handleCheckboxChange(module.module_id, "create", e.target.checked)
+              handleCheckboxChange(
+                module.module_name,
+                module.module_id,
+                "create",
+                e.target.checked
+              )
             }
           />
         ),
@@ -52,11 +77,14 @@ export const RolesPermissionTableData = ({
         data: (
           <input
             type="checkbox"
-            checked={selectedPermissions[module.module_id]?.includes?.(
-              "update"
-            )}
+            checked={modulePerm.actions.includes("update")}
             onChange={(e) =>
-              handleCheckboxChange(module.module_id, "update", e.target.checked)
+              handleCheckboxChange(
+                module.module_name,
+                module.module_id,
+                "update",
+                e.target.checked
+              )
             }
           />
         ),
@@ -66,11 +94,14 @@ export const RolesPermissionTableData = ({
         data: (
           <input
             type="checkbox"
-            checked={selectedPermissions[module.module_id]?.includes?.(
-              "delete"
-            )}
+            checked={modulePerm.actions.includes("delete")}
             onChange={(e) =>
-              handleCheckboxChange(module.module_id, "delete", e.target.checked)
+              handleCheckboxChange(
+                module.module_name,
+                module.module_id,
+                "delete",
+                e.target.checked
+              )
             }
           />
         ),
@@ -81,11 +112,16 @@ export const RolesPermissionTableData = ({
           <input
             type="checkbox"
             checked={["read", "create", "update", "delete"].every((p) =>
-              selectedPermissions[module.module_id]?.includes?.(p)
+              modulePerm.actions.includes(p)
             )}
             onChange={(e) =>
               ["read", "create", "update", "delete"].forEach((perm) =>
-                handleCheckboxChange(module.module_id, perm, e.target.checked)
+                handleCheckboxChange(
+                  module.module_name,
+                  module.module_id,
+                  perm,
+                  e.target.checked
+                )
               )
             }
           />

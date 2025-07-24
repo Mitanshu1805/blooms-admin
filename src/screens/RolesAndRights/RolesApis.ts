@@ -76,10 +76,7 @@ export const EditRolesA = async (
       method: "POST",
       data: {
         role_id: editItem.role_id,
-        role_name: editItem.role_name,
-        role_code: editItem.role_code,
-        access_type: editItem.access_type,
-        permission_type: editItem.permission_type,
+        permissions: editItem.permissions,
       },
     });
     if (response?.status === 200) {

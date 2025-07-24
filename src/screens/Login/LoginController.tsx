@@ -22,7 +22,6 @@ function LoginController() {
     console.log("response>>>", response);
     const rawPermissions = response?.data?.permissions || [];
     console.log("rawPermissions>", rawPermissions);
-
     if (response?.status === 200) {
       sessionStorage.setItem("auth_token", response?.data?.auth_token);
       sessionStorage.setItem("phone_number", response?.data?.phone_number);
@@ -30,25 +29,26 @@ function LoginController() {
         "user_details",
         JSON.stringify(response?.data?.details)
       );
-      // if (rawPermissions.length > 0) {
-      //   const firstModuleName = rawPermissions[0]?.module_name;
-      //   console.log("firstModuleName>", firstModuleName);
-      //   if (firstModuleName) {
-      //     navigate(firstModuleName);
-      //   } else {
-      //   }
-      // }
-      const skipModules = ["services", "sub_services"];
-      const nextModule = rawPermissions.find(
-        (perm: any) =>
-          perm.module_name && !skipModules.includes(perm.module_name)
+
+      const dashboardModule = rawPermissions.find(
+        (module: any) => module.module_name === "dashboard"
       );
-      if (nextModule?.module_name) {
-        navigate(`/${nextModule.module_name}`);
+
+      if (dashboardModule) {
+        navigate("/dashboard", { replace: true });
       } else {
-        console.warn("No valid modules to navigate");
+        const skipModules = ["services", "sub_services"];
+        const nextModule = rawPermissions.find(
+          (perm: any) =>
+            perm.module_name && !skipModules.includes(perm.module_name)
+        );
+
+        if (nextModule?.module_name) {
+          navigate(`/${nextModule.module_name}`);
+        } else {
+          console.warn("No valid modules to navigate");
+        }
       }
-      // navigate("/dashboard", { replace: true });
     }
   };
 

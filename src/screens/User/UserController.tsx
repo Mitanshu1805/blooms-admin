@@ -284,7 +284,7 @@ function UserController() {
     setSearchInput(e.target.value);
   };
 
-  console.log("editItem>>", editItem);
+  // console.log("editItem>>", editItem);
 
   return (
     <div>
