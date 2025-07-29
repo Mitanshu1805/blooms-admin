@@ -40,10 +40,16 @@ export const ValidateLoginPassword = (password: ValidateProps["password"]) => {
   return false;
 };
 
-export const ValidateName = (name: ValidateProps["name"]) => {
-  if (name?.trim() === "") {
-    return 1;
-  }
+// export const ValidateName = (name: ValidateProps["name"]) => {
+//   if (name?.trim() === "") {
+//     return 1;
+//   }
+//   return false;
+// };
+export const ValidateName = (name: any) => {
+  if (name === undefined || name === null) return 1;
+  if (typeof name !== "string" && typeof name !== "number") return 1;
+  if (String(name).trim() === "") return 1;
   return false;
 };
 

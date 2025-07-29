@@ -21,14 +21,16 @@ export const AddServiceValidator = (
   let newErrors: any = {};
   let isValid: boolean = true;
   const statusServiceName = ValidateName(serviceData.service_name);
-  const statusBasePrice = ValidateName(serviceData.base_price);
+  // const statusBasePrice = ValidateName(serviceData.base_price);
+  const statusBasePrice = ValidateName(String(serviceData.cost));
+
   const statusServiceKey = ValidateName(serviceData.web_page_service_key);
   const statusEachSlot = ValidateName(serviceData.timing_of_each_slot);
-  const statusWaiver = ValidateName(serviceData.waiver);
+  const statusWaiver = ValidateName(String(serviceData.waiver ?? ""));
   const validWaiver = ValidatePercentage(serviceData.waiver);
   const statusLastSlot = ValidateName(endTime);
   const statusFirstSlot = ValidateName(startTime);
-  const statusImage = ValidateName(serviceImage.preview);
+  const statusImage = ValidateName(String(serviceImage.preview ?? ""));
   const propertyTypeValidationObj = validatePropertyType(
     serviceData.property_type
   );
@@ -41,7 +43,7 @@ export const AddServiceValidator = (
   }
 
   if (statusBasePrice) {
-    newErrors.base_price = statusBasePrice === 1 ? "Price is Required" : "";
+    newErrors.cost = statusBasePrice === 1 ? "Price is Required" : "";
     isValid = false;
   }
 
@@ -87,6 +89,20 @@ export const AddServiceValidator = (
   }
 
   setErrors(newErrors);
+
+  console.log("🧪 Validation Check Results:");
+  console.log("service_name", statusServiceName);
+  console.log("cost", statusBasePrice);
+  console.log("web_page_service_key", statusServiceKey);
+  console.log("timing_of_each_slot", statusEachSlot);
+  console.log("first_slot", statusFirstSlot);
+  console.log("last_slot", statusLastSlot);
+  console.log("waiver", statusWaiver);
+  console.log("validWaiver", validWaiver);
+  console.log("image", statusImage);
+  console.log("property_type", propertyTypeValidationObj);
+  console.log("Final isValid:", isValid);
+
   return isValid;
 };
 

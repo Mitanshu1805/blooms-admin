@@ -68,6 +68,7 @@ export const AddServiceA = async (
     form_data.append("last_slot", endTime);
     form_data.append("first_slot", startTime);
     form_data.append("has_brand", has_brand);
+    form_data.append("waiver", "0");
 
     const response = await ApiCallFormData({
       endpoint: "services/add",

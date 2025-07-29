@@ -80,7 +80,7 @@ function ServiceController() {
     );
   };
 
-  console.log("serviceData>>>>", serviceData);
+  // console.log("serviceData>>>>", serviceData);
 
   const AddServiceApi = async () => {
     console.log("serviceData>>>>", serviceData);
