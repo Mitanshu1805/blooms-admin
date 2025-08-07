@@ -121,6 +121,7 @@ function ODComponent({
     { label: "Unit No.", title: item?.unit },
     { label: "Constituency", title: item?.city },
     { label: "Country", title: item?.location_name },
+    { label: "Postal Code", title: item?.postal_code },
     { label: "Note", title: item?.note },
   ];
 

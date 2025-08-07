@@ -113,7 +113,7 @@ export const EditServiceA = async (
     form_data.append("cost", editItem.cost);
     form_data.append("share_count", editItem.share_count);
     form_data.append("web_page_service_key", editItem.web_page_service_key);
-    form_data.append("waiver", editItem.waiver);
+    // form_data.append("waiver", editItem.waiver);
     const response = await ApiCallFormData({
       endpoint: "services/update",
       method: "POST",

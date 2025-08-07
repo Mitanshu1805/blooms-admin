@@ -412,9 +412,11 @@ function ServiceController() {
   };
 
   const ServiceEditFormSubmitHandler = () => {
-    if (WaiverValidator(editItem.waiver, setErrors)) {
-      EditServiceApi();
-    }
+    console.log("editItem waiver?", editItem.waiver);
+
+    // if (WaiverValidator(editItem.waiver, setErrors)) {
+    EditServiceApi();
+    // }
   };
 
   const toggleDeletePopup = () => {
