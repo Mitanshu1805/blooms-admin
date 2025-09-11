@@ -95,7 +95,13 @@ const Sidebar = ({ sidebarOpen, handleToggleSidebar, setIsLogout }: any) => {
       path: "/client",
       permissionKey: "client",
     },
-
+    {
+      id: 13,
+      name: "Offer",
+      icon: "bx bx-user",
+      path: "/offer",
+      // permissionKey: "offer",
+    },
     {
       id: 14,
       name: "Log out",

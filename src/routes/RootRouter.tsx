@@ -18,6 +18,7 @@ import {
   Services,
   TimeSlots,
   User,
+  Offer,
   // Permissions,
 } from "../screens";
 import PrivateRoute from "./ProtectedRoute";
@@ -136,6 +137,14 @@ function RootRouter() {
           element={
             <PrivateRoute>
               <General Component={Client} />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/offer"
+          element={
+            <PrivateRoute>
+              <General Component={Offer} />
             </PrivateRoute>
           }
         />

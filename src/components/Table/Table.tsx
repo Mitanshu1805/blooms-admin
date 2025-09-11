@@ -68,7 +68,7 @@ any) => {
                                 ) : null}
                                 {isView ? (
                                   <Image
-                                    style={{ paddingLeft: "10px" }}
+                                    style={{ paddingLeft: "15px" }}
                                     src={Eye}
                                     onClick={() => {
                                       navigationClick
@@ -102,7 +102,8 @@ any) => {
                                       j?.data?.user_id ??
                                       j?.data?.feedback_id ??
                                       j?.data?.option_id ??
-                                      j?.data?.property_type_id,
+                                      j?.data?.property_type_id ??
+                                      j?.data?.offer_id,
                                     status: val,
                                   })
                                 }
