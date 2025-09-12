@@ -18,6 +18,19 @@ const OfferTableData = (OfferListData: any) => {
         data: offer?.content,
       },
       {
+        title: "Locations",
+        data: (
+          <span>
+            {offer?.locations?.map((loc: any, i: number) => (
+              <span key={i}>
+                {loc.location_name}
+                {i < offer.locations.length - 1 && ", "}
+              </span>
+            ))}
+          </span>
+        ),
+      },
+      {
         title: "Is Active",
         data: offer,
       },

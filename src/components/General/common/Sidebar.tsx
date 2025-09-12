@@ -98,7 +98,8 @@ const Sidebar = ({ sidebarOpen, handleToggleSidebar, setIsLogout }: any) => {
     {
       id: 13,
       name: "Offer",
-      icon: "bx bx-user",
+      // icon: "bx bx-purchase-tag",
+      icon: "bx bx-gift",
       path: "/offer",
       // permissionKey: "offer",
     },

@@ -22,6 +22,11 @@ export const OfferList = async (setIsLoading: (val: boolean) => void) => {
   }
 };
 
+interface Location {
+  location_id: string;
+  // location_name: string;
+}
+
 export const OfferAdd = async (
   setIsLoading: (val: boolean) => void,
   offerData: {
@@ -29,17 +34,25 @@ export const OfferAdd = async (
     is_clickable: boolean;
     content: string;
     image: string;
+    location_ids: Location[];
   }
 ) => {
   try {
     setIsLoading(true);
     const formData = new FormData();
+    console.log("offerData in api", offerData);
+
     formData.append("name", offerData.name);
     formData.append("is_clickable", String(offerData.is_clickable));
     formData.append("content", offerData.content);
     if (offerData.image) {
       formData.append("image", offerData.image);
     }
+    const locationIds = offerData.location_ids;
+    console.log(locationIds);
+
+    formData.append("location_ids", JSON.stringify(locationIds));
+    console.log(typeof locationIds);
     const response = await ApiCallFormData({
       endpoint: "offer/add",
       method: "POST",
@@ -66,11 +79,14 @@ export const OfferUpdate = async (
     is_clickable: boolean;
     content: string;
     image: File;
+    locations: [];
   }
 ) => {
   try {
     setIsLoading(true);
     const formData = new FormData();
+    console.log(offerData);
+
     formData.append("offer_id", offerData.offer_id);
     formData.append("name", offerData.name);
     formData.append("is_clickable", String(offerData.is_clickable));
@@ -78,6 +94,10 @@ export const OfferUpdate = async (
     if (offerData.image) {
       formData.append("image", offerData.image);
     }
+    const locationIds = offerData?.locations?.map(
+      (item: any) => item.location_id
+    );
+    formData.append("location_ids", JSON.stringify(locationIds));
     const response = await ApiCallFormData({
       endpoint: "offer/update",
       method: "PUT",

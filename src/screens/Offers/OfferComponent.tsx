@@ -7,6 +7,8 @@ interface OfferProps {
   isLoading: boolean;
   handleSwitchChange: (value: any) => void;
   toggleOfferPopUp: any;
+  onDeleteHandler: (value: any) => void;
+  onEditHandler: (value: any) => void;
 }
 
 function OfferComponent({
@@ -14,9 +16,19 @@ function OfferComponent({
   isLoading,
   handleSwitchChange,
   toggleOfferPopUp,
+  onDeleteHandler,
+  onEditHandler,
 }: OfferProps) {
   //   const offerData = offerListData.map((name: any) => name.name);
-  const HeaderData = ["No.", "Image", "Name", "Content", "Is Active", "Action"];
+  const HeaderData = [
+    "No.",
+    "Image",
+    "Name",
+    "Content",
+    "Locations",
+    "Is Active",
+    "Action",
+  ];
 
   const listData = OfferTableData(offerListData);
   return (
@@ -38,13 +50,14 @@ function OfferComponent({
           isLoading={isLoading}
           listHeaderData={HeaderData}
           listData={listData}
+          onEditHandler={onEditHandler}
           // onEditHandler={
           //   hasPermission("user", "update") ? onEditHandler : undefined
           // }
           // onEditOurselves={
           //   hasPermission("user", "update") ? onEditOurselves : undefined
           // }
-          // onDeleteHandler={onDeleteHandler}
+          onDeleteHandler={onDeleteHandler}
           handleChange={(value: any) => handleSwitchChange(value)}
         />
       </div>

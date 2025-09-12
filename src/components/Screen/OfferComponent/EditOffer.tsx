@@ -1,23 +1,25 @@
 import React from "react";
-import { AddDocument, Button, Input } from "../..";
+import Button from "../../Button/Button";
+import AddDocument from "../CrewComponent/AddDocument";
+import { Input } from "../..";
 
-function AddOffer({
-  offerData,
-  setOfferData,
-  offerImage,
+function EditOffer({
+  editOffer,
+  setEditOffer,
   errors,
-  onChangeOfferImage,
-  removePreviewProfile,
+  OfferEditFormSubmitHandler,
+  toggleEditOfferPopup,
   isLoading,
-  openOfferFormSubmitHandler,
-  toggleOfferPopUp,
+  updateOfferImage,
   locationListData,
 }: any) {
+  console.log(editOffer);
+
   return (
     <div className="popup-box-wrapper">
       <div className="popup-box-container">
         <div className="flex-col-div">
-          <span className="popup-box-title">ADD NEW OFFER</span>
+          <span className="popup-box-title">EDIT OFFER</span>
         </div>
         <div className="underline" />
         <div className="container">
@@ -29,9 +31,9 @@ function AddOffer({
                 label="Title"
                 type="text"
                 placeholder="Title"
-                value={offerData.name}
+                value={editOffer.name}
                 onChange={(e: any) => {
-                  setOfferData((prevValue: any) => ({
+                  setEditOffer((prevValue: any) => ({
                     ...prevValue,
                     name: e.target.value,
                   }));
@@ -45,9 +47,9 @@ function AddOffer({
               <input
                 type="checkbox"
                 style={{ marginBottom: "6px", height: "16px", width: "16px" }}
-                checked={offerData.is_clickable}
+                checked={editOffer.is_clickable}
                 onChange={(e: any) =>
-                  setOfferData((prevValue: any) => ({
+                  setEditOffer((prevValue: any) => ({
                     ...prevValue,
                     is_clickable: e.target.checked,
                   }))
@@ -62,9 +64,9 @@ function AddOffer({
                 label="Content"
                 type="text"
                 placeholder="Content"
-                value={offerData.content}
+                value={editOffer.content}
                 onChange={(e: any) => {
-                  setOfferData((prevValue: any) => ({
+                  setEditOffer((prevValue: any) => ({
                     ...prevValue,
                     content: e.target.value,
                   }));
@@ -76,10 +78,14 @@ function AddOffer({
           <div className="add-details-input-rows">
             <AddDocument
               name={""}
-              logoPreview={offerImage.preview}
-              onChangeLogo={onChangeOfferImage}
-              removePreview={removePreviewProfile}
-              error={errors?.image}
+              logoPreview={editOffer.image}
+              onChangeLogo={updateOfferImage}
+              removePreview={() =>
+                setEditOffer((prevState: any) => ({
+                  ...prevState,
+                  image: null,
+                }))
+              }
             />
           </div>
         </div>
@@ -92,7 +98,7 @@ function AddOffer({
                 style={{ maxHeight: "150px", overflowY: "auto" }}
               >
                 {locationListData?.roles?.map((location: any) => {
-                  const isSelected = offerData.locations?.some(
+                  const isSelected = editOffer.locations?.some(
                     (loc: any) => loc.location_id === location.location_id
                   );
 
@@ -106,7 +112,7 @@ function AddOffer({
                         onChange={(e) => {
                           if (e.target.checked) {
                             // add location object
-                            setOfferData((prev: any) => ({
+                            setEditOffer((prev: any) => ({
                               ...prev,
                               locations: [
                                 ...(prev.locations || []),
@@ -118,7 +124,7 @@ function AddOffer({
                             }));
                           } else {
                             // remove location object
-                            setOfferData((prev: any) => ({
+                            setEditOffer((prev: any) => ({
                               ...prev,
                               locations: (prev.locations || []).filter(
                                 (loc: any) =>
@@ -144,19 +150,18 @@ function AddOffer({
             )}
           </div>
         </div>
-
         <div className="underline" />
         <div className="flex-row-cen-cen-div">
           <Button
             isLoading={isLoading}
             className="add-details-submit-btn"
             name="Submit"
-            onClick={openOfferFormSubmitHandler}
+            onClick={OfferEditFormSubmitHandler}
           />
           <Button
             className="add-details-cancel-btn"
             name="Cancel"
-            onClick={toggleOfferPopUp}
+            onClick={toggleEditOfferPopup}
           />
         </div>
       </div>
@@ -164,4 +169,4 @@ function AddOffer({
   );
 }
 
-export default AddOffer;
+export default EditOffer;
