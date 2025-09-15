@@ -4,6 +4,7 @@ import {
   OfferAdd,
   OfferDelete,
   OfferList,
+  OfferScreen,
   OfferUpdate,
   OfferUpdateStatus,
 } from "./OffersApis";
@@ -23,6 +24,7 @@ function OfferController() {
     is_clickable: boolean;
     content: string;
     locations: Location[];
+    screen_key: string;
   }
 
   const initialValue: OfferData = {
@@ -30,6 +32,7 @@ function OfferController() {
     is_clickable: false,
     content: "",
     locations: [],
+    screen_key: "",
   };
 
   const [offerData, setOfferData] = useState<OfferData>(initialValue);
@@ -39,6 +42,7 @@ function OfferController() {
     raw: "",
   };
   const [offerListData, setOfferListData] = useState<any>();
+  const [offerScreensList, setOfferScreenList] = useState<any>();
   // const [offerData, setOfferData] = useState(initialValue);
   const [isLoading, setIsLoading] = useState(false);
   const [openOfferForm, setOpenOfferForm] = useState(false);
@@ -56,11 +60,18 @@ function OfferController() {
   useEffect(() => {
     fetchData();
     fetchLocationData();
+    fetchScreens();
   }, []);
 
   const fetchData = async () => {
     const offerDataResponse: any = await OfferList(setIsLoading);
     setOfferListData(offerDataResponse?.data?.offers);
+  };
+
+  const fetchScreens = async () => {
+    const screenResponse: any = await OfferScreen(setIsLoading);
+    // console.log(screenResponse?.data?.screens);
+    setOfferScreenList(screenResponse?.data?.screens);
   };
 
   const fetchLocationData = async () => {
@@ -101,6 +112,7 @@ function OfferController() {
     formData.append("name", offerData.name);
     formData.append("is_clickable", String(offerData.is_clickable));
     formData.append("content", offerData.content);
+    formData.append("navigation_key", offerData.screen_key);
     // formData.append("locations", JSON.stringify(offerData.locations));
     const locationIds = offerData.locations.map((loc: any) => loc.location_id);
 
@@ -113,6 +125,7 @@ function OfferController() {
     const response = await OfferAdd(setIsLoading, {
       name: offerData.name,
       is_clickable: offerData.is_clickable,
+      screen_key: offerData.screen_key,
       content: offerData.content,
       image: offerImage?.raw,
       location_ids: locationIds,
@@ -213,6 +226,7 @@ function OfferController() {
           isLoading={isLoading}
           openOfferFormSubmitHandler={openOfferFormSubmitHandler}
           toggleOfferPopUp={toggleOfferPopUp}
+          offerScreensList={offerScreensList}
         />
       ) : null}
 
@@ -226,6 +240,7 @@ function OfferController() {
           isLoading={isLoading}
           updateOfferImage={updateOfferImage}
           toggleEditOfferPopup={toggleEditOfferPopup}
+          offerScreensList={offerScreensList}
         />
       ) : null}
 

@@ -12,8 +12,12 @@ function EditOffer({
   isLoading,
   updateOfferImage,
   locationListData,
+  offerScreensList,
 }: any) {
   console.log(editOffer);
+  const screen = offerScreensList?.find(
+    (name: any) => name.screen_key === editOffer?.navigation_key
+  );
 
   return (
     <div className="popup-box-wrapper">
@@ -55,6 +59,34 @@ function EditOffer({
                   }))
                 }
               />
+            </div>
+
+            <div className="col-md-4">
+              <div className="add-details-input-container">
+                <div className="add-details-text-field-container">
+                  <label className="input-label">Select Screen</label>
+                  <select
+                    className="form-select"
+                    value={screen?.screen_key || ""}
+                    onChange={(e) =>
+                      setEditOffer((prev: any) => ({
+                        ...prev,
+                        screen_key: e.target.value,
+                      }))
+                    }
+                  >
+                    <option value="">-- Select Screen --</option>
+                    {offerScreensList?.map((screen: any) => (
+                      <option key={screen.screen_key} value={screen.screen_key}>
+                        {screen.screen_name}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+                {errors?.screen_key && (
+                  <span className="error-message">{errors.screen_key}</span>
+                )}
+              </div>
             </div>
 
             <div className="col-md-4">

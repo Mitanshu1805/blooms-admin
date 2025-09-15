@@ -22,6 +22,26 @@ export const OfferList = async (setIsLoading: (val: boolean) => void) => {
   }
 };
 
+export const OfferScreen = async (setIsLoading: (val: boolean) => void) => {
+  try {
+    setIsLoading(true);
+    const response = await ApiCall({
+      endpoint: "offer/screens",
+      method: "GET",
+    });
+    return response;
+  } catch (error: any) {
+    if (error?.data?.message) {
+      alertService.alert({
+        type: AlertType.Error,
+        message: error?.data?.message,
+      });
+    }
+  } finally {
+    setIsLoading(false);
+  }
+};
+
 interface Location {
   location_id: string;
   // location_name: string;
@@ -34,6 +54,7 @@ export const OfferAdd = async (
     is_clickable: boolean;
     content: string;
     image: string;
+    screen_key: string;
     location_ids: Location[];
   }
 ) => {
@@ -45,6 +66,7 @@ export const OfferAdd = async (
     formData.append("name", offerData.name);
     formData.append("is_clickable", String(offerData.is_clickable));
     formData.append("content", offerData.content);
+    formData.append("navigation_key", offerData.screen_key);
     if (offerData.image) {
       formData.append("image", offerData.image);
     }
@@ -80,6 +102,7 @@ export const OfferUpdate = async (
     content: string;
     image: File;
     locations: [];
+    navigation_key: string;
   }
 ) => {
   try {
@@ -90,6 +113,7 @@ export const OfferUpdate = async (
     formData.append("offer_id", offerData.offer_id);
     formData.append("name", offerData.name);
     formData.append("is_clickable", String(offerData.is_clickable));
+    formData.append("navigation_key", offerData.navigation_key);
     formData.append("content", offerData.content);
     if (offerData.image) {
       formData.append("image", offerData.image);
@@ -98,6 +122,8 @@ export const OfferUpdate = async (
       (item: any) => item.location_id
     );
     formData.append("location_ids", JSON.stringify(locationIds));
+    console.log(formData);
+
     const response = await ApiCallFormData({
       endpoint: "offer/update",
       method: "PUT",
