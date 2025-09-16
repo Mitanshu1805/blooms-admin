@@ -12,6 +12,7 @@ import AddOffer from "../../components/Screen/OfferComponent/AddOffer";
 import { DeletePopup } from "../../components";
 import EditOffer from "../../components/Screen/OfferComponent/EditOffer";
 import { LocationList } from "../Location/LocationApis";
+import { ValidateId, ValidateName } from "../../helpers/Validators";
 
 function OfferController() {
   interface Location {
@@ -105,7 +106,7 @@ function OfferController() {
     setOfferImage(imageValue);
   };
 
-  const openOfferFormSubmitHandler = async () => {
+  const AddOfferApi = async () => {
     console.log(offerData);
 
     const formData = new FormData();
@@ -136,6 +137,40 @@ function OfferController() {
       fetchData();
       toggleOfferPopUp();
     }
+  };
+
+  const openOfferFormSubmitHandler = async () => {
+    if (AddOfferValidator()) {
+      AddOfferApi();
+    }
+  };
+
+  const AddOfferValidator = () => {
+    let newErrors: any = {};
+    let isValid: boolean = true;
+    let offerName = ValidateName(offerData.name);
+    let navigationKey = ValidateName(offerData.screen_key);
+    const locationIds = offerData.locations.map((loc: any) => loc.location_id);
+    console.log(offerName, navigationKey, locationIds);
+
+    if (offerName) {
+      newErrors.name = offerName === 1 ? "Offer Name is required" : "";
+      isValid = false;
+    }
+
+    if (navigationKey) {
+      newErrors.navigation_key =
+        navigationKey === 1 ? "Please select a screen" : "";
+      isValid = false;
+    }
+
+    if (!offerData.locations || offerData.locations.length === 0) {
+      newErrors.location_ids = "Select at least one location";
+      isValid = false;
+    }
+
+    setErrors(newErrors);
+    return isValid;
   };
 
   const toggleOfferPopUp = () => {

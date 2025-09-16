@@ -14,6 +14,8 @@ function AddOffer({
   locationListData,
   offerScreensList,
 }: any) {
+  console.log(errors);
+
   const screenNames = offerScreensList?.map(
     (screen: any) => screen.screen_name
   );
@@ -81,9 +83,15 @@ function AddOffer({
                     ))}
                   </select>
                 </div>
-                {errors?.screen_key && (
-                  <span className="error-message">{errors.screen_key}</span>
-                )}
+                {errors?.navigation_key ? (
+                  <div className="inputText-error-container">
+                    {/* <Image className="inputText-img" src={RemoveIcon} /> */}
+                    <span>{errors?.navigation_key}</span>
+                  </div>
+                ) : null}
+                {/* {errors?.navigation_key && (
+                  <span className="error-message">{errors.navigation_key}</span>
+                  )} */}
               </div>
             </div>
 
@@ -160,6 +168,7 @@ function AddOffer({
                           }
                         }}
                       />
+
                       <label
                         className="form-check-label"
                         htmlFor={`loc-${location.location_id}`}
@@ -169,6 +178,12 @@ function AddOffer({
                     </div>
                   );
                 })}
+                {errors?.location_ids ? (
+                  <div className="inputText-error-container">
+                    {/* <Image className="inputText-img" src={RemoveIcon} /> */}
+                    <span>{errors?.location_ids}</span>
+                  </div>
+                ) : null}
               </div>
             </div>
             {errors?.location_id && (
