@@ -1,6 +1,8 @@
+import { appendFile } from "fs";
 import { ApiCall, ApiCallFormData } from "../../config";
 import Api from "../../config/interceptors";
 import { AlertType, alertService } from "../../utils/alert.service";
+import { str } from "ajv";
 
 export const OfferList = async (setIsLoading: (val: boolean) => void) => {
   try {
@@ -146,6 +148,7 @@ export const OfferUpdateStatus = async (
   offerData: any,
   setIsLoading: (value: boolean) => void
 ) => {
+  console.log(offerData);
   console.log("Payload going to backend:", {
     offer_id: offerData.id,
     is_active: offerData.status,
@@ -161,6 +164,39 @@ export const OfferUpdateStatus = async (
         is_active: offerData.status,
       },
     });
+    return response;
+  } catch (error: any) {
+    if (error?.data?.message) {
+      alertService.alert({
+        type: AlertType.Error,
+        message: error?.data?.message,
+      });
+    }
+  } finally {
+    setIsLoading(false);
+  }
+};
+
+interface Position {
+  offer_id: string;
+  position: number; // <-- must be number
+}
+
+export const OfferUpdatePositions = async (
+  positions: Position[],
+  setIsLoading: (val: boolean) => void
+) => {
+  try {
+    setIsLoading(true);
+
+    const response = await ApiCall({
+      endpoint: "offer/update/position",
+      method: "PUT",
+      data: {
+        positions,
+      },
+    });
+
     return response;
   } catch (error: any) {
     if (error?.data?.message) {

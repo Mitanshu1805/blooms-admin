@@ -7,6 +7,7 @@ import {
   OfferScreen,
   OfferUpdate,
   OfferUpdateStatus,
+  OfferUpdatePositions,
 } from "./OffersApis";
 import AddOffer from "../../components/Screen/OfferComponent/AddOffer";
 import { DeletePopup } from "../../components";
@@ -86,7 +87,9 @@ function OfferController() {
   };
 
   const handleSwitchChange = async (value: any) => {
-    const response = await OfferUpdateStatus(value, setIsLoading);
+    console.log(value?.value);
+
+    const response = await OfferUpdateStatus(value?.value, setIsLoading);
 
     if (response?.status === 200) {
       fetchData();
@@ -239,15 +242,24 @@ function OfferController() {
     console.log(editOffer);
   };
 
+  const updatePosition = async (data: any) => {
+    const response = await OfferUpdatePositions(data, setIsLoading);
+    if (response?.status === 200) {
+      fetchData();
+    }
+  };
+
   return (
     <div>
       <OfferComponent
         offerListData={offerListData}
+        setOfferListData={setOfferListData}
         isLoading={isLoading}
         handleSwitchChange={handleSwitchChange}
         toggleOfferPopUp={toggleOfferPopUp}
         onEditHandler={onEditHandler}
         onDeleteHandler={onDeleteHandler}
+        updatePosition={updatePosition}
       />
       {openOfferForm ? (
         <AddOffer
