@@ -49,6 +49,7 @@ function OfferController() {
   const [isLoading, setIsLoading] = useState(false);
   const [openOfferForm, setOpenOfferForm] = useState(false);
   const [offerImage, setOfferImage] = useState(imageValue);
+  const [editOfferImage, setEditOfferImage] = useState<any>();
   const [errors, setErrors] = useState(initialValue);
   const [deleteOffer, setDeleteOffer] = useState<any>("");
   const [openDeleteOfferPop, setOpenDeleteOfferPop] = useState(false);
@@ -110,7 +111,7 @@ function OfferController() {
   };
 
   const AddOfferApi = async () => {
-    console.log(offerData);
+    console.log(offerData, offerImage);
 
     const formData = new FormData();
     formData.append("name", offerData.name);
@@ -122,24 +123,26 @@ function OfferController() {
 
     formData.append("location_ids", JSON.stringify(locationIds));
 
+    console.log(offerImage);
+
     if (offerImage.raw) {
       formData.append("image", offerImage.raw);
     }
 
-    const response = await OfferAdd(setIsLoading, {
-      name: offerData.name,
-      is_clickable: offerData.is_clickable,
-      screen_key: offerData.screen_key,
-      content: offerData.content,
-      image: offerImage?.raw,
-      location_ids: locationIds,
-    });
-    if (response?.status === 201) {
-      console.log(response);
+    // const response = await OfferAdd(setIsLoading, {
+    //   name: offerData.name,
+    //   is_clickable: offerData.is_clickable,
+    //   screen_key: offerData.screen_key,
+    //   content: offerData.content,
+    //   image: offerImage?.raw,
+    //   location_ids: locationIds,
+    // });
+    // if (response?.status === 201) {
+    //   console.log(response);
 
-      fetchData();
-      toggleOfferPopUp();
-    }
+    //   fetchData();
+    //   toggleOfferPopUp();
+    // }
   };
 
   const openOfferFormSubmitHandler = async () => {
@@ -213,34 +216,91 @@ function OfferController() {
     setOpenEditOfferForm(!openEditOfferForm);
   };
 
+  // const EditOfferApi = async () => {
+  //   console.log(editOffer);
+
+  //   const response = await OfferUpdate(setIsLoading, editOffer);
+  //   if (response?.status == 200) {
+  //     fetchData();
+  //     toggleEditOfferPopup();
+  //   }
+  // };
+
   const EditOfferApi = async () => {
     console.log(editOffer);
+    // console.log(editOfferImage);
 
-    const response = await OfferUpdate(setIsLoading, editOffer);
-    if (response?.status == 200) {
+    const formData = new FormData();
+    formData.append("offer_id", editOffer.offer_id);
+    formData.append("name", editOffer.name);
+    formData.append("is_clickable", String(editOffer.is_clickable));
+    formData.append("content", editOffer.content);
+    formData.append("navigation_key", editOffer.screen_key);
+
+    const locationIds = editOffer.locations.map((loc: any) => loc.location_id);
+    formData.append("location_ids", JSON.stringify(locationIds));
+    console.log(JSON.stringify(locationIds));
+
+    if (editOffer.image) {
+      formData.append("image", editOffer.image); // send actual file
+    }
+
+    const response = await OfferUpdate(setIsLoading, {
+      offer_id: editOffer?.offer_id,
+      name: editOffer.name,
+      is_clickable: editOffer.is_clickable,
+      navigation_key: editOffer.navigation_key,
+      content: editOffer.content,
+      image: editOffer?.raw ?? editOffer?.image,
+      locations: locationIds,
+    });
+    if (response?.status === 200) {
       fetchData();
       toggleEditOfferPopup();
     }
   };
 
   const OfferEditFormSubmitHandler = () => {
+    console.log("MYLOG => ", editOffer);
     EditOfferApi();
   };
+
+  // const updateOfferImage = (e: any) => {
+  //   const file = e.target.files[0];
+  //   if (file) {
+  //     const newLogoPath = URL.createObjectURL(file);
+  //     console.log("newLogoPath>>>>", newLogoPath);
+
+  //     setEditOffer((prevState: any) => ({
+  //       ...prevState,
+  //       image: newLogoPath,
+  //       raw: file,
+  //     }));
+  //   }
+  //   console.log(editOffer);
+  // };
 
   const updateOfferImage = (e: any) => {
     const file = e.target.files[0];
     if (file) {
-      const newLogoPath = URL.createObjectURL(file);
-      console.log("newLogoPath>>>>", newLogoPath);
-
       setEditOffer((prevState: any) => ({
         ...prevState,
-        image: newLogoPath,
+        image: URL.createObjectURL(file),
         raw: file,
       }));
     }
-    console.log(editOffer);
   };
+
+  // setEditOfferImage(editOffer?.image);
+
+  // const handleUpdateOfferImage = (e: any) => {
+  //   if (e.target.files.length) {
+  //     setEditOfferImage({
+  //       preview: URL.createObjectURL(e.target.files[0]),
+  //       raw: e.target.files[0],
+  //     });
+  //   }
+  // };
 
   const updatePosition = async (data: any) => {
     const response = await OfferUpdatePositions(data, setIsLoading);
@@ -288,6 +348,9 @@ function OfferController() {
           updateOfferImage={updateOfferImage}
           toggleEditOfferPopup={toggleEditOfferPopup}
           offerScreensList={offerScreensList}
+          editOfferImage={editOfferImage}
+          // setEditOfferImage={setEditOfferImage}
+          // handleUpdateOfferImage={handleUpdateOfferImage}
         />
       ) : null}
 

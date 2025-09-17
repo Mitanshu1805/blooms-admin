@@ -102,7 +102,7 @@ export const OfferUpdate = async (
     name: string;
     is_clickable: boolean;
     content: string;
-    image: File;
+    image: string;
     locations: [];
     navigation_key: string;
   }
@@ -120,9 +120,8 @@ export const OfferUpdate = async (
     if (offerData.image) {
       formData.append("image", offerData.image);
     }
-    const locationIds = offerData?.locations?.map(
-      (item: any) => item.location_id
-    );
+    const locationIds = offerData?.locations;
+
     formData.append("location_ids", JSON.stringify(locationIds));
     console.log(formData);
 
