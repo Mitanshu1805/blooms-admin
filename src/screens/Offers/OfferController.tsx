@@ -129,20 +129,20 @@ function OfferController() {
       formData.append("image", offerImage.raw);
     }
 
-    // const response = await OfferAdd(setIsLoading, {
-    //   name: offerData.name,
-    //   is_clickable: offerData.is_clickable,
-    //   screen_key: offerData.screen_key,
-    //   content: offerData.content,
-    //   image: offerImage?.raw,
-    //   location_ids: locationIds,
-    // });
-    // if (response?.status === 201) {
-    //   console.log(response);
+    const response = await OfferAdd(setIsLoading, {
+      name: offerData.name,
+      is_clickable: offerData.is_clickable,
+      screen_key: offerData.screen_key,
+      content: offerData.content,
+      image: offerImage?.raw,
+      location_ids: locationIds,
+    });
+    if (response?.status === 201) {
+      console.log(response);
 
-    //   fetchData();
-    //   toggleOfferPopUp();
-    // }
+      fetchData();
+      toggleOfferPopUp();
+    }
   };
 
   const openOfferFormSubmitHandler = async () => {
@@ -174,8 +174,8 @@ function OfferController() {
       newErrors.location_ids = "Select at least one location";
       isValid = false;
     }
-
     setErrors(newErrors);
+    console.log(errors);
     return isValid;
   };
 
