@@ -73,7 +73,7 @@ export const EditRolesA = async (
     setIsLoading(true);
     const response = await ApiCall({
       endpoint: "role/update",
-      method: "POST",
+      method: "PUT",
       data: {
         role_id: editItem.role_id,
         permissions: editItem.permissions,

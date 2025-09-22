@@ -101,7 +101,7 @@ const Sidebar = ({ sidebarOpen, handleToggleSidebar, setIsLogout }: any) => {
       // icon: "bx bx-purchase-tag",
       icon: "bx bx-gift",
       path: "/offer",
-      // permissionKey: "offer",
+      permissionKey: "offers",
     },
     {
       id: 14,

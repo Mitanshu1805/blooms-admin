@@ -11,6 +11,8 @@ export const RolesPermissionTableData = ({
       .join(" ");
   };
 
+  console.log(modulesListData);
+
   return modulesListData?.map((module: any, index: number) => {
     const modulePerm = selectedPermissions[module.module_name] || {
       module_id: module.module_id,

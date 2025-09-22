@@ -12,6 +12,7 @@ import {
   TableLoader,
 } from "../../components";
 import { DeleteIcon, EditIcon } from "../../assets";
+import { hasPermission } from "../../utils/permissions.utils";
 
 interface OfferProps {
   offerListData: any;
@@ -35,6 +36,9 @@ function OfferComponent({
   setOfferListData,
 }: OfferProps) {
   //   const offerData = offerListData.map((name: any) => name.name);
+  const canUpdate = hasPermission("offers", "update");
+  const canDelete = hasPermission("offers", "delete");
+  const canView = hasPermission("offers", "read");
   const HeaderData = [
     "No.",
     "Image",
@@ -68,6 +72,7 @@ function OfferComponent({
           })
         }
         height={20}
+        disabled={!canUpdate}
         width={50}
         uncheckedIcon={false}
         checkedIcon={false}
@@ -83,18 +88,23 @@ function OfferComponent({
     return (
       <div className="content-middle-action-data-div">
         {/* {hasUpdate && onSubEditHandler && ( */}
-        <Image
-          style={{ paddingLeft: "10px" }}
-          src={EditIcon}
-          onClick={() => onEditHandler(data)}
-        />
+        {canUpdate && (
+          <Image
+            style={{ paddingLeft: "10px" }}
+            src={EditIcon}
+            onClick={() => onEditHandler(data)}
+          />
+        )}
         {/* )} */}
         {/* {hasDelete && onSubDeleteHandler && ( */}
-        <Image
-          style={{ paddingLeft: "10px" }}
-          src={DeleteIcon}
-          onClick={() => onDeleteHandler(data)}
-        />
+
+        {canDelete && (
+          <Image
+            style={{ paddingLeft: "10px" }}
+            src={DeleteIcon}
+            onClick={() => onDeleteHandler(data)}
+          />
+        )}
         {/* )} */}
       </div>
     );
@@ -156,14 +166,27 @@ function OfferComponent({
       cellRenderer: SwitchRenderer,
       width: 100,
     },
-    {
+  ];
+  // if (canUpdate) {
+  //   colDefs.push({
+  //     headerName: "Is Active",
+  //     field: "is_active",
+  //     cellRenderer: SwitchRenderer,
+  //     width: 100,
+  //   });
+  // }
+  if (canUpdate || canDelete) {
+    colDefs.push({
       headerName: "Action",
       field: "action",
       cellRenderer: ActionRenderer,
       width: 100,
-    },
-  ];
+    });
+  }
 
+  if (!canView) {
+    return <div>You do not have permission to view this page.</div>;
+  }
   const listData = OfferTableData(offerListData);
   return (
     <div className="details-list-card card">
@@ -172,11 +195,13 @@ function OfferComponent({
           <span className="details-list-top-left-title">OFFER LIST</span>
         </div>
         <div className="details-list-top-right">
-          <Button
-            className="details-list-btn"
-            name={"Add Offer"}
-            onClick={toggleOfferPopUp}
-          />
+          {hasPermission("offers", "create") && (
+            <Button
+              className="details-list-btn"
+              name={"Add Offer"}
+              onClick={toggleOfferPopUp}
+            />
+          )}
         </div>
       </div>
       {/* <div className="details-list-table">
