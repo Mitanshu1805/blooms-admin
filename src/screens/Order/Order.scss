@@ -59,6 +59,17 @@
   margin: 0.5rem;
   margin-top: 1rem;
 }
+.order-info-submit-btn-replay-note {
+  border: none;
+  background-color: $primary-color;
+  color: $text-color;
+  height: 40px;
+  border-radius: 10px;
+  width: 80px;
+  margin: 0.5rem;
+  margin-left: 0;
+  // margin-top: 1rem;
+}
 .image-pdf-wrap {
   display: flex;
   flex-wrap: wrap;
@@ -336,7 +347,7 @@
   margin: 7px 0 0 0;
 }
 .quote-title-container span {
-  font-weight: 600; 
+  font-weight: 600;
   font-size: 15px;
 }
 .quote-img-container {

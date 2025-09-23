@@ -9,7 +9,7 @@
   padding-top: 5px;
   padding-bottom: 5px;
   /* background-color: rgba(248, 248, 248, 1); */
-  margin-left: 10px;
+  // margin-left: 10px;
 }
 .inputText-input-wrapper {
   // margin: 30px;
@@ -17,6 +17,14 @@
   display: flex;
   flex-direction: column;
   margin-bottom: 20px;
+  min-height: 40px;
+}
+.inputText-input-wrapper-odc {
+  // margin: 30px;
+  flex-grow: 0;
+  display: flex;
+  flex-direction: column;
+  // margin-bottom: 20px;
   min-height: 40px;
 }
 .inputText-input-container {
@@ -40,6 +48,14 @@
   font-size: 15px;
   font-weight: 400;
   margin-bottom: 0px;
+}
+.inputText-label-odc {
+  left: 1em;
+  /* background-color: rgba(248, 248, 248, 1); */
+  font-size: 15px;
+  font-weight: 400;
+  margin-bottom: 0px;
+  text-align: left;
 }
 .inputText-img {
   height: 20px;

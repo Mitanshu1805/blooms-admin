@@ -9,10 +9,12 @@ import {
   SingleAccordion,
   TableComp,
   TableLoader,
+  InputForODC,
 } from "../../components";
 import { OrderDetailsTableData } from "./OrderDetailsTableData";
 import DateTimePicker from "react-datetime-picker";
 import SwitchComponent from "../../components/Toggle/Toggle";
+import AutoResizeTextarea from "../../components/InputText/AutoResizeTextArea";
 
 interface ODProps {
   isLoading: boolean;
@@ -112,6 +114,7 @@ function ODComponent({
   ];
 
   const listData = OrderDetailsTableData(item);
+  console.log("🚀 => item?.other_document:", item);
   console.log("🚀 => item?.other_document:", item?.other_document);
   const LeftOrderDetailsData = [
     { label: "Contact Person", title: item?.contact_person },
@@ -242,25 +245,24 @@ function ODComponent({
       </div>
       {item?.order_status !== "Complete" ? (
         <div className="row">
-          <div className="col-md-6">
-            <div className="d-flex align-items-center">
-              <Input
-                className={"od-text-input"}
-                style={{ width: "100%" }}
-                label="Reply Note"
-                type="text"
-                placeholder="Reply Note"
+          <div className="col-md-6 pe-0">
+            <div
+              className="d-flex flex-column"
+              style={{ alignItems: "stretch", overflow: "visible" }}
+            >
+              <AutoResizeTextarea
                 value={detailsData.note_reply}
-                onChange={(e: any) => {
+                placeholder="Reply Note"
+                onChange={(e) =>
                   setDetailsData((prevValue: any) => ({
                     ...prevValue,
                     note_reply: e.target.value,
-                  }));
-                }}
+                  }))
+                }
               />
               <Button
-                className="order-info-submit-btn"
-                name={"Add"}
+                className="order-info-submit-btn-replay-note"
+                name="Add"
                 onClick={() => {
                   if (detailsData.note_reply) {
                     NotReplySubmitHandler();

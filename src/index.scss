@@ -102,16 +102,15 @@ code {
 
 // new order container
 .od-details-container {
-  background-color: #FFC3BC;
+  background-color: #ffc3bc;
   border-radius: 0.5rem;
 }
 .od-details-title {
   border-radius: 1rem 1rem 0 0;
   padding: 5px 10px;
-  background-color: #FFFFFF;
+  background-color: #ffffff;
   align-self: flex-start;
   font-weight: bold;
-
 }
 .od-customer-info {
   display: flex;
@@ -119,8 +118,8 @@ code {
   align-items: flex-start;
   padding: 1rem;
 }
-.od-customer-info-container{
-  background-color: #FFFFFF;
+.od-customer-info-container {
+  background-color: #ffffff;
   padding: 1rem;
   border-radius: 0 1rem 1rem 1rem;
   width: 100%;
@@ -141,12 +140,11 @@ code {
   padding-left: 10px;
   text-align: left;
   display: flex;
-  align-items: center;
+  align-items: stretch;
 }
 .od-text-input {
   flex: 1;
 }
-
 
 @media (max-width: 1400px) {
   .order-container {

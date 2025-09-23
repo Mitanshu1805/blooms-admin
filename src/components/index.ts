@@ -16,6 +16,8 @@ export { default as Header } from "./General/common/Header";
 export { default as Sidebar } from "./General/common/Sidebar";
 
 export { default as Input } from "./InputText/InputText";
+export { default as InputForODC } from "./InputText/InputTextForOrderDetails";
+export { default as AutoResizeTextArea } from "./InputText/AutoResizeTextArea";
 
 export { default as TableLoader } from "../components/Loading/TableLoading";
 export { default as ArticleLoader } from "./Loading/ArticleLoader";
