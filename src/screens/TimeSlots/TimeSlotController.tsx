@@ -7,6 +7,8 @@ import {
   TimeSlotList,
   UpdateGlobalTimeLimit,
   UpdateTimeSlotList,
+  UpdateCancellationLimit,
+  CancellationTimeLimit,
 } from "./TimeSlotApis";
 import {
   format,
@@ -20,6 +22,7 @@ import { alertService, AlertType } from "../../utils/alert.service";
 
 function TimeSlotController() {
   const [territoryOptions, setTerritoryOptions] = useState<any>([]);
+  const [isLoading, setIsLoading] = useState(false);
   const [location_id, setLocation_id] = useState<any>(null);
   const [serviceOptions, setServiceOptions] = useState<any>([]);
   const [service_id, setService_id] = useState<any>(null);
@@ -30,9 +33,11 @@ function TimeSlotController() {
   const [specificDate, setSpecificDate] = useState<any>(null);
   const [timeSlotList, setTimeSlotList] = useState<any>({});
   const [timelimit, setTimelimit] = useState("09:00");
+  const [cancellationTimeLimit, setCancellationTimeLimit] = useState<any>();
 
   useEffect(() => {
     fetchData();
+    fetchCancellationTimeLimit();
   }, []);
 
   useEffect(() => {
@@ -54,6 +59,11 @@ function TimeSlotController() {
 
     const globalTimeLimit: any = await GetGlobalTimeLimit();
     setTimelimit(globalTimeLimit?.data?.data);
+  };
+
+  const fetchCancellationTimeLimit = async () => {
+    const Response: any = await CancellationTimeLimit();
+    setCancellationTimeLimit(Response?.data?.data);
   };
 
   const ServiceDropDownApi = async () => {
@@ -78,6 +88,16 @@ function TimeSlotController() {
   const handleMonthSelect = (month: any) => {
     setSelectedMonth(month);
     TimeSlotListApi(month);
+  };
+
+  const handleTimeSlotController = async (cancellation_limit: string) => {
+    const response = await UpdateCancellationLimit(
+      cancellation_limit,
+      setIsLoading
+    );
+    if (response?.status == 200) {
+      fetchCancellationTimeLimit();
+    }
   };
 
   const renderDates = (month: any) => {
@@ -186,6 +206,8 @@ function TimeSlotController() {
     <div>
       <TimeSlotComponent
         territoryOptions={territoryOptions}
+        cancellationTimeLimit={cancellationTimeLimit}
+        handleTimeSlotController={handleTimeSlotController}
         setLocation_id={setLocation_id}
         serviceOptions={serviceOptions}
         setService_id={setService_id}

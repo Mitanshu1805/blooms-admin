@@ -77,7 +77,7 @@ export const UpdateTimeSlotList = async (
 export const GetGlobalTimeLimit = async () => {
   try {
     const response = await ApiCall({
-      endpoint: "services/globaltime",
+      endpoint: "setting/globaltime",
       method: "GET",
     });
 
@@ -90,7 +90,7 @@ export const GetGlobalTimeLimit = async () => {
 export const UpdateGlobalTimeLimit = async (timeslot: string) => {
   try {
     const response = await ApiCall({
-      endpoint: "services/update/globaltime",
+      endpoint: "setting/update/globaltime",
       method: "POST",
       data: {
         timeslot: timeslot,
@@ -106,5 +106,66 @@ export const UpdateGlobalTimeLimit = async (timeslot: string) => {
     return response;
   } catch (error: any) {
     console.log("error >> ", error);
+  }
+};
+
+export const CancellationTimeLimit = async () =>
+  // setIsLoading: (val: boolean) => void
+  {
+    try {
+      // setIsLoading(true);
+      const response = await ApiCall({
+        endpoint: "setting/cancellation",
+        method: "GET",
+        data: {},
+      });
+      if (response?.status === 200) {
+        alertService.alert({
+          type: AlertType.Success,
+          message: response?.data?.message,
+        });
+      }
+      return response;
+    } catch (error: any) {
+      if (error?.data?.message) {
+        alertService.alert({
+          type: AlertType.Error,
+          message: error?.data?.message,
+        });
+      }
+    } finally {
+      // setIsLoading(false);
+    }
+  };
+
+export const UpdateCancellationLimit = async (
+  cancellation_Limit: string,
+  setIsLoading: (val: boolean) => void
+) => {
+  try {
+    setIsLoading(true);
+    const response = await ApiCall({
+      endpoint: "order/update/cancellation",
+      method: "PUT",
+      data: {
+        cancellation_Limit,
+      },
+    });
+    if (response?.status === 200) {
+      alertService.alert({
+        type: AlertType.Success,
+        message: response?.data?.message,
+      });
+    }
+    return response;
+  } catch (error: any) {
+    if (error?.data?.message) {
+      alertService.alert({
+        type: AlertType.Error,
+        message: error?.data?.message,
+      });
+    }
+  } finally {
+    setIsLoading(false);
   }
 };
