@@ -139,16 +139,16 @@ export const CancellationTimeLimit = async () =>
   };
 
 export const UpdateCancellationLimit = async (
-  cancellation_Limit: string,
+  cancellation_limit: string,
   setIsLoading: (val: boolean) => void
 ) => {
   try {
     setIsLoading(true);
     const response = await ApiCall({
-      endpoint: "order/update/cancellation",
+      endpoint: "setting/update/cancellation",
       method: "PUT",
       data: {
-        cancellation_Limit,
+        cancellation_limit,
       },
     });
     if (response?.status === 200) {
