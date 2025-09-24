@@ -105,6 +105,13 @@ const Sidebar = ({ sidebarOpen, handleToggleSidebar, setIsLogout }: any) => {
     },
     {
       id: 14,
+      name: "Global Settings",
+      icon: "bx bx-tone",
+      path: "/global-settings",
+      permissionKey: "setting",
+    },
+    {
+      id: 15,
       name: "Log out",
       icon: "bx bx-log-out",
     },
@@ -156,7 +163,7 @@ const Sidebar = ({ sidebarOpen, handleToggleSidebar, setIsLogout }: any) => {
                 currentTab === item?.path ? "active" : ""
               }`}
               onClick={() =>
-                item?.id === 14
+                item?.id === 15
                   ? setIsLogout(true)
                   : handleTabClick(item?.path ? item?.path : "")
               }

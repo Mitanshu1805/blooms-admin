@@ -19,6 +19,7 @@ import {
   TimeSlots,
   User,
   Offer,
+  GlobalSettings,
   // Permissions,
 } from "../screens";
 import PrivateRoute from "./ProtectedRoute";
@@ -105,6 +106,14 @@ function RootRouter() {
           element={
             <PrivateRoute>
               <General Component={Codes} />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/global-settings"
+          element={
+            <PrivateRoute>
+              <General Component={GlobalSettings} />
             </PrivateRoute>
           }
         />

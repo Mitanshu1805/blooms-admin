@@ -67,7 +67,7 @@ function TimeSlotComponent({
             <span className="details-list-top-left-title">TIME SLOTS</span>
           </div>
         </div>
-        <div className="selected-month">
+        {/* <div className="selected-month">
           <label className="inputText-label" htmlFor={"First Slot"}>
             Global Booking Time Limit
           </label>
@@ -90,8 +90,58 @@ function TimeSlotComponent({
               </button>
             )}
           </div>
-        </div>
+        </div> */}
         <div className="details-list-table">
+          <div className="dropdown-container">
+            <DropDown
+              style={{ width: "300px" }}
+              label={"Select Territory"}
+              onChange={(e: any) => {
+                setLocation_id(e.target.value);
+              }}
+              data={territoryOptions}
+            />
+            <div className="second-dropdown">
+              <DropDown
+                style={{ width: "300px" }}
+                label={"Select Service"}
+                onChange={(e: any) => {
+                  setService_id(e.target.value);
+                }}
+                data={location_id ? serviceOptions : ""}
+              />
+            </div>
+          </div>
+          {isNotSelected && (
+            <div className="months-container">
+              {months.map((month: any, index: number) => (
+                <button
+                  key={index}
+                  onClick={() => handleMonthSelect(month)}
+                  className="month-button"
+                >
+                  <div
+                    className={
+                      moment(selectedMonth).format("DD-MM-YYYY") ===
+                      moment(month).format("DD-MM-YYYY")
+                        ? "month-card selected"
+                        : "month-card"
+                    }
+                  >
+                    {format(month, "MMMM yyyy")}
+                  </div>
+                </button>
+              ))}
+            </div>
+          )}
+        </div>
+        {selectedMonth && (
+          <div className="selected-month">
+            <h4>{format(selectedMonth, "MMMM yyyy")}</h4>
+            {renderDates(selectedMonth)}
+          </div>
+        )}
+        {/* <div className="details-list-table">
           <div className="dropdown-container">
             <DropDown
               style={{ width: "300px" }}
@@ -124,7 +174,7 @@ function TimeSlotComponent({
               ))}
             </div>
           )}
-        </div>
+        </div> */}
         {selectedMonth && (
           <div className="selected-month">
             <h4>{format(selectedMonth, "MMMM yyyy")}</h4>
@@ -134,7 +184,7 @@ function TimeSlotComponent({
       </div>
       <div>
         {/* ---------------- CANCELLATION LIMIT ---------------- */}
-        <div className="details-list-card card">
+        {/* <div className="details-list-card card">
           <div className="details-list-top">
             <div className="details-list-top-left">
               <span className="details-list-top-left-title">
@@ -170,7 +220,7 @@ function TimeSlotComponent({
               )}
             </div>
           </div>
-        </div>
+        </div> */}
       </div>
     </div>
   );

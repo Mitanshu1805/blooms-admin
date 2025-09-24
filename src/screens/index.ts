@@ -17,3 +17,4 @@ export { default as CrewOrders } from "./CrewOrders/COController";
 export { default as PinkDates } from "./PinkDates/PinkDateController";
 export { default as Permissions } from "./Permissions/PermissionsController";
 export { default as Offer } from "./Offers/OfferController";
+export { default as GlobalSettings } from "./GlobalSettings/GlobalSettingController";
