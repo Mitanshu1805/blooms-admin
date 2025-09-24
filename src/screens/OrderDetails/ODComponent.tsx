@@ -15,6 +15,7 @@ import { OrderDetailsTableData } from "./OrderDetailsTableData";
 import DateTimePicker from "react-datetime-picker";
 import SwitchComponent from "../../components/Toggle/Toggle";
 import AutoResizeTextarea from "../../components/InputText/AutoResizeTextArea";
+import { useState } from "react";
 
 interface ODProps {
   isLoading: boolean;
@@ -113,7 +114,14 @@ function ODComponent({
     "Amount",
   ];
 
+  const [testModal, setTestModal] = useState(false);
+
+  const handleClick = () => {
+    setTestModal(true);
+  };
+
   const listData = OrderDetailsTableData(item);
+  const [text, setText] = useState("");
   console.log("🚀 => item?.other_document:", item);
   console.log("🚀 => item?.other_document:", item?.other_document);
   const LeftOrderDetailsData = [
@@ -247,10 +255,15 @@ function ODComponent({
         <div className="row">
           <div className="col-md-6 pe-0">
             <div
-              className="d-flex flex-column"
-              style={{ alignItems: "stretch", overflow: "visible" }}
+              className="d-flex flex-row"
+              style={{
+                alignItems: "center",
+                overflow: "visible",
+                marginBottom: "10px",
+              }}
             >
               <AutoResizeTextarea
+                className="custom-textarea"
                 value={detailsData.note_reply}
                 placeholder="Reply Note"
                 onChange={(e) =>
@@ -261,7 +274,7 @@ function ODComponent({
                 }
               />
               <Button
-                className="order-info-submit-btn-replay-note"
+                className="order-info-submit-btn"
                 name="Add"
                 onClick={() => {
                   if (detailsData.note_reply) {
