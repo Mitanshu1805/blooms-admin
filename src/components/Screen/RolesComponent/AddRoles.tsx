@@ -16,6 +16,8 @@ function AddRoles({
   editItem,
   setEditItem,
 }: any) {
+  console.log(editItem);
+
   return (
     <div className="popup-box-wrapper">
       <div className="popup-box-container">
@@ -34,11 +36,11 @@ function AddRoles({
                 label="Role Name"
                 type="text"
                 placeholder="Role Name"
-                value={editItem.role_name}
+                value={editItem.role_name || ""}
                 onChange={(e: any) => {
                   setEditItem((prev: any) => ({
                     ...prev,
-                    editItem: e.target.value,
+                    role_name: e.target.value,
                   }));
                 }}
                 error={errors?.role_name}
