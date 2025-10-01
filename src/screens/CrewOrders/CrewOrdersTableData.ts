@@ -1,4 +1,5 @@
 import moment from "moment";
+import { title } from "process";
 
 export const CrewOrdersTableData = (
   crewOrdersListData: any,
@@ -7,6 +8,8 @@ export const CrewOrdersTableData = (
   waiver: number
 ) => {
   let accumulatedNett: number = 0;
+  console.log(crewOrdersListData);
+
   return crewOrdersListData?.flatMap((item: any, index: number) => {
     const calculate = () => {
       const calWaiver = waiver > 0 && waiver <= 100 ? waiver : 10;
@@ -70,6 +73,14 @@ export const CrewOrdersTableData = (
         title: "Nett",
         data: accumulatedNett.toFixed(2),
       },
+      {
+        title: "Crew Earnings",
+        data: item?.crew_earnings,
+      },
+      {
+        title: "BLMS Earnings",
+        data: item?.blms_earnings,
+      },
     ];
     const rows = [baseRow];
 
@@ -117,6 +128,14 @@ export const CrewOrdersTableData = (
         {
           title: "Nett",
           data: accumulatedNett.toFixed(2),
+        },
+        {
+          title: "Crew Earnings",
+          data: item?.crew_earnings,
+        },
+        {
+          title: "BLMS Earnings",
+          data: item?.blms_earnings,
         },
       ];
 

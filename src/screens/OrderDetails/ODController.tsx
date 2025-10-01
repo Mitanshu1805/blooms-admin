@@ -279,26 +279,30 @@ function ODController() {
     if (buttonName === "Delete") {
       onDeleteHandler();
     } else if (buttonName === "Complete") {
-      let crewAssigned = false;
+      // let crewAssigned = false;
+      console.log("timeCrew at button click:", timeCrew);
 
-      for (const crew of timeCrew) {
-        if (
-          crew.time_slots.some(
-            (slot: any) => slot.order_id === state?.data?.order_id
-          )
-        ) {
-          OrderStatusHandler(buttonName);
-          crewAssigned = true;
-          break;
-        }
-      }
+      // for (const crew of timeCrew) {
+      //   console.log("Checking crew:", crew);
+      //   console.log("Crew time slots:", crew.time_slots);
+      //   console.log("Current order_id:", state?.data?.order_id);
+      //   if (
+      //     crew.time_slots.some(
+      //       (slot: any) => slot.order_id === state?.data?.order_id
+      //     )
+      //   ) {
+      OrderStatusHandler(buttonName);
+      // crewAssigned = true;
+      //   break;
+      // }
+      // }
 
-      if (!crewAssigned) {
-        alertService.alert({
-          type: AlertType.Error,
-          message: "Crew is not assigned",
-        });
-      }
+      // if (!crewAssigned) {
+      //   alertService.alert({
+      //     type: AlertType.Error,
+      //     message: "Crew is not assigned",
+      //   });
+      // }
     } else {
       OrderStatusHandler(buttonName);
     }
@@ -404,6 +408,7 @@ function ODController() {
       item?.time_slot,
       setIsLoading
     );
+    console.log(itemDataResponse);
 
     const selectedCrew = itemDataResponse?.data?.find((findItem: any) =>
       findItem?.time_slots?.some(

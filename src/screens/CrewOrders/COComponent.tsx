@@ -60,6 +60,8 @@ function COComponent({
     `Comm Waiver? (${waiver}%)`,
     `Credit/Debit (${crewOrdersListData[0]?.currency})`,
     "Nett",
+    "Crew Earnings",
+    "BLMS Earnings",
   ];
 
   const listData = CrewOrdersTableData(
