@@ -73,14 +73,14 @@ export const CrewOrdersTableData = (
         title: "Nett",
         data: accumulatedNett.toFixed(2),
       },
-      {
-        title: "Crew Earnings",
-        data: item?.crew_earnings,
-      },
-      {
-        title: "BLMS Earnings",
-        data: item?.blms_earnings,
-      },
+      // {
+      //   title: "Crew Earnings",
+      //   data: item?.crew_earnings,
+      // },
+      // {
+      //   title: "BLMS Earnings",
+      //   data: item?.blms_earnings,
+      // },
     ];
     const rows = [baseRow];
 
@@ -129,14 +129,14 @@ export const CrewOrdersTableData = (
           title: "Nett",
           data: accumulatedNett.toFixed(2),
         },
-        {
-          title: "Crew Earnings",
-          data: item?.crew_earnings,
-        },
-        {
-          title: "BLMS Earnings",
-          data: item?.blms_earnings,
-        },
+        // {
+        //   title: "Crew Earnings",
+        //   data: item?.crew_earnings,
+        // },
+        // {
+        //   title: "BLMS Earnings",
+        //   data: item?.blms_earnings,
+        // },
       ];
 
       rows.push(materialRow);

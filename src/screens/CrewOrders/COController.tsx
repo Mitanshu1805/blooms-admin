@@ -11,6 +11,7 @@ function COController() {
   const { state } = useLocation();
 
   const [crewOrdersListData, setCrewOrdersListData] = useState<any>([]);
+  const [netSettlement, setNetSettlement] = useState<any>([]);
   const [selectedPage, setSelectedPage] = useState(1);
   const [size, setSize] = useState(10);
   const [isLoading, setIsLoading] = useState(false);
@@ -80,6 +81,7 @@ function COController() {
     console.log(rolesDataResponse);
     if (rolesDataResponse?.data?.data) {
       setCrewOrdersListData(rolesDataResponse?.data?.data);
+      setNetSettlement(rolesDataResponse?.data?.netSettlement);
     } else {
       setCrewOrdersListData([]);
     }
@@ -130,6 +132,7 @@ function COController() {
     <div>
       <COComponent
         crewOrdersListData={crewOrdersListData}
+        netSettlement={netSettlement}
         selectedPage={selectedPage}
         isLoading={isLoading}
         size={size}

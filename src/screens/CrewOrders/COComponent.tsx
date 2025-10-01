@@ -27,6 +27,7 @@ interface CrewOrdersProps {
   handlePeriodChange: (value: string) => void;
   crewName: string;
   waiver: number;
+  netSettlement: any;
 }
 
 function COComponent({
@@ -48,6 +49,7 @@ function COComponent({
   handlePeriodChange,
   crewName,
   waiver,
+  netSettlement,
 }: CrewOrdersProps) {
   const headerData = [
     "No",
@@ -60,8 +62,8 @@ function COComponent({
     `Comm Waiver? (${waiver}%)`,
     `Credit/Debit (${crewOrdersListData[0]?.currency})`,
     "Nett",
-    "Crew Earnings",
-    "BLMS Earnings",
+    // "Crew Earnings",
+    // "BLMS Earnings",
   ];
 
   const listData = CrewOrdersTableData(
@@ -70,6 +72,7 @@ function COComponent({
     size,
     waiver
   );
+
   return (
     <div className="details-list-card card">
       <div className="details-list-top">
@@ -127,6 +130,19 @@ function COComponent({
           </div>
         </div>
         <div className="details-list-top-right"></div>
+      </div>
+      <div className="net-settlement mb-4 text-start">
+        <h4>
+          Settlement Amount:{" "}
+          <span
+            style={{
+              color: Number(netSettlement) < 0 ? "red" : "green",
+              fontWeight: "bold",
+            }}
+          >
+            {netSettlement}
+          </span>
+        </h4>
       </div>
       <div className="details-list-table">
         <TableComp
