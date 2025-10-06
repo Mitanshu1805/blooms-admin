@@ -107,7 +107,7 @@ function COComponent({
               />
             </div>
           </div>
-          <div>
+          {/* <div>
             <p>Remarks:</p>
             <textarea
               className="fixed-height-textarea"
@@ -118,7 +118,7 @@ function COComponent({
             <p>
               {remarks.length}/{limit}
             </p>
-          </div>
+          </div> */}
           <div className="details-list-top-left-dropdown">
             {/* <NumberDropdown
                   data={userListData}
@@ -131,8 +131,16 @@ function COComponent({
         </div>
         <div className="details-list-top-right"></div>
       </div>
+      <div style={{ marginBottom: "10px" }}>
+        <Button
+          className="order-info-receipt-btn"
+          name={"Generate Statement"}
+          onClick={generateStatement}
+          isInvalid={crewOrdersListData.length === 0}
+        />
+      </div>
       <div className="net-settlement mb-4 text-start">
-        <h4>
+        <h4 style={{ marginLeft: "15px" }}>
           Settlement Amount:{" "}
           <span
             style={{
@@ -161,14 +169,6 @@ function COComponent({
               />
             </div>
           ) : null} */}
-      <div>
-        <Button
-          className="order-info-receipt-btn"
-          name={"Generate Statement"}
-          onClick={generateStatement}
-          isInvalid={crewOrdersListData.length === 0}
-        />
-      </div>
     </div>
   );
 }
