@@ -14,16 +14,19 @@ export const CrewOrdersTableData = (
     console.log(item);
 
     const calculate = () => {
+      const order_amount = Number(item?.cashless ?? "0")
+        ? item.cashless
+        : item?.cash;
       const calWaiver = waiver > 0 && waiver <= 100 ? waiver : 10;
-      if (item?.cashless) {
+      if (Number(item?.cashless ?? 0)) {
         return item.has_waiver
-          ? item.order_amount
-          : (Number(item.order_amount) * (100 - calWaiver)) / 100;
+          ? order_amount
+          : (Number(order_amount) * (100 - calWaiver)) / 100;
       }
 
       return item.has_waiver
         ? 0.0
-        : (-1 * (Number(item.order_amount) * calWaiver)) / 100;
+        : (-1 * (Number(order_amount) * calWaiver)) / 100;
     };
 
     const creditDebit = Number(calculate());
@@ -55,7 +58,7 @@ export const CrewOrdersTableData = (
       },
       {
         title: "Cash/Cashless",
-        data: item?.cashless ? "cashless" : "cash",
+        data: Number(item?.cashless ?? "0") ? "cashless" : "cash",
       },
       {
         title: "Type",
@@ -63,7 +66,7 @@ export const CrewOrdersTableData = (
       },
       {
         title: "Fee",
-        data: item.order_amount,
+        data: Number(item?.cashless ?? "0") ? item.cashless : item?.cash,
       },
       {
         title: "Waiver",
