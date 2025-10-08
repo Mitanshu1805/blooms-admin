@@ -78,12 +78,14 @@ function COController() {
       startDate,
       endDate
     );
-    console.log(rolesDataResponse);
+    console.log("rolesDataResponse>>", rolesDataResponse?.data);
+    console.log("netSettlement>>>", netSettlement);
     if (rolesDataResponse?.data?.data) {
       setCrewOrdersListData(rolesDataResponse?.data?.data);
       setNetSettlement(rolesDataResponse?.data?.netSettlement);
     } else {
       setCrewOrdersListData([]);
+      setNetSettlement([]);
     }
   };
 
@@ -133,6 +135,7 @@ function COController() {
       <COComponent
         crewOrdersListData={crewOrdersListData}
         netSettlement={netSettlement}
+        setNetSettlement={setNetSettlement}
         selectedPage={selectedPage}
         isLoading={isLoading}
         size={size}

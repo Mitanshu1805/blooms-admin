@@ -58,7 +58,8 @@ export const CrewOrdersTableData = (
       },
       {
         title: "Cash/Cashless",
-        data: Number(item?.cashless ?? "0") ? "cashless" : "cash",
+        // data: Number(item?.cashless ?? "0") ? "cashless" : "cash",
+        data: item?.actual_payment_mode,
       },
       {
         title: "Type",
@@ -92,7 +93,7 @@ export const CrewOrdersTableData = (
     const rows = [baseRow];
 
     if (item?.materials_fee && Number(item?.materials_fee) !== 0) {
-      if (item?.cashless) {
+      if (item?.actual_payment_mode == "cashless") {
         accumulatedNett += Number(item?.materials_fee);
       }
       const materialRow = [
@@ -114,7 +115,8 @@ export const CrewOrdersTableData = (
         },
         {
           title: "Cash/Cashless",
-          data: item?.cashless ? "cashless" : "cash",
+          // data: item?.cashless ? "cashless" : "cash",
+          data: item?.actual_payment_mode,
         },
         {
           title: "Type",

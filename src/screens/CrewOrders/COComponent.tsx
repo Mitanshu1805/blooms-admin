@@ -27,6 +27,7 @@ interface CrewOrdersProps {
   handlePeriodChange: (value: string) => void;
   crewName: string;
   waiver: number;
+  setNetSettlement: any;
   netSettlement: any;
 }
 
@@ -50,6 +51,7 @@ function COComponent({
   crewName,
   waiver,
   netSettlement,
+  setNetSettlement,
 }: CrewOrdersProps) {
   const headerData = [
     "No",
@@ -72,6 +74,8 @@ function COComponent({
     size,
     waiver
   );
+
+  console.log("netSettlement>>>", netSettlement);
 
   return (
     <div className="details-list-card card">
