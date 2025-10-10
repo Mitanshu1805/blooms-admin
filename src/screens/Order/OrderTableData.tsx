@@ -1,3 +1,5 @@
+import { FaSyncAlt } from "react-icons/fa";
+import React from "react";
 import moment from "moment";
 import { hasPermission } from "../../utils/permissions.utils";
 
@@ -8,7 +10,11 @@ export const OrderTableData = (
 ) => {
   const canDelete = hasPermission("orders", "delete");
   const showActionColumn = canDelete;
+
   return userListData?.data?.map((item: any, index: number) => {
+    // Cast FaSyncAlt to React.ElementType
+    const SyncIcon = FaSyncAlt as React.ElementType;
+
     const row = [
       {
         title: "No.",
@@ -27,7 +33,11 @@ export const OrderTableData = (
       },
       {
         title: "Client Name",
-        data: item?.contact_person,
+        data: item?.contact_person || "",
+      },
+      {
+        title: <SyncIcon style={{ cursor: "pointer", color: "##ffffff" }} />,
+        data: item?.client_total_orders || 0,
       },
       {
         title: "Order ID",
@@ -54,12 +64,14 @@ export const OrderTableData = (
         data: moment.utc(item?.time_slot).format("YYYY-MM-DD h:mm:ss A"),
       },
     ];
+
     if (showActionColumn) {
       row.push({
         title: "Action",
         data: item,
       });
     }
+
     return row;
   });
 };

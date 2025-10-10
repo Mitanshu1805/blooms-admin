@@ -7,6 +7,8 @@ import {
 import "./Order.scss";
 import { OrderTableData } from "./OrderTableData";
 import { hasPermission } from "../../utils/permissions.utils";
+import { FaSyncAlt } from "react-icons/fa";
+import React from "react";
 
 interface OrderProps {
   selectedPage: number;
@@ -36,11 +38,14 @@ function OrderComponent({
   const canDelete = hasPermission("orders", "delete");
   const canView = hasPermission("orders", "read");
   const showActionColumn = canDelete;
+  const SyncIcon = FaSyncAlt as React.ElementType;
   const HeaderData = [
     "No",
     "Location Name",
     "Service Name",
     "Client Name",
+    // "Orders",
+    <SyncIcon style={{ cursor: "pointer", color: "##ffffff" }} />,
     "Order ID",
     "City",
     "Payment Method",
