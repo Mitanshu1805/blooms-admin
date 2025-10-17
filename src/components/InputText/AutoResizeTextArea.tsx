@@ -5,9 +5,11 @@ interface AutoResizeTextareaProps {
   onChange: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
   placeholder?: string;
   className?: string;
+  label?: string;
 }
 
 const AutoResizeTextarea: React.FC<AutoResizeTextareaProps> = ({
+  label,
   value,
   onChange,
   placeholder,
@@ -24,21 +26,39 @@ const AutoResizeTextarea: React.FC<AutoResizeTextareaProps> = ({
   }, [value]);
 
   return (
-    <textarea
-      ref={textareaRef}
-      rows={1}
-      className={className}
-      style={{
-        width: "100%",
-        resize: "none", // disable manual resize
-        overflowY: "hidden", // hide scrollbar but allow growth
-        lineHeight: "1.5", // make sure newlines have space
-        padding: "8px 12px", // optional: spacing inside
-      }}
-      placeholder={placeholder}
-      value={value}
-      onChange={onChange}
-    />
+    <div style={{ width: "100%", display: "flex", alignItems: "center" }}>
+      {label && (
+        <label
+          style={{
+            // display: "block",
+            // fontWeight: 600,
+            // marginBottom: "4px",
+            // color: "#333",
+            width: "7.5rem",
+            fontSize: "15px",
+            paddingRight: "10px",
+            fontWeight: "600",
+          }}
+        >
+          {label}
+        </label>
+      )}
+      <textarea
+        ref={textareaRef}
+        rows={1}
+        className={className}
+        style={{
+          width: "100%",
+          resize: "none",
+          overflowY: "hidden",
+          lineHeight: "1.5",
+          padding: "8px 12px",
+        }}
+        placeholder={placeholder}
+        value={value}
+        onChange={onChange}
+      />
+    </div>
   );
 };
 
