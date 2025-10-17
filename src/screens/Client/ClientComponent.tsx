@@ -40,6 +40,7 @@ function ClientComponent({
   const showStatusColumn = canUpdate;
   const HeaderData = [
     "No",
+    "Name",
     "Phone Number",
     // "Status",
     // "Action",

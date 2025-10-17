@@ -18,6 +18,10 @@ export const ClientTableData = (
             : (selectedPage - 1) * limit + index + 1,
       },
       {
+        title: "Name",
+        data: item?.client_name,
+      },
+      {
         title: "Phone Number",
         data: item?.phone_number,
       },
