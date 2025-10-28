@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { DeletePopup } from "../../components";
 import {
   BlockClient,
+  ClientBlockList,
   ClientList,
   DeleteClient,
   UnblockClient,
@@ -10,6 +11,7 @@ import {
 } from "./ClientApis";
 import ClientComponent from "./ClientComponent";
 import { ClientBlock } from "../../components";
+import ClientBlockHistory from "../../components/Screen/ClientComponent/ClientBlockHistory";
 
 function ClientController() {
   const blockClientInitialValues = {
@@ -29,6 +31,8 @@ function ClientController() {
   const [blockClientData, setBlockClientData] = useState(
     blockClientInitialValues
   );
+  const [openHistoryModal, setOpenHistoryModal] = useState(false);
+  const [historyData, setHistoryData] = useState<any[]>([]);
 
   useEffect(() => {
     fetchData();
@@ -130,6 +134,21 @@ function ClientController() {
       // toggleEditUserPopup();
     }
   };
+  const onHistoryHandler = (client: any) => {
+    console.log("View block history of:", client);
+    BlockHistoryApi(client);
+    // you can open modal here or fetch history API
+  };
+
+  const BlockHistoryApi = async (client: any) => {
+    const response = await ClientBlockList(client?.client_id, setIsLoading);
+    console.log(response);
+
+    if (response?.status === 200) {
+      setHistoryData(response?.data || []); // assuming API returns data.data[]
+      setOpenHistoryModal(true);
+    }
+  };
 
   return (
     <div>
@@ -147,6 +166,7 @@ function ClientController() {
         navigation={navigation}
         handleSwitchChange={handleSwitchChange}
         onUnblockHandler={onUnblockHandler}
+        onHistoryHandler={onHistoryHandler}
       />
 
       {openBlockForm ? (
@@ -157,6 +177,15 @@ function ClientController() {
           toggleUserPopup={toggleUserPopup}
         />
       ) : null}
+
+      {openHistoryModal && (
+        <ClientBlockHistory
+          show={openHistoryModal}
+          onClose={() => setOpenHistoryModal(false)}
+          historyData={historyData}
+        />
+      )}
+
       {openDeleteClientPop ? (
         <DeletePopup
           isLoading={isLoading}

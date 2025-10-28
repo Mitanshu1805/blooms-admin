@@ -8,6 +8,7 @@ import TableLoader from "../Loading/TableLoading";
 import "./Table.scss";
 
 const TableComponent = ({
+  onHistoryHandler,
   onEditOurselves,
   listData,
   listHeaderData,
@@ -139,6 +140,33 @@ any) => {
                                     j.data?.location_name
                                   : "-"}
                               </div>
+                            </Td>
+                          ) : j.title === "Block History" ? (
+                            <Td>
+                              <button
+                                className="btn btn-outline-primary btn-sm"
+                                onClick={() =>
+                                  onHistoryHandler && onHistoryHandler(j.data)
+                                }
+                                style={{
+                                  display: "flex",
+                                  alignItems: "center",
+                                  gap: "5px",
+                                  fontSize: "12px",
+                                  padding: "3px 8px",
+                                  borderRadius: "4px",
+                                  color: "white",
+                                  borderColor: "#FD8F82",
+                                  backgroundColor: "#FD8F82",
+                                  marginLeft: "8px",
+                                }}
+                              >
+                                <i
+                                  className="fa fa-history"
+                                  aria-hidden="true"
+                                ></i>
+                                History
+                              </button>
                             </Td>
                           ) : j.title === "Special Service" ? (
                             <Td>

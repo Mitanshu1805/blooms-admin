@@ -21,6 +21,7 @@ interface ClientProps {
   handleChangeSearch: (value: string) => void;
   handleSwitchChange: (value: any) => void;
   navigation: any;
+  onHistoryHandler: any;
 }
 
 function ClientComponent({
@@ -36,6 +37,7 @@ function ClientComponent({
   handleSwitchChange,
   onBlockHandler,
   onUnblockHandler,
+  onHistoryHandler,
 }: ClientProps) {
   const canUpdate = hasPermission("client", "update");
   const canDelete = hasPermission("client", "delete");
@@ -49,6 +51,7 @@ function ClientComponent({
     "Reason",
     "Time Period",
     "Blocked At",
+    "Block History",
     // "Status",
     // "Action",
     ...(showStatusColumn ? ["Status"] : []),
@@ -100,6 +103,7 @@ function ClientComponent({
                 }
               : undefined
           }
+          onHistoryHandler={onHistoryHandler}
           handleChange={
             canUpdate ? (value: any) => handleSwitchChange(value) : undefined
           }

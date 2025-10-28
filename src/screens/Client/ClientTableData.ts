@@ -9,8 +9,6 @@ export const ClientTableData = (
   const canUpdate = hasPermission("client", "update");
 
   return userListData?.data?.map((item: any, index: number) => {
-    console.log(item);
-
     const row = [
       {
         title: "No.",
@@ -50,7 +48,7 @@ export const ClientTableData = (
 
       {
         title: "Block History",
-        data: null,
+        data: item,
       },
     ];
 
