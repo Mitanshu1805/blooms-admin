@@ -20,6 +20,7 @@ const TableComponent = ({
   isViewPayment,
   navigationClick,
   paymentNavigate,
+  onBlockHandler,
 }: // editItem,
 any) => {
   // console.log("editItem in perm table data >>>", editItem);
@@ -53,6 +54,20 @@ any) => {
                                     src={EditIcon}
                                     onClick={() => onEditHandler(j.data)}
                                   />
+                                ) : null}
+
+                                {onBlockHandler ? (
+                                  <button
+                                    className="btn btn-warning btn-sm ms-2"
+                                    onClick={() => onBlockHandler(j.data)}
+                                    style={{
+                                      fontSize: "12px",
+                                      padding: "2px 8px",
+                                      borderRadius: "4px",
+                                    }}
+                                  >
+                                    {j.data?.blocked_at ? "Unblock" : "Block"}
+                                  </button>
                                 ) : null}
 
                                 {onDeleteHandler ? (

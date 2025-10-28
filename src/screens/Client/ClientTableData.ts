@@ -9,6 +9,8 @@ export const ClientTableData = (
   const canUpdate = hasPermission("client", "update");
 
   return userListData?.data?.map((item: any, index: number) => {
+    console.log(item);
+
     const row = [
       {
         title: "No.",
@@ -24,6 +26,31 @@ export const ClientTableData = (
       {
         title: "Phone Number",
         data: item?.phone_number,
+      },
+      {
+        title: "Reason",
+        data: item?.reason,
+      },
+      {
+        title: "Time Period",
+        data: (() => {
+          const tp = item?.time_period;
+          if (!tp) return "-";
+
+          const unit = Object.keys(tp)[0]; // e.g. "days", "weeks"
+          const value = tp[unit];
+          return value ? `${value} ${unit}` : "-";
+        })(),
+      },
+
+      {
+        title: "Blocked At",
+        data: item?.blocked_at,
+      },
+
+      {
+        title: "Block History",
+        data: null,
       },
     ];
 

@@ -74,6 +74,8 @@ export { default as AddUser } from "./Screen/UserComponent/AddUser";
 export { default as EditUser } from "./Screen/UserComponent/EditUser";
 export { default as EditOurselves } from "./Screen/UserComponent/EditOurselves";
 
+export { default as ClientBlock } from "./Screen/ClientComponent/BlockClient";
+
 export { default as Image } from "./Image/Image";
 
 export { default as SearchBar } from "./SearchBar/SearchBar";

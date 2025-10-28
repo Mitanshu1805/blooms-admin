@@ -12,6 +12,8 @@ interface ClientProps {
   userListData: any;
   isLoading: boolean;
   onDeleteHandler: (value: any) => void;
+  onBlockHandler: (value: any) => void;
+  onUnblockHandler: (value: any) => void;
   setSelectedPage: (value: number) => void;
   size: number;
   setSize: (value: any) => void;
@@ -32,6 +34,8 @@ function ClientComponent({
   searchInput,
   handleChangeSearch,
   handleSwitchChange,
+  onBlockHandler,
+  onUnblockHandler,
 }: ClientProps) {
   const canUpdate = hasPermission("client", "update");
   const canDelete = hasPermission("client", "delete");
@@ -42,6 +46,9 @@ function ClientComponent({
     "No",
     "Name",
     "Phone Number",
+    "Reason",
+    "Time Period",
+    "Blocked At",
     // "Status",
     // "Action",
     ...(showStatusColumn ? ["Status"] : []),
@@ -49,6 +56,7 @@ function ClientComponent({
   ];
 
   const listData = ClientTableData(userListData, selectedPage, size);
+  console.log(listData);
 
   if (!canView) {
     return <div>You do not have permission to view this page.</div>;
@@ -80,6 +88,17 @@ function ClientComponent({
           listData={listData}
           onDeleteHandler={
             hasPermission("client", "delete") ? onDeleteHandler : undefined
+          }
+          onBlockHandler={
+            hasPermission("client", "update")
+              ? (client: any) => {
+                  if (client?.blocked_at) {
+                    onUnblockHandler(client); // if already blocked → unblock
+                  } else {
+                    onBlockHandler(client); // if not blocked → block
+                  }
+                }
+              : undefined
           }
           handleChange={
             canUpdate ? (value: any) => handleSwitchChange(value) : undefined
