@@ -264,3 +264,37 @@ export const ClientBlockList = async (
     setIsLoading(false);
   }
 };
+
+export const PointRedeem = async (
+  client_id: string,
+  points_to_redeem: string,
+  setIsLoading: (val: boolean) => void
+) => {
+  try {
+    setIsLoading(true);
+    const response = await ApiCall({
+      endpoint: "client/loyalty/point/redeem",
+      method: "POST",
+      data: {
+        client_id: client_id,
+        points_to_redeem: points_to_redeem,
+      },
+    });
+    if (response?.status === 200) {
+      alertService.alert({
+        type: AlertType.Success,
+        message: response?.data?.message,
+      });
+    }
+    return response;
+  } catch (error: any) {
+    if (error?.data?.message) {
+      alertService.alert({
+        type: AlertType.Error,
+        message: error?.data?.message,
+      });
+    }
+  } finally {
+    setIsLoading(false);
+  }
+};

@@ -6,12 +6,14 @@ import {
   ClientBlockList,
   ClientList,
   DeleteClient,
+  PointRedeem,
   UnblockClient,
   updateClientStatus,
 } from "./ClientApis";
 import ClientComponent from "./ClientComponent";
 import { ClientBlock } from "../../components";
 import ClientBlockHistory from "../../components/Screen/ClientComponent/ClientBlockHistory";
+import { RedeemPoints } from "../../components";
 
 function ClientController() {
   const blockClientInitialValues = {
@@ -33,6 +35,7 @@ function ClientController() {
   );
   const [openHistoryModal, setOpenHistoryModal] = useState(false);
   const [historyData, setHistoryData] = useState<any[]>([]);
+  const [openRedeemPoints, setOpenRedeemPoints] = useState(false);
 
   useEffect(() => {
     fetchData();
@@ -101,6 +104,12 @@ function ClientController() {
     // now call your API here with `payload`
   };
 
+  const UserPointsRedeemSubmitHandler = (redeemPoints: any, client_id: any) => {
+    // console.log(redeemPoints, client_id);
+
+    PointsRedeemApi(redeemPoints, client_id);
+  };
+
   const onUnblockHandler = (client: any) => {
     console.log("Unblock handler called for:", client?.client_id);
     // call Unblock API here (similar to BlockApi)
@@ -134,6 +143,17 @@ function ClientController() {
       // toggleEditUserPopup();
     }
   };
+
+  const PointsRedeemApi = async (redeemPoints: any, client_id: any) => {
+    // console.log("Final CALL");
+    const response = await PointRedeem(client_id, redeemPoints, setIsLoading);
+    console.log(response);
+    if (response?.status === 200) {
+      fetchData();
+      // toggleEditUserPopup();
+    }
+  };
+
   const onHistoryHandler = (client: any) => {
     console.log("View block history of:", client);
     BlockHistoryApi(client);
@@ -167,6 +187,7 @@ function ClientController() {
         handleSwitchChange={handleSwitchChange}
         onUnblockHandler={onUnblockHandler}
         onHistoryHandler={onHistoryHandler}
+        UserPointsRedeemSubmitHandler={UserPointsRedeemSubmitHandler}
       />
 
       {openBlockForm ? (

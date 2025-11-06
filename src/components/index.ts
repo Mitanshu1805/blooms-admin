@@ -75,6 +75,7 @@ export { default as EditUser } from "./Screen/UserComponent/EditUser";
 export { default as EditOurselves } from "./Screen/UserComponent/EditOurselves";
 
 export { default as ClientBlock } from "./Screen/ClientComponent/BlockClient";
+export { default as RedeemPoints } from "./Screen/ClientComponent/PointsRedeem";
 
 export { default as Image } from "./Image/Image";
 

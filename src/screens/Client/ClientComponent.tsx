@@ -6,6 +6,8 @@ import {
 } from "../../components";
 import { ClientTableData } from "./ClientTableData";
 import { hasPermission } from "../../utils/permissions.utils";
+import { RedeemPoints } from "../../components";
+import { useState } from "react";
 
 interface ClientProps {
   selectedPage: number;
@@ -22,6 +24,7 @@ interface ClientProps {
   handleSwitchChange: (value: any) => void;
   navigation: any;
   onHistoryHandler: any;
+  UserPointsRedeemSubmitHandler: any;
 }
 
 function ClientComponent({
@@ -38,6 +41,7 @@ function ClientComponent({
   onBlockHandler,
   onUnblockHandler,
   onHistoryHandler,
+  UserPointsRedeemSubmitHandler,
 }: ClientProps) {
   const canUpdate = hasPermission("client", "update");
   const canDelete = hasPermission("client", "delete");
@@ -52,6 +56,7 @@ function ClientComponent({
     "Time Period",
     "Blocked At",
     "Block History",
+    "Points",
     // "Status",
     // "Action",
     ...(showStatusColumn ? ["Status"] : []),
@@ -59,8 +64,21 @@ function ClientComponent({
   ];
 
   const listData = ClientTableData(userListData, selectedPage, size);
-  console.log(listData);
 
+  const [showRedeemModal, setShowRedeemModal] = useState(false);
+  const [selectedClient, setSelectedClient] = useState<any>(null);
+
+  const handleRedeemClick = (client: any) => {
+    console.log("Render");
+
+    setSelectedClient(client);
+    setShowRedeemModal(true);
+  };
+
+  const closeForm = () => {
+    setShowRedeemModal(false);
+    setSelectedClient(null);
+  };
   if (!canView) {
     return <div>You do not have permission to view this page.</div>;
   }
@@ -107,6 +125,8 @@ function ClientComponent({
           handleChange={
             canUpdate ? (value: any) => handleSwitchChange(value) : undefined
           }
+          isPointsRedeem={true}
+          pointsRedeem={handleRedeemClick}
         />
       </div>
       {listData?.length > 0 ? (
@@ -119,6 +139,17 @@ function ClientComponent({
           />
         </div>
       ) : null}
+      {/* 👇 RedeemPoints Modal */}
+      {showRedeemModal && (
+        <RedeemPoints
+          show={showRedeemModal}
+          onHide={() => setShowRedeemModal(false)}
+          client={selectedClient}
+          UserPointsRedeemSubmitHandler={UserPointsRedeemSubmitHandler}
+          selectedClient={selectedClient}
+          closeForm={closeForm}
+        />
+      )}
     </div>
   );
 }

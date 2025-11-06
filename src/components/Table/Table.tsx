@@ -22,6 +22,8 @@ const TableComponent = ({
   navigationClick,
   paymentNavigate,
   onBlockHandler,
+  isPointsRedeem,
+  pointsRedeem,
 }: // editItem,
 any) => {
   // console.log("editItem in perm table data >>>", editItem);
@@ -98,6 +100,13 @@ any) => {
                                     style={{ paddingLeft: "10px" }}
                                     src={Cash}
                                     onClick={() => paymentNavigate(j)}
+                                  />
+                                ) : null}
+                                {isPointsRedeem ? (
+                                  <Image
+                                    style={{ paddingLeft: "10px" }}
+                                    src={Cash}
+                                    onClick={() => pointsRedeem(j)}
                                   />
                                 ) : null}
                               </div>
