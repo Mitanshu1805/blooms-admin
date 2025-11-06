@@ -61,12 +61,17 @@ any) => {
 
                                 {onBlockHandler ? (
                                   <button
-                                    className="btn btn-warning btn-sm ms-2"
                                     onClick={() => onBlockHandler(j.data)}
+                                    className={`btn btn-sm ms-2 ${
+                                      j.data?.blocked_at
+                                        ? "btn-secondary"
+                                        : "btn-danger"
+                                    }`}
                                     style={{
                                       fontSize: "12px",
                                       padding: "2px 8px",
                                       borderRadius: "4px",
+                                      color: "white",
                                     }}
                                   >
                                     {j.data?.blocked_at ? "Unblock" : "Block"}

@@ -45,7 +45,12 @@ export const ClientTableData = (
 
       {
         title: "Blocked At",
-        data: item?.blocked_at,
+        data: item?.blocked_at
+          ? new Date(item.blocked_at).toLocaleString("en-IN", {
+              dateStyle: "medium",
+              timeStyle: "short",
+            })
+          : "-",
       },
 
       {

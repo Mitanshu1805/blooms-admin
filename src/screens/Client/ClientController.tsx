@@ -140,7 +140,7 @@ function ClientController() {
     const response = await BlockClient(blockItem, setIsLoading);
     if (response?.status === 200) {
       fetchData();
-      // toggleEditUserPopup();
+      toggleUserPopup();
     }
   };
 
