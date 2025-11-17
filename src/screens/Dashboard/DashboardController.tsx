@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { SplashList, UpdateSplashA } from "./Dashboard";
+import { GuideList, SplashList, UpdateSplashA, VideoUpload } from "./Dashboard";
 import DashboardComponent from "./DashboardComponent";
 import { ButtonLoading } from "../../components";
 
@@ -7,14 +7,27 @@ function DashboardController() {
   const [isLoading, setIsLoading] = useState(false);
   const [splashListData, setSplashListData] = useState<any>("");
   const [openResetPop, setOpenResetPop] = useState(false);
+  const [guideText, setGuideText] = useState("");
+  const [screenKey, setScreenKey] = useState("");
+  const [guideVideo, setGuideVideo] = useState<any>(null);
+  const [isVideoLoading, setIsVideoLoading] = useState(false);
 
   useEffect(() => {
+    setScreenKey("Account");
     fetchData();
+    fetchVideo();
   }, []);
 
   const fetchData = async () => {
     const notificationResponse: any = await SplashList(setIsLoading);
     setSplashListData(notificationResponse?.data?.screen);
+  };
+
+  const fetchVideo = async () => {
+    const videoResponse: any = await GuideList("Account", setIsLoading);
+    console.log(videoResponse?.data?.guides[0]?.guide_video);
+    const video = videoResponse?.data?.guides[0]?.guide_video;
+    setGuideVideo(video);
   };
 
   const UpdateSplashImageHandler = async () => {
@@ -50,6 +63,38 @@ function DashboardController() {
 
   const resetSubmitHandler = () => {};
 
+  const onChangeGuideVideo = (e: any) => {
+    if (e.target.files && e.target.files.length > 0) {
+      const file = e.target.files[0];
+      setGuideVideo({
+        preview: URL.createObjectURL(file),
+        raw: file,
+      });
+    }
+  };
+
+  const uploadGuideVideoHandler = async () => {
+    if (!screenKey || !guideVideo?.raw) {
+      alert("Please fill all fields and upload a video");
+      return;
+    }
+
+    const response = await VideoUpload(
+      guideText,
+      screenKey,
+      guideVideo.raw,
+      setIsVideoLoading
+    );
+
+    if (response?.status === 200) {
+      // Optional: clear form
+      setGuideText("");
+      setScreenKey("");
+      setGuideVideo(null);
+      fetchVideo();
+    }
+  };
+
   return (
     <div>
       <DashboardComponent
@@ -59,6 +104,15 @@ function DashboardController() {
         splashListData={splashListData}
         setSplashListData={setSplashListData}
         toggleResetPop={toggleResetPop}
+        guideText={guideText}
+        setGuideText={setGuideText}
+        screenKey={screenKey}
+        setScreenKey={setScreenKey}
+        guideVideo={guideVideo}
+        setGuideVideo={setGuideVideo}
+        onChangeGuideVideo={onChangeGuideVideo}
+        uploadGuideVideoHandler={uploadGuideVideoHandler}
+        isVideoLoading={isVideoLoading}
       />
       {openResetPop ? (
         <div className="deleteCustomer-box-main">

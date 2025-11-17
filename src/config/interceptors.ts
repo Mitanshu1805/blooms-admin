@@ -3,7 +3,7 @@ import axios from "axios";
 const Api = axios.create({
   // baseURL: "https://api.blooms.sg/api/",
   // baseURL: 'http://192.168.23.7:3002/api/',
-  // baseURL: 'http://192.168.23.22:3002/api/',
+  // baseURL: "http://192.168.23.23:3002/api/",
   // baseURL: "http://0.0.0.0:3000/api/",
   baseURL: "http://192.168.23.23:3002/api/",
   // baseURL: "https://dev.api.blooms.sg/api/",
