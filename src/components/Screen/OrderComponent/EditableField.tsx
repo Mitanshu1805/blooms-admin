@@ -14,27 +14,27 @@ const EditableField = ({
   };
 
   return (
-    <div className='content-details-div'>
-      <strong className='content-details-label'>{label}</strong>
+    <div className="content-details-div">
+      <strong className="content-details-label">{label}</strong>
       {editable && isEditing ? (
-        <div className='editable-div'>
+        <div className="editable-div">
           :
           <textarea
-            className='content-details-input'
+            className="content-details-input"
             value={value}
             onChange={onInputChange}
-            style={{ whiteSpace: 'pre-wrap' }}
+            style={{ whiteSpace: "pre-wrap" }}
           />
-          <div className='margin-div'>
-            <i className='bx bx-edit-alt icon-primary-color' />
+          <div className="margin-div">
+            <i className="bx bx-edit-alt icon-primary-color" />
           </div>
         </div>
       ) : (
-        <div className='edit-text-div'>
-          <span className='content-details-title'>: {value}</span>{' '}
+        <div className="edit-text-div">
+          <span className="content-details-title">: {value}</span>{" "}
           {editable && (
-            <div className='margin-div' onClick={handleEdit}>
-              <i className='bx bx-edit-alt icon-primary-color' />
+            <div className="margin-div" onClick={handleEdit}>
+              <i className="bx bx-edit-alt icon-primary-color" />
             </div>
           )}
         </div>

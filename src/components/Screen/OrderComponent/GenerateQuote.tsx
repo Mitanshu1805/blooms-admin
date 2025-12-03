@@ -154,7 +154,7 @@ const Quote = ({
                       onInputChange={(e: any) => {
                         setQuoteData((prevValue: any) => ({
                           ...prevValue,
-                          service_type: e.target.value,
+                          service: e.target.value,
                         }));
                       }}
                       editable={true}
