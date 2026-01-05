@@ -4,6 +4,7 @@ import { DeletePopup } from "../../components";
 import {
   BlockClient,
   ClientBlockList,
+  ClientExport,
   ClientList,
   DeleteClient,
   PointRedeem,
@@ -170,6 +171,10 @@ function ClientController() {
     }
   };
 
+  const exportClientsHandler = async () => {
+    await ClientExport(setIsLoading);
+  };
+
   return (
     <div>
       <ClientComponent
@@ -188,6 +193,7 @@ function ClientController() {
         onUnblockHandler={onUnblockHandler}
         onHistoryHandler={onHistoryHandler}
         UserPointsRedeemSubmitHandler={UserPointsRedeemSubmitHandler}
+        onExportHandler={exportClientsHandler}
       />
 
       {openBlockForm ? (

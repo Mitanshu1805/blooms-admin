@@ -25,6 +25,7 @@ interface ClientProps {
   navigation: any;
   onHistoryHandler: any;
   UserPointsRedeemSubmitHandler: any;
+  onExportHandler?: () => void; // Add optional export handler
 }
 
 function ClientComponent({
@@ -42,6 +43,7 @@ function ClientComponent({
   onUnblockHandler,
   onHistoryHandler,
   UserPointsRedeemSubmitHandler,
+  onExportHandler,
 }: ClientProps) {
   const canUpdate = hasPermission("client", "update");
   const canDelete = hasPermission("client", "delete");
@@ -57,8 +59,6 @@ function ClientComponent({
     "Blocked At",
     "Block History",
     "Points",
-    // "Status",
-    // "Action",
     ...(showStatusColumn ? ["Status"] : []),
     ...(showActionColumn ? ["Action"] : []),
   ];
@@ -79,9 +79,12 @@ function ClientComponent({
     setShowRedeemModal(false);
     setSelectedClient(null);
   };
+
   if (!canView) {
     return <div>You do not have permission to view this page.</div>;
   }
+
+  console.log("onExportHandler", onExportHandler);
 
   return (
     <div className="details-list-card card">
@@ -98,8 +101,25 @@ function ClientComponent({
             />
           </div>
         </div>
-        <div className="details-list-top-right">
-          <SearchBar onChange={handleChangeSearch} value={searchInput} />
+        <div
+          className="details-list-top-right d-flex align-items-end"
+          style={{ flexDirection: "row" }}
+        >
+          <div style={{ width: "250px" }}>
+            <SearchBar onChange={handleChangeSearch} value={searchInput} />
+          </div>
+
+          {canView && (
+            <button
+              className="btn btn-outline"
+              style={{ color: "white", backgroundColor: "#fd8f82" }}
+              type="button"
+              onClick={onExportHandler}
+              disabled={isLoading}
+            >
+              Export
+            </button>
+          )}
         </div>
       </div>
       <div className="details-list-table">
@@ -114,9 +134,9 @@ function ClientComponent({
             hasPermission("client", "update")
               ? (client: any) => {
                   if (client?.blocked_at) {
-                    onUnblockHandler(client); // if already blocked → unblock
+                    onUnblockHandler(client);
                   } else {
-                    onBlockHandler(client); // if not blocked → block
+                    onBlockHandler(client);
                   }
                 }
               : undefined
@@ -139,7 +159,6 @@ function ClientComponent({
           />
         </div>
       ) : null}
-      {/* 👇 RedeemPoints Modal */}
       {showRedeemModal && (
         <RedeemPoints
           show={showRedeemModal}
