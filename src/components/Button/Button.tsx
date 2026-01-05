@@ -8,6 +8,7 @@ interface Props {
   isLoading?: boolean;
   style?: any;
   isInvalid?: boolean;
+  disabled?: boolean;
 }
 
 const Button = (props: Props) => {

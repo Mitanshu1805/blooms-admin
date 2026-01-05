@@ -1,15 +1,15 @@
-import ReactToPrint from 'react-to-print';
-import { ArticleLoader, Image, RatesSection } from '../..';
-import Button from '../../Button/Button';
-import EditableField from './EditableField';
-import ServiceReceipt from './ServiceReceipt';
-import { ReceiptFooter, ReceiptHeader } from '../../../assets';
-import { useState } from 'react';
-import moment from 'moment';
-import DateTimePicker from 'react-datetime-picker';
-import 'react-datetime-picker/dist/DateTimePicker.css';
-import 'react-calendar/dist/Calendar.css';
-import 'react-clock/dist/Clock.css';
+import ReactToPrint from "react-to-print";
+import { ArticleLoader, Image, RatesSection } from "../..";
+import Button from "../../Button/Button";
+import EditableField from "./EditableField";
+import ServiceReceipt from "./ServiceReceipt";
+import { ReceiptFooter, ReceiptHeader } from "../../../assets";
+import { useState } from "react";
+import moment from "moment";
+import DateTimePicker from "react-datetime-picker";
+import "react-datetime-picker/dist/DateTimePicker.css";
+import "react-calendar/dist/Calendar.css";
+import "react-clock/dist/Clock.css";
 
 const Receipt = ({
   openReceipt,
@@ -32,71 +32,71 @@ const Receipt = ({
 }: any) => {
   const formattedArray = item?.items?.map(
     (cost: any) =>
-      `${cost?.order_label ? cost?.order_label : ''} x ${
+      `${cost?.order_label ? cost?.order_label : ""} x ${
         cost?.quantity ? cost?.quantity : 0
       } : ${cost?.amount ? cost?.amount : 0}`
   );
 
   const [dropdownValues, setDropdownValues] = useState(
-    formattedArray ? formattedArray : ['']
+    formattedArray ? formattedArray : [""]
   );
   const [receiptData, setReceiptData] = useState({
     service_date: item?.time_slot,
     service_type: item?.service_name,
-    service_duration: '',
+    service_duration: "",
     charges: item?.order_amount,
     amount_paid: item?.order_amount,
-    remarks: '',
+    remarks: "",
   });
 
   const prevCom = [
-    { label: 'Charges', title: receiptData?.charges },
-    { label: 'Amount Paid', title: receiptData?.amount_paid },
-    { label: 'Remarks', title: receiptData?.remarks },
+    { label: "Charges", title: receiptData?.charges },
+    { label: "Amount Paid", title: receiptData?.amount_paid },
+    { label: "Remarks", title: receiptData?.remarks },
   ];
 
   return (
     <>
-      <div className='popup-box-wrapper'>
-        <div className='receipt-box'>
-          <div className='receipt'>
-            <div className='header-main-div'>
+      <div className="popup-box-wrapper">
+        <div className="receipt-box">
+          <div className="receipt">
+            <div className="header-main-div">
               <Image
-                style={{ height: '100%', width: '100%' }}
+                style={{ height: "100%", width: "100%" }}
                 src={ReceiptHeader}
               />
             </div>
             {isLoading ? (
               <ArticleLoader />
             ) : (
-              <div className='content-main-div'>
-                <div className='content-text-div'>
-                  <span className='content-text-one'>
+              <div className="content-main-div">
+                <div className="content-text-div">
+                  <span className="content-text-one">
                     {item?.contact_person},
                   </span>
-                  <span className='content-text-one'>
+                  <span className="content-text-one">
                     thanks for blooming with us
                   </span>
-                  <span className='content-text-three'>{item?.address} </span>
+                  <span className="content-text-three">{item?.address} </span>
                 </div>
                 {isPreview ? (
-                  <div className='content-div'>
+                  <div className="content-div">
                     <EditableField
                       value={moment(receiptData?.service_date).format(
-                        'dddd, MMM DD, YYYY, hh:mm a'
+                        "dddd, MMM DD, YYYY, hh:mm a"
                       )}
-                      label='Service Date'
+                      label="Service Date"
                     />
-                    <EditableField value={item.oid} label='Order ID' />
+                    <EditableField value={item.oid} label="Order ID" />
                     <EditableField
                       value={receiptData?.service_type}
-                      label='Service Type'
+                      label="Service Type"
                     />
-                    <div className='content-details-rates-div'>
-                      <strong className='content-details-label'>Rates </strong>
-                      <div className='flex-col-div'>
+                    <div className="content-details-rates-div">
+                      <strong className="content-details-label">Rates </strong>
+                      <div className="flex-col-div">
                         {dropdownValues?.map((item: any) => (
-                          <div className='content-details-multi-title'>
+                          <div className="content-details-multi-title">
                             : {item}
                           </div>
                         ))}
@@ -104,35 +104,44 @@ const Receipt = ({
                     </div>
                     <EditableField
                       value={receiptData?.service_duration}
-                      label='Service Duration'
+                      label="Service Duration"
                     />
                     {prevCom?.map((subitem: any) => (
-                      <div className='content-details-div'>
-                        <strong className='content-details-label'>
+                      <div className="content-details-div">
+                        <strong className="content-details-label">
                           {subitem.label}
                         </strong>
-                        <div className='edit-text-div'>
+                        <div className="edit-text-div">
                           :
-                          <span className='content-details-title input-border'>
+                          {/* <span className="content-details-title input-border">
                             {subitem.title}
-                          </span>{' '}
+                          </span>{" "} */}
+                          <span
+                            className={`content-details-title input-border ${
+                              subitem.label === "Remarks"
+                                ? "remarks-preview"
+                                : ""
+                            }`}
+                          >
+                            {subitem.title}
+                          </span>
                         </div>
                       </div>
                     ))}
                   </div>
                 ) : (
-                  <div className='content-div'>
-                    <div className='content-details-div'>
-                      <strong className='content-details-label'>
-                        {'Service Date'}
+                  <div className="content-div">
+                    <div className="content-details-div">
+                      <strong className="content-details-label">
+                        {"Service Date"}
                       </strong>
-                      <div className='editable-div'>
+                      <div className="editable-div">
                         :
-                        <div className='margin-div'>
+                        <div className="margin-div">
                           <DateTimePicker
-                            className={'content-details-input'}
+                            className={"content-details-input"}
                             clearIcon={null}
-                            format='y-MM-dd h:mm a'
+                            format="y-MM-dd h:mm a"
                             onChange={(value: any) => {
                               setReceiptData((prevValue: any) => ({
                                 ...prevValue,
@@ -146,14 +155,14 @@ const Receipt = ({
                     </div>
                     <EditableField
                       value={item.oid}
-                      label='Order ID'
+                      label="Order ID"
                       editable={false}
                       isEditing={isSTEditing}
                       setIsEditing={setIsSTEditing}
                     />
                     <EditableField
                       value={receiptData.service_type}
-                      label='Service Type'
+                      label="Service Type"
                       onInputChange={(e: any) => {
                         setReceiptData((prevValue: any) => ({
                           ...prevValue,
@@ -171,7 +180,7 @@ const Receipt = ({
                     />
                     <EditableField
                       value={receiptData.service_duration}
-                      label='Service Duration'
+                      label="Service Duration"
                       editable={true}
                       isEditing={true}
                       setIsEditing={setIsEditing}
@@ -184,7 +193,7 @@ const Receipt = ({
                     />
                     <EditableField
                       value={receiptData.charges}
-                      label='Charges'
+                      label="Charges"
                       editable={true}
                       isEditing={true}
                       setIsEditing={setIsEditing}
@@ -197,7 +206,7 @@ const Receipt = ({
                     />
                     <EditableField
                       value={receiptData?.amount_paid}
-                      label='Amount Paid'
+                      label="Amount Paid"
                       editable={true}
                       isEditing={true}
                       setIsEditing={setIsEditing}
@@ -210,7 +219,7 @@ const Receipt = ({
                     />
                     <EditableField
                       value={receiptData?.remarks}
-                      label='Remarks'
+                      label="Remarks"
                       editable={true}
                       isEditing={true}
                       setIsEditing={setIsEditing}
@@ -224,22 +233,22 @@ const Receipt = ({
                   </div>
                 )}
                 {isPreview ? (
-                  <div className='btn-div'>
+                  <div className="btn-div">
                     <Button
-                      className='receipt-preview-btn'
-                      name='Back to Generate'
+                      className="receipt-preview-btn"
+                      name="Back to Generate"
                       onClick={() => setIsPreview(!isPreview)}
                     />
                     <Button
-                      className='receipt-preview-btn'
-                      name='Upload to Order'
+                      className="receipt-preview-btn"
+                      name="Upload to Order"
                       onClick={handleUploadOrder}
                     />
                     <ReactToPrint
                       trigger={() => (
                         <Button
-                          className='receipt-preview-btn'
-                          name='Print'
+                          className="receipt-preview-btn"
+                          name="Print"
                           onClick={printDocument}
                         />
                       )}
@@ -248,27 +257,27 @@ const Receipt = ({
                     />
                   </div>
                 ) : (
-                  <div className='btn-div'>
+                  <div className="btn-div">
                     <Button
-                      className='order-info-receipt-btn'
-                      name='Generate Preview'
+                      className="order-info-receipt-btn"
+                      name="Generate Preview"
                       onClick={handleGeneratePreview}
                     />
                   </div>
                 )}
               </div>
             )}
-            <div className='footer-main-div'>
+            <div className="footer-main-div">
               <Image
-                style={{ height: '100%', width: '100%' }}
+                style={{ height: "100%", width: "100%" }}
                 src={ReceiptFooter}
               />
             </div>
           </div>
-          <div className='flex-row-cen-cen-div only-margin-top only-margin-bottom'>
+          <div className="flex-row-cen-cen-div only-margin-top only-margin-bottom">
             <Button
-              className='add-details-cancel-btn'
-              name='Close'
+              className="add-details-cancel-btn"
+              name="Close"
               onClick={() => {
                 setOpenReceipt(!openReceipt);
                 setIsPreview(false);
@@ -277,7 +286,7 @@ const Receipt = ({
           </div>
         </div>
       </div>
-      <div style={{ width: '1130px' }}>
+      <div style={{ width: "1130px" }}>
         <ServiceReceipt
           receiptRef={receiptRef}
           item={item}
