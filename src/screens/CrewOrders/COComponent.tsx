@@ -15,7 +15,7 @@ interface CrewOrdersProps {
   size: number;
   searchInput: string;
   setSelectedPage: (value: number) => void;
-  generateStatement: () => void;
+  generateStatement: any;
   country: string;
   handleCountryChange: (value: string) => void;
   handleRemarksChange: (value: string) => void;
@@ -76,6 +76,7 @@ function COComponent({
   );
 
   console.log("netSettlement>>>", netSettlement);
+  console.log(crewOrdersListData);
 
   return (
     <div className="details-list-card card">
@@ -140,7 +141,7 @@ function COComponent({
           className="order-info-receipt-btn"
           name={"Generate Statement"}
           onClick={generateStatement}
-          isInvalid={crewOrdersListData.length === 0}
+          // isInvalid={crewOrdersListData.length === 0}
         />
       </div>
       <div className="net-settlement mb-4 text-start">

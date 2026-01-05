@@ -4,11 +4,12 @@ import { useCallback, useEffect, useState } from "react";
 
 import { pdf } from "@react-pdf/renderer";
 import CrewSettlementDoc from "../../components/SettlementPDF/StatementDoc";
-import { CrewOrderList, CrewUpload } from "./COApis";
+import { CrewOrderList, CrewOrdersPdf, CrewUpload } from "./COApis";
 import moment from "moment";
 
 function COController() {
   const { state } = useLocation();
+  console.log(state);
 
   const [crewOrdersListData, setCrewOrdersListData] = useState<any>([]);
   const [netSettlement, setNetSettlement] = useState<any>([]);
@@ -130,6 +131,78 @@ function COController() {
     }
   };
 
+  const handlePrint = async () => {
+    console.log("=== PDF Generation Debug ===");
+
+    try {
+      setIsLoading(true);
+
+      const currencyValue =
+        country === "Singapore"
+          ? "SGD"
+          : country === "Malaysia"
+          ? "MYR"
+          : "USD";
+
+      // Use the exact same date setup as fetchData
+      const dates = dateSetup();
+
+      console.log("Request Parameters:");
+      console.log("- Crew ID:", state?.crew_id);
+      console.log("- Currency:", currencyValue);
+      console.log("- Start Date (API format):", dates[0]);
+      console.log("- End Date (API format):", dates[1]);
+      console.log("- Start Date (Display):", startDate);
+      console.log("- End Date (Display):", endDate);
+      console.log("- Crew Orders Count:", crewOrdersListData?.length);
+
+      // Use dates[0] and dates[1] which are already in YYYY-MM-DD format
+      const response = await CrewOrdersPdf(
+        setIsLoading,
+        state?.crew_id,
+        currencyValue,
+        dates[0], // These are the same dates used in fetchData
+        dates[1]
+      );
+
+      console.log(
+        "Response:",
+        response?.status,
+        "Size:",
+        response?.data?.byteLength
+      );
+      console.log(
+        "data instanceof ArrayBuffer:",
+        response?.data instanceof ArrayBuffer
+      );
+      console.log("byteLength:", response?.data?.byteLength);
+
+      if (response?.data) {
+        const blob = new Blob([response.data], { type: "application/pdf" });
+        console.log("Blob size:", blob.size);
+
+        if (blob.size < 3) {
+          alert(
+            "⚠️ PDF generated but appears to be empty. Check if there are orders for the selected dates."
+          );
+        }
+
+        const url = window.URL.createObjectURL(blob);
+        const link = document.createElement("a");
+        link.href = url;
+        link.target = "_blank";
+        link.download = `crew-orders-${state?.crew_name}-${startDate}.pdf`;
+        link.click();
+
+        setTimeout(() => window.URL.revokeObjectURL(url), 100);
+      }
+    } catch (error) {
+      console.error("PDF generation failed", error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   return (
     <div>
       <COComponent
@@ -141,7 +214,8 @@ function COController() {
         size={size}
         searchInput=""
         setSelectedPage={setSelectedPage}
-        generateStatement={handleGenerate}
+        // generateStatement={handleGenerate}
+        generateStatement={handlePrint}
         country={country}
         handleCountryChange={handleCountryChange}
         remarks={remarks}
