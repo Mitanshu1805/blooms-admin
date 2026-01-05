@@ -19,6 +19,8 @@ interface DashboardProps {
   onChangeGuideVideo: (e: any) => void;
   uploadGuideVideoHandler: () => void;
   isVideoLoading: boolean;
+  offerScreensList: any;
+  deleteGuideVideoHandler: () => void;
 }
 
 function DashboardComponent({
@@ -37,6 +39,8 @@ function DashboardComponent({
   uploadGuideVideoHandler,
   isVideoLoading,
   setGuideVideo,
+  offerScreensList,
+  deleteGuideVideoHandler,
 }: DashboardProps) {
   const canUpdate = hasPermission("dashboard", "update");
   const canDelete = hasPermission("dashboard", "delete");
@@ -47,6 +51,8 @@ function DashboardComponent({
   if (!canView) {
     return <div>You do not have permission to view this page.</div>;
   }
+
+  console.log("offerScreensList>>>>>", offerScreensList);
 
   return (
     <div className="dash-list-card card">
@@ -147,14 +153,13 @@ function DashboardComponent({
               {guideVideo ? (
                 <div className="flex-col-cen-cen-div dash-splash-selected-img-div">
                   <video
-                    src={guideVideo.preview || guideVideo}
+                    src={guideVideo.preview || guideVideo.guide_video}
                     className="flex-col-cen-cen-div dash-media-preview"
                     controls
                   />
-
                   <div
                     className="splash-edit"
-                    onClick={() => setGuideVideo(null)}
+                    onClick={deleteGuideVideoHandler}
                   >
                     <Image src={RemoveIcon} />
                   </div>
@@ -186,7 +191,31 @@ function DashboardComponent({
                 onChange={(e: any) => setGuideText(e.target.value)}
               />
 
-              <Input label="Screen Key" type="text" value="Account" disabled />
+              {offerScreensList && offerScreensList.length > 0 ? (
+                <div
+                  className="input-group"
+                  style={{ flexDirection: "column" }}
+                >
+                  <label className="input-label">Screen Key</label>
+
+                  <select
+                    className="form-control"
+                    style={{ width: "48%" }}
+                    value={screenKey}
+                    onChange={(e) => setScreenKey(e.target.value)}
+                  >
+                    <option value="">Select Screen</option>
+
+                    {offerScreensList.map((offer: any) => (
+                      <option key={offer.screen_key} value={offer.screen_key}>
+                        {offer.screen_name}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              ) : (
+                <div className="no-data">No Screens present</div>
+              )}
 
               <Button
                 className="info-edit-btn"

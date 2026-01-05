@@ -100,6 +100,39 @@ export const VideoUpload = async (
   }
 };
 
+export const VideoDelete = async (
+  guide_id: any,
+  setIsLoading: (value: boolean) => void
+) => {
+  try {
+    setIsLoading(true);
+
+    const response = await ApiCall({
+      endpoint: "guide/delete",
+      method: "DELETE",
+      data: {
+        guide_id: guide_id,
+      },
+    });
+
+    if (response?.status === 200) {
+      alertService.alert({
+        type: AlertType.Success,
+        message: response?.data?.message,
+      });
+    }
+
+    return response;
+  } catch (error: any) {
+    alertService.alert({
+      type: AlertType.Error,
+      message: error?.response?.data?.message || "Something went wrong",
+    });
+  } finally {
+    setIsLoading(false);
+  }
+};
+
 export const GuideList = async (screen_key: any, setIsLoading: any) => {
   try {
     setIsLoading(true);

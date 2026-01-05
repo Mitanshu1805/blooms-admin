@@ -1,7 +1,14 @@
 import { useEffect, useState } from "react";
-import { GuideList, SplashList, UpdateSplashA, VideoUpload } from "./Dashboard";
+import {
+  GuideList,
+  SplashList,
+  UpdateSplashA,
+  VideoDelete,
+  VideoUpload,
+} from "./Dashboard";
 import DashboardComponent from "./DashboardComponent";
 import { ButtonLoading } from "../../components";
+import { OfferScreen } from "../Offers/OffersApis";
 
 function DashboardController() {
   const [isLoading, setIsLoading] = useState(false);
@@ -11,23 +18,44 @@ function DashboardController() {
   const [screenKey, setScreenKey] = useState("");
   const [guideVideo, setGuideVideo] = useState<any>(null);
   const [isVideoLoading, setIsVideoLoading] = useState(false);
+  const [offerScreensList, setOfferScreenList] = useState<any>();
 
   useEffect(() => {
     setScreenKey("Account");
     fetchData();
-    fetchVideo();
+    fetchScreens();
   }, []);
+
+  useEffect(() => {
+    fetchVideo(screenKey);
+  }, [screenKey]);
 
   const fetchData = async () => {
     const notificationResponse: any = await SplashList(setIsLoading);
     setSplashListData(notificationResponse?.data?.screen);
   };
 
-  const fetchVideo = async () => {
-    const videoResponse: any = await GuideList("Account", setIsLoading);
-    console.log(videoResponse?.data?.guides[0]?.guide_video);
-    const video = videoResponse?.data?.guides[0]?.guide_video;
-    setGuideVideo(video);
+  const fetchScreens = async () => {
+    const screenResponse: any = await OfferScreen(setIsLoading);
+    // console.log(screenResponse?.data?.screens);
+    setOfferScreenList(screenResponse?.data?.screens);
+  };
+
+  // const fetchVideo = async (key: string) => {
+  //   if (!key) return;
+
+  //   const videoResponse: any = await GuideList(key, setIsLoading);
+  //   const video = videoResponse?.data?.guides?.[0]?.guide_video || null;
+  //   setGuideVideo(video);
+  // };
+
+  const fetchVideo = async (key: string) => {
+    if (!key) return;
+
+    const videoResponse: any = await GuideList(key, setIsLoading);
+    const guide = videoResponse?.data?.guides?.[0] || null;
+
+    setGuideVideo(guide); // ⬅️ store full object
   };
 
   const UpdateSplashImageHandler = async () => {
@@ -89,9 +117,21 @@ function DashboardController() {
     if (response?.status === 200) {
       // Optional: clear form
       setGuideText("");
-      setScreenKey("");
+      // setScreenKey("");
       setGuideVideo(null);
-      fetchVideo();
+      fetchVideo(screenKey);
+    }
+  };
+
+  const deleteGuideVideoHandler = async () => {
+    console.log("HERE ");
+
+    if (!guideVideo?.guide_id) return;
+
+    const response = await VideoDelete(guideVideo.guide_id, setIsVideoLoading);
+
+    if (response?.status === 200) {
+      setGuideVideo(null);
     }
   };
 
@@ -113,6 +153,8 @@ function DashboardController() {
         onChangeGuideVideo={onChangeGuideVideo}
         uploadGuideVideoHandler={uploadGuideVideoHandler}
         isVideoLoading={isVideoLoading}
+        offerScreensList={offerScreensList}
+        deleteGuideVideoHandler={deleteGuideVideoHandler}
       />
       {openResetPop ? (
         <div className="deleteCustomer-box-main">
