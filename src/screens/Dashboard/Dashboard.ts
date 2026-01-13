@@ -73,7 +73,13 @@ export const VideoUpload = async (
     form_data.append("screen_key", screen_key);
 
     if (guide_video) {
-      form_data.append("guide_video", guide_video);
+      // 🟢 If it's a YouTube link (string), send as youtube_url
+      if (typeof guide_video === "string") {
+        form_data.append("youtube_url", guide_video);
+      } else {
+        // 🟢 Otherwise send as file
+        form_data.append("guide_video", guide_video);
+      }
     }
 
     const response = await ApiCallFormData({

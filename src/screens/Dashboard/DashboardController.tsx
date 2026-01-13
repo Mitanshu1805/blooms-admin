@@ -91,33 +91,95 @@ function DashboardController() {
 
   const resetSubmitHandler = () => {};
 
+  // const onChangeGuideVideo = (e: any) => {
+  //   if (e.target.files && e.target.files.length > 0) {
+  //     const file = e.target.files[0];
+  //     setGuideVideo({
+  //       preview: URL.createObjectURL(file),
+  //       raw: file,
+  //     });
+  //   }
+  // };
   const onChangeGuideVideo = (e: any) => {
-    if (e.target.files && e.target.files.length > 0) {
+    // 🟢 File upload event
+    if (e?.target?.files && e.target.files.length > 0) {
       const file = e.target.files[0];
       setGuideVideo({
         preview: URL.createObjectURL(file),
         raw: file,
       });
-    }
-  };
-
-  const uploadGuideVideoHandler = async () => {
-    if (!screenKey || !guideVideo?.raw) {
-      alert("Please fill all fields and upload a video");
       return;
     }
 
-    const response = await VideoUpload(
-      guideText,
-      screenKey,
-      guideVideo.raw,
-      setIsVideoLoading
-    );
+    // 🟢 YouTube link (string)
+    if (typeof e === "string") {
+      setGuideVideo(e.trim());
+    }
+  };
+
+  // const uploadGuideVideoHandler = async () => {
+  //   if (!screenKey || !guideVideo?.raw) {
+  //     alert("Please fill all fields and upload a video");
+  //     return;
+  //   }
+
+  //   const response = await VideoUpload(
+  //     guideText,
+  //     screenKey,
+  //     guideVideo.raw,
+  //     setIsVideoLoading
+  //   );
+
+  //   if (response?.status === 200) {
+  //     // Optional: clear form
+  //     setGuideText("");
+  //     // setScreenKey("");
+  //     setGuideVideo(null);
+  //     fetchVideo(screenKey);
+  //   }
+  // };
+
+  const uploadGuideVideoHandler = async () => {
+    if (!screenKey || !guideVideo) {
+      alert("Please fill all fields");
+      return;
+    }
+
+    let response;
+
+    // 🟢 YouTube link
+    if (typeof guideVideo === "string") {
+      response = await VideoUpload(
+        guideText,
+        screenKey,
+        guideVideo,
+        setIsVideoLoading
+      );
+    }
+    // 🟢 New uploaded file
+    else if (guideVideo?.raw) {
+      response = await VideoUpload(
+        guideText,
+        screenKey,
+        guideVideo.raw,
+        setIsVideoLoading
+      );
+    }
+    // 🟢 Existing saved video (API fetch)
+    else if (guideVideo?.guide_video) {
+      response = await VideoUpload(
+        guideText,
+        screenKey,
+        guideVideo.guide_video,
+        setIsVideoLoading
+      );
+    } else {
+      alert("Invalid guide video");
+      return;
+    }
 
     if (response?.status === 200) {
-      // Optional: clear form
       setGuideText("");
-      // setScreenKey("");
       setGuideVideo(null);
       fetchVideo(screenKey);
     }
@@ -125,8 +187,9 @@ function DashboardController() {
 
   const deleteGuideVideoHandler = async () => {
     console.log("HERE ");
+    console.log(guideVideo);
 
-    if (!guideVideo?.guide_id) return;
+    // if (!guideVideo?.guide_id) return;
 
     const response = await VideoDelete(guideVideo.guide_id, setIsVideoLoading);
 
