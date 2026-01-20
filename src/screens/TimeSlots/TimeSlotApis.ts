@@ -169,3 +169,39 @@ export const UpdateCancellationLimit = async (
     setIsLoading(false);
   }
 };
+
+export const servicesSameDayBooking = async (
+  service_id: string,
+  location_id: string,
+  same_day_booking: boolean,
+  setIsLoading: (val: boolean) => void
+) => {
+  try {
+    setIsLoading(true);
+    const response = await ApiCall({
+      endpoint: "services/sameday/booking",
+      method: "PUT",
+      data: {
+        service_id,
+        location_id,
+        same_day_booking,
+      },
+    });
+    if (response?.status === 200) {
+      alertService.alert({
+        type: AlertType.Success,
+        message: response?.data?.message,
+      });
+    }
+    return response;
+  } catch (error: any) {
+    if (error?.data?.message) {
+      alertService.alert({
+        type: AlertType.Error,
+        message: error?.data?.message,
+      });
+    }
+  } finally {
+    setIsLoading(false);
+  }
+};

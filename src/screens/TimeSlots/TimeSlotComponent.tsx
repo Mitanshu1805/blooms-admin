@@ -4,6 +4,8 @@ import "./TimeSlot.scss";
 import TimePicker from "react-time-picker";
 import { hasPermission } from "../../utils/permissions.utils";
 import { useState, useEffect } from "react";
+// import ToggleComponent from "../../components/Toggle/Toggle";
+import ToggleComp from "../../components/Toggle/ToggleComp";
 
 interface TimeSlotsProps {
   territoryOptions: any;
@@ -22,6 +24,10 @@ interface TimeSlotsProps {
   handleTimelimitChange: (val: any) => void;
   handleTimeSlotController: (val: any) => void;
   globalTimelimitSubmitHandler: (val: any) => void;
+  handleSwitchChange: any;
+  sameDayBooking: any;
+  setSameDayBooking: any;
+  selectedService: any;
 }
 
 function TimeSlotComponent({
@@ -41,6 +47,10 @@ function TimeSlotComponent({
   handleTimeSlotController,
   handleTimelimitChange,
   globalTimelimitSubmitHandler,
+  sameDayBooking,
+  setSameDayBooking,
+  selectedService,
+  handleSwitchChange,
 }: TimeSlotsProps) {
   const canUpdate = hasPermission("disable_timeslots", "update");
   const canDelete = hasPermission("disable_timeslots", "delete");
@@ -56,8 +66,7 @@ function TimeSlotComponent({
     return <div>You do not have permission to view this page.</div>;
   }
 
-  console.log(cancellationTimeLimit);
-  console.log(localCancellationLimit);
+  console.log(serviceOptions, selectedService);
 
   return (
     <div>
@@ -67,30 +76,7 @@ function TimeSlotComponent({
             <span className="details-list-top-left-title">TIME SLOTS</span>
           </div>
         </div>
-        {/* <div className="selected-month">
-          <label className="inputText-label" htmlFor={"First Slot"}>
-            Global Booking Time Limit
-          </label>
-          <div className="add-details-input-container">
-            <TimePicker
-              className={"time-picker-input-container"}
-              id="start-time"
-              value={timelimit}
-              onChange={handleTimelimitChange}
-              format={"HH:mm"}
-              clockIcon={true}
-              disableClock={true}
-            />
-            {hasPermission("disable_timeslots", "update") && (
-              <button
-                onClick={globalTimelimitSubmitHandler}
-                className="month-button"
-              >
-                <div className="month-card selected">Save</div>
-              </button>
-            )}
-          </div>
-        </div> */}
+
         <div className="details-list-table">
           <div className="dropdown-container">
             <DropDown
@@ -112,6 +98,31 @@ function TimeSlotComponent({
               />
             </div>
           </div>
+          {location_id && selectedService?.value && (
+            <div
+              style={{
+                marginTop: "15px",
+                display: "flex",
+                alignItems: "center",
+                gap: "10px",
+              }}
+            >
+              {/* <span>Allow Same Day Booking:</span> */}
+
+              <ToggleComp
+                checked={selectedService?.sameday_booking}
+                onChange={(value: boolean) => {
+                  setSameDayBooking(value);
+                  handleSwitchChange(
+                    selectedService?.value,
+                    location_id,
+                    value,
+                  );
+                }}
+              />
+            </div>
+          )}
+
           {isNotSelected && (
             <div className="months-container">
               {months.map((month: any, index: number) => (
@@ -141,40 +152,7 @@ function TimeSlotComponent({
             {renderDates(selectedMonth)}
           </div>
         )}
-        {/* <div className="details-list-table">
-          <div className="dropdown-container">
-            <DropDown
-              style={{ width: "300px" }}
-              label={"Select Territory"}
-              onChange={(e: any) => {
-                setLocation_id(e.target.value);
-              }}
-              data={territoryOptions}
-            />
-          </div>
-          {isNotSelected && (
-            <div className="months-container">
-              {months.map((month: any, index: number) => (
-                <button
-                  key={index}
-                  onClick={() => handleMonthSelect(month)}
-                  className="month-button"
-                >
-                  <div
-                    className={
-                      moment(selectedMonth).format("DD-MM-YYYY") ===
-                      moment(month).format("DD-MM-YYYY")
-                        ? "month-card selected"
-                        : "month-card"
-                    }
-                  >
-                    {format(month, "MMMM yyyy")}
-                  </div>
-                </button>
-              ))}
-            </div>
-          )}
-        </div> */}
+
         {selectedMonth && (
           <div className="selected-month">
             <h4>{format(selectedMonth, "MMMM yyyy")}</h4>
@@ -182,46 +160,7 @@ function TimeSlotComponent({
           </div>
         )}
       </div>
-      <div>
-        {/* ---------------- CANCELLATION LIMIT ---------------- */}
-        {/* <div className="details-list-card card">
-          <div className="details-list-top">
-            <div className="details-list-top-left">
-              <span className="details-list-top-left-title">
-                Cancellation Limit
-              </span>
-            </div>
-          </div>
-
-          <div className="details-list-table">
-            <div className="add-details-input-container">
-              <div className="d-flex flex-row align-items-center gap-2">
-                <Input
-                  style={{ width: "80px" }}
-                  placeholder={"Enter Cancellation time slot"}
-                  value={localCancellationLimit.replace("d", "")}
-                  onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                    setLocalCancellationLimit(e.target.value)
-                  }
-                />
-                <span style={{ paddingBottom: "20px" }}>Days</span>
-              </div>
-              {canUpdate && (
-                <button
-                  onClick={() =>
-                    handleTimeSlotController(
-                      localCancellationLimit ? `${localCancellationLimit}d` : ""
-                    )
-                  }
-                  className="month-button"
-                >
-                  <div className="month-card selected">Update</div>
-                </button>
-              )}
-            </div>
-          </div>
-        </div> */}
-      </div>
+      <div></div>
     </div>
   );
 }

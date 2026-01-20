@@ -9,6 +9,7 @@ import {
   UpdateTimeSlotList,
   UpdateCancellationLimit,
   CancellationTimeLimit,
+  servicesSameDayBooking,
 } from "./TimeSlotApis";
 import {
   format,
@@ -34,6 +35,7 @@ function TimeSlotController() {
   const [timeSlotList, setTimeSlotList] = useState<any>({});
   const [timelimit, setTimelimit] = useState("09:00");
   const [cancellationTimeLimit, setCancellationTimeLimit] = useState<any>();
+  const [sameDayBooking, setSameDayBooking] = useState<boolean>(false);
 
   useEffect(() => {
     fetchData();
@@ -202,6 +204,25 @@ function TimeSlotController() {
     }
   };
 
+  const handleSwitchChange = async (
+    service_id: string,
+    location_id: string,
+    same_day_booking: boolean
+  ) => {
+    console.log("Here");
+
+    const response = await servicesSameDayBooking(
+      service_id,
+      location_id,
+      same_day_booking,
+      setIsLoading
+    );
+
+    if (response?.status === 200) {
+      fetchData();
+    }
+  };
+
   return (
     <div>
       <TimeSlotComponent
@@ -221,6 +242,10 @@ function TimeSlotController() {
         timelimit={timelimit}
         handleTimelimitChange={setTimelimit}
         globalTimelimitSubmitHandler={globalTimelimitSubmitHandler}
+        handleSwitchChange={handleSwitchChange}
+        sameDayBooking={sameDayBooking}
+        setSameDayBooking={setSameDayBooking}
+        selectedService={selectedService}
       />
       {isOpenPop && service_id ? (
         <TimeSlotPopup
