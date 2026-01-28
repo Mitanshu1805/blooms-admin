@@ -2,6 +2,14 @@ import { str } from "ajv";
 import { ApiCall, ApiCallFormData } from "../../config";
 import { AlertType, alertService } from "../../utils/alert.service";
 
+interface CrewOrderUpdatePayload {
+  order_id: string;
+  payment_mode: string;
+  cash: string;
+  cashless: string;
+  materials_fee: string;
+}
+
 export const CrewOrderList = async (
   size: number,
   selectedPage: number,
@@ -9,7 +17,7 @@ export const CrewOrderList = async (
   crew_id: string,
   currency: string,
   startDate: string,
-  endDate: string
+  endDate: string,
 ) => {
   try {
     setIsLoading(true);
@@ -43,7 +51,7 @@ export const CrewOrderList = async (
 export const CrewUpload = async (
   file: any,
   folderName: string,
-  setIsLoading: (val: boolean) => void
+  setIsLoading: (val: boolean) => void,
 ) => {
   try {
     setIsLoading(true);
@@ -84,7 +92,7 @@ export const CrewOrdersPdf = async (
   crew_id: string,
   currency: string,
   startDate: string,
-  endDate: string
+  endDate: string,
 ) => {
   try {
     setIsLoading(true);
@@ -99,6 +107,32 @@ export const CrewOrdersPdf = async (
         currency: currency,
         startDate: startDate,
         endDate: endDate,
+      },
+    });
+    return response;
+  } catch (error: any) {
+    if (error?.data?.message) {
+      alertService.alert({
+        type: AlertType.Error,
+        message: error?.data?.message,
+      });
+    }
+  } finally {
+    setIsLoading(false);
+  }
+};
+
+export const CrewOrdersUpdate = async (
+  orders: CrewOrderUpdatePayload[],
+  setIsLoading: (val: boolean) => void,
+) => {
+  try {
+    setIsLoading(true);
+    const response = await ApiCall({
+      endpoint: "crew/orders/update",
+      method: "POST",
+      data: {
+        orders,
       },
     });
     return response;

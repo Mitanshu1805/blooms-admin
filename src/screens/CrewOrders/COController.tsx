@@ -4,7 +4,12 @@ import { useCallback, useEffect, useState } from "react";
 
 import { pdf } from "@react-pdf/renderer";
 import CrewSettlementDoc from "../../components/SettlementPDF/StatementDoc";
-import { CrewOrderList, CrewOrdersPdf, CrewUpload } from "./COApis";
+import {
+  CrewOrderList,
+  CrewOrdersPdf,
+  CrewUpload,
+  CrewOrdersUpdate,
+} from "./COApis";
 import moment from "moment";
 
 function COController() {
@@ -22,13 +27,16 @@ function COController() {
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
   const [remarks, setRemarks] = useState("");
+  const [editableOrders, setEditableOrders] = useState<any[]>([]);
+  const [isEditMode, setIsEditMode] = useState(false);
+
   const limit = 200;
 
   const setFormattedContent = useCallback(
     (text: string) => {
       setRemarks(text.slice(0, limit));
     },
-    [limit]
+    [limit],
   );
 
   useEffect(() => {
@@ -68,7 +76,7 @@ function COController() {
   const fetchData = async (
     currency: string,
     startDate: string,
-    endDate: string
+    endDate: string,
   ) => {
     const rolesDataResponse: any = await CrewOrderList(
       size,
@@ -77,12 +85,15 @@ function COController() {
       state?.crew_id,
       currency,
       startDate,
-      endDate
+      endDate,
     );
     console.log("rolesDataResponse>>", rolesDataResponse?.data);
     console.log("netSettlement>>>", netSettlement);
     if (rolesDataResponse?.data?.data) {
       setCrewOrdersListData(rolesDataResponse?.data?.data);
+      setEditableOrders(
+        JSON.parse(JSON.stringify(rolesDataResponse.data.data)),
+      );
       setNetSettlement(rolesDataResponse?.data?.netSettlement);
     } else {
       setCrewOrdersListData([]);
@@ -111,7 +122,7 @@ function COController() {
           remarks={remarks}
           startDate={startDate}
           endDate={endDate}
-        />
+        />,
       ).toBlob();
 
       const file = new File([blob], `${state?.crew_name}_${startDate}.pdf`, {
@@ -122,7 +133,7 @@ function COController() {
       const crewUploadResponse: any = await CrewUpload(
         file,
         `${month} ${year}`,
-        setIsLoading
+        setIsLoading,
       );
 
       console.log("PDF uploaded to Google Drive successfully!");
@@ -141,8 +152,8 @@ function COController() {
         country === "Singapore"
           ? "SGD"
           : country === "Malaysia"
-          ? "MYR"
-          : "USD";
+            ? "MYR"
+            : "USD";
 
       // Use the exact same date setup as fetchData
       const dates = dateSetup();
@@ -162,18 +173,18 @@ function COController() {
         state?.crew_id,
         currencyValue,
         dates[0], // These are the same dates used in fetchData
-        dates[1]
+        dates[1],
       );
 
       console.log(
         "Response:",
         response?.status,
         "Size:",
-        response?.data?.byteLength
+        response?.data?.byteLength,
       );
       console.log(
         "data instanceof ArrayBuffer:",
-        response?.data instanceof ArrayBuffer
+        response?.data instanceof ArrayBuffer,
       );
       console.log("byteLength:", response?.data?.byteLength);
 
@@ -183,7 +194,7 @@ function COController() {
 
         if (blob.size < 3) {
           alert(
-            "⚠️ PDF generated but appears to be empty. Check if there are orders for the selected dates."
+            "⚠️ PDF generated but appears to be empty. Check if there are orders for the selected dates.",
           );
         }
 
@@ -203,10 +214,133 @@ function COController() {
     }
   };
 
+  // CrewOrders.controller.tsx
+
+  const handleCellChange = (
+    rowIndex: number,
+    fieldTitle: string,
+    value: any,
+  ) => {
+    console.log("Editing:", { rowIndex, fieldTitle, value });
+
+    setEditableOrders((prev) => {
+      const updated = [...prev];
+
+      // Calculate which order this row belongs to
+      let currentRowCount = 0;
+      let orderIndex = -1;
+      let isMaterialRow = false;
+
+      for (let i = 0; i < updated.length; i++) {
+        const hasMatFee =
+          updated[i]?.materials_fee && Number(updated[i]?.materials_fee) !== 0;
+        const rowsForThisOrder = hasMatFee ? 2 : 1;
+
+        if (
+          currentRowCount <= rowIndex &&
+          rowIndex < currentRowCount + rowsForThisOrder
+        ) {
+          orderIndex = i;
+          isMaterialRow = hasMatFee && rowIndex === currentRowCount + 1;
+          break;
+        }
+        currentRowCount += rowsForThisOrder;
+      }
+
+      if (orderIndex === -1) {
+        console.error("Could not find order for row index:", rowIndex);
+        return prev;
+      }
+
+      console.log("Found order:", {
+        orderIndex,
+        isMaterialRow,
+        order: updated[orderIndex],
+      });
+
+      // Update the appropriate field
+      if (fieldTitle === "Fee") {
+        if (isMaterialRow) {
+          // Material row - update materials_fee
+          updated[orderIndex] = {
+            ...updated[orderIndex],
+            materials_fee: value,
+          };
+        } else {
+          // Service row - update cashless or cash
+          if (
+            updated[orderIndex].actual_payment_mode === "cashless" ||
+            Number(updated[orderIndex]?.cashless ?? "0")
+          ) {
+            updated[orderIndex] = {
+              ...updated[orderIndex],
+              cashless: value,
+            };
+          } else {
+            updated[orderIndex] = {
+              ...updated[orderIndex],
+              cash: value,
+            };
+          }
+        }
+      } else if (fieldTitle === "Cash/Cashless") {
+        updated[orderIndex] = {
+          ...updated[orderIndex],
+          actual_payment_mode: value,
+        };
+
+        if (value === "cash") {
+          updated[orderIndex].cash =
+            updated[orderIndex].cashless || updated[orderIndex].cash || "0.00";
+          updated[orderIndex].cashless = "0.00";
+        } else {
+          updated[orderIndex].cashless =
+            updated[orderIndex].cash || updated[orderIndex].cashless || "0.00";
+          updated[orderIndex].cash = "0.00";
+        }
+      }
+
+      console.log("Updated order:", updated[orderIndex]);
+      return updated;
+    });
+  };
+
+  const isOrderChanged = (original: any, edited: any) => {
+    return (
+      String(original.cash ?? "0.00") !== String(edited.cash ?? "0.00") ||
+      String(original.cashless ?? "0.00") !==
+        String(edited.cashless ?? "0.00") ||
+      String(original.materials_fee ?? "0.00") !==
+        String(edited.materials_fee ?? "0.00") ||
+      original.actual_payment_mode !== edited.actual_payment_mode
+    );
+  };
+
+  const buildUpdatePayload = () => {
+    return editableOrders
+      .filter((edited: any, index: number) =>
+        isOrderChanged(crewOrdersListData[index], edited),
+      )
+      .map((order: any) => {
+        const fee = Number(order.cashless ?? 0) || Number(order.cash ?? 0) || 0;
+
+        const isCash = order.actual_payment_mode === "cash";
+
+        return {
+          order_id: order.order_id,
+          payment_mode: isCash ? "cash" : "cashless",
+          cash: isCash ? fee.toFixed(2) : "0.00",
+          cashless: isCash ? "0.00" : fee.toFixed(2),
+          materials_fee: String(order.materials_fee ?? "0.00"),
+        };
+      });
+  };
+
   return (
     <div>
       <COComponent
         crewOrdersListData={crewOrdersListData}
+        setCrewOrdersListData={setCrewOrdersListData}
         netSettlement={netSettlement}
         setNetSettlement={setNetSettlement}
         selectedPage={selectedPage}
@@ -227,6 +361,12 @@ function COController() {
         handlePeriodChange={handlePeriodChange}
         crewName={state.crew_name}
         waiver={Number(state.waiver)}
+        isEditMode={isEditMode}
+        setIsEditMode={setIsEditMode}
+        editableOrders={editableOrders}
+        handleCellChange={handleCellChange}
+        buildUpdatePayload={buildUpdatePayload}
+        setIsLoading={setIsLoading}
       />
     </div>
   );

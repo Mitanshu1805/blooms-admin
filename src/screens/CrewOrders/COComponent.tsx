@@ -7,9 +7,11 @@ import {
 } from "../../components";
 import { CrewOrdersTableData } from "./CrewOrdersTableData";
 import "./CrewOrders.scss";
+import { CrewOrdersUpdate } from "./COApis";
 
 interface CrewOrdersProps {
   selectedPage: number;
+  setCrewOrdersListData: any;
   crewOrdersListData: any;
   isLoading: boolean;
   size: number;
@@ -29,10 +31,17 @@ interface CrewOrdersProps {
   waiver: number;
   setNetSettlement: any;
   netSettlement: any;
+  isEditMode: any;
+  setIsEditMode: any;
+  editableOrders: any;
+  handleCellChange: any;
+  buildUpdatePayload: any;
+  setIsLoading: any;
 }
 
 function COComponent({
   selectedPage,
+  setCrewOrdersListData,
   crewOrdersListData,
   isLoading,
   size,
@@ -52,6 +61,12 @@ function COComponent({
   waiver,
   netSettlement,
   setNetSettlement,
+  isEditMode,
+  setIsEditMode,
+  editableOrders,
+  handleCellChange,
+  buildUpdatePayload,
+  setIsLoading,
 }: CrewOrdersProps) {
   const headerData = [
     "No",
@@ -64,16 +79,14 @@ function COComponent({
     `Comm Waiver? (${waiver}%)`,
     `Credit/Debit (${crewOrdersListData[0]?.currency})`,
     "Nett",
+    // "Action",
     // "Crew Earnings",
     // "BLMS Earnings",
   ];
 
-  const listData = CrewOrdersTableData(
-    crewOrdersListData,
-    selectedPage,
-    size,
-    waiver
-  );
+  const tableSource = isEditMode ? editableOrders : crewOrdersListData;
+
+  const listData = CrewOrdersTableData(tableSource, selectedPage, size, waiver);
 
   console.log("netSettlement>>>", netSettlement);
   console.log(crewOrdersListData);
@@ -112,27 +125,8 @@ function COComponent({
               />
             </div>
           </div>
-          {/* <div>
-            <p>Remarks:</p>
-            <textarea
-              className="fixed-height-textarea"
-              onChange={(event) => handleRemarksChange(event.target.value)}
-              value={remarks}
-              placeholder="Enter your remarks here (Optional)"
-            />
-            <p>
-              {remarks.length}/{limit}
-            </p>
-          </div> */}
-          <div className="details-list-top-left-dropdown">
-            {/* <NumberDropdown
-                  data={userListData}
-                  onChange={(e: any) => {
-                    setSize(e.target.value);
-                    setSelectedPage(1);
-                  }}
-                /> */}
-          </div>
+
+          <div className="details-list-top-left-dropdown"></div>
         </div>
         <div className="details-list-top-right"></div>
       </div>
@@ -157,23 +151,106 @@ function COComponent({
           </span>
         </h4>
       </div>
+      {listData?.length > 0 && (
+        <div style={{ marginBottom: "12px", textAlign: "right" }}>
+          {!isEditMode ? (
+            <Button
+              name="Edit"
+              onClick={() => setIsEditMode(true)}
+              style={{
+                backgroundColor: "#FD8D82",
+                color: "white",
+                padding: "8px 30px",
+                border: "2px solid",
+                borderRadius: "10px",
+                marginRight: "5px",
+              }}
+            />
+          ) : (
+            <>
+              <Button
+                style={{
+                  backgroundColor: "#FD8D82",
+                  color: "white",
+                  padding: "8px 30px",
+                  border: "2px solid",
+                  borderRadius: "10px",
+                  marginRight: "5px",
+                }}
+                name="Save"
+                onClick={async () => {
+                  try {
+                    const payload = buildUpdatePayload();
+                    console.log("Updating orders payload:", payload);
+
+                    await CrewOrdersUpdate(payload, setIsLoading);
+
+                    setCrewOrdersListData([...editableOrders]);
+
+                    let newNetSettlement = 0;
+
+                    editableOrders.forEach((item: any) => {
+                      const order_amount = Number(item?.cashless ?? "0")
+                        ? item.cashless
+                        : item?.cash;
+
+                      const calWaiver =
+                        waiver > 0 && waiver <= 100 ? waiver : 10;
+
+                      if (Number(item?.cashless ?? 0)) {
+                        newNetSettlement += item.has_waiver
+                          ? Number(order_amount)
+                          : (Number(order_amount) * (100 - calWaiver)) / 100;
+                      } else {
+                        newNetSettlement += item.has_waiver
+                          ? 0
+                          : (-1 * Number(order_amount) * calWaiver) / 100;
+                      }
+
+                      if (
+                        item?.materials_fee &&
+                        Number(item?.materials_fee) !== 0 &&
+                        item?.actual_payment_mode === "cashless"
+                      ) {
+                        newNetSettlement += Number(item?.materials_fee);
+                      }
+                    });
+
+                    setNetSettlement(newNetSettlement.toFixed(2));
+                    setIsEditMode(false);
+                  } catch (error) {
+                    console.error("Failed to update crew orders", error);
+                  }
+                }}
+              />
+
+              <Button
+                name="Cancel"
+                onClick={() => setIsEditMode(false)}
+                style={{
+                  backgroundColor: "#FD8D82",
+                  color: "white",
+                  padding: "8px 30px",
+                  border: "2px solid",
+                  borderRadius: "10px",
+                  marginRight: "5px",
+                }}
+              />
+            </>
+          )}
+        </div>
+      )}
+
       <div className="details-list-table">
         <TableComp
           isLoading={false}
           listHeaderData={headerData}
           listData={listData}
+          isEditMode={isEditMode}
+          onCellChange={handleCellChange}
+          // onEditHandler={onEditHandler}
         />
       </div>
-      {/* {sampleData?.length > 0 ? (
-            <div className="details-list-pagination">
-              <Pagination
-                selectedPage={selectedPage}
-                totalCount={userListData?.totalPages ?? 1}
-                onPageChange={(page: number) => setSelectedPage(page)}
-                itemsPerPage={4}
-              />
-            </div>
-          ) : null} */}
     </div>
   );
 }

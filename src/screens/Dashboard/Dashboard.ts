@@ -88,7 +88,7 @@ export const VideoUpload = async (
       data: form_data,
     });
 
-    if (response?.status === 200) {
+    if (response?.status === 201 || response?.status === 200) {
       alertService.alert({
         type: AlertType.Success,
         message: response?.data?.message,

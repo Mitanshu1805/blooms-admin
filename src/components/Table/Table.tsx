@@ -24,9 +24,14 @@ const TableComponent = ({
   onBlockHandler,
   isPointsRedeem,
   pointsRedeem,
+  isEditMode = false,
+  onCellChange,
 }: // editItem,
 any) => {
   // console.log("editItem in perm table data >>>", editItem);
+
+  const EDITABLE_TITLES = ["Fee", "Cash/Cashless"];
+
   return (
     <>
       {isLoading ? (
@@ -149,9 +154,9 @@ any) => {
                           ) : j.title === "Navigate" ? (
                             <Td onClick={() => navigationClick(j)}>
                               <div className="navigate-text">
-                                {j.data?.service_name ?? j.data?.location_name
-                                  ? j.data?.service_name ??
-                                    j.data?.location_name
+                                {(j.data?.service_name ?? j.data?.location_name)
+                                  ? (j.data?.service_name ??
+                                    j.data?.location_name)
                                   : "-"}
                               </div>
                             </Td>
@@ -196,9 +201,46 @@ any) => {
                             </Td>
                           ) : (
                             <Td key={i}>
-                              {j.data || j.data === 0 ? j.data : "-"}
+                              {isEditMode &&
+                              EDITABLE_TITLES.includes(j.title) ? (
+                                j.title === "Cash/Cashless" ? (
+                                  <select
+                                    className="form-select form-select-sm"
+                                    value={j.data ?? ""}
+                                    onChange={(e) =>
+                                      onCellChange &&
+                                      onCellChange(
+                                        Number(key),
+                                        j.title,
+                                        e.target.value,
+                                      )
+                                    }
+                                  >
+                                    <option value="cash">cash</option>
+                                    <option value="cashless">cashless</option>
+                                  </select>
+                                ) : (
+                                  <input
+                                    type={j.title === "Fee" ? "number" : "text"}
+                                    className="form-control form-control-sm"
+                                    value={j.data ?? ""}
+                                    onChange={(e) =>
+                                      onCellChange &&
+                                      onCellChange(
+                                        Number(key),
+                                        j.title,
+                                        e.target.value,
+                                      )
+                                    }
+                                  />
+                                )
+                              ) : j.data || j.data === 0 ? (
+                                j.data
+                              ) : (
+                                "-"
+                              )}
                             </Td>
-                          )
+                          ),
                         )}
                       </Tr>
                     </Tbody>
