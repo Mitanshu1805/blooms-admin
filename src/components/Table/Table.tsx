@@ -30,7 +30,13 @@ const TableComponent = ({
 any) => {
   // console.log("editItem in perm table data >>>", editItem);
 
-  const EDITABLE_TITLES = ["Fee", "Cash/Cashless"];
+  const EDITABLE_TITLES = [
+    "Fee",
+    "Cash/Cashless",
+    "Customer",
+    "Order ID",
+    "Waiver",
+  ];
 
   return (
     <>
@@ -201,8 +207,7 @@ any) => {
                             </Td>
                           ) : (
                             <Td key={i}>
-                              {isEditMode &&
-                              EDITABLE_TITLES.includes(j.title) ? (
+                              {isEditMode && j.editable ? (
                                 j.title === "Cash/Cashless" ? (
                                   <select
                                     className="form-select form-select-sm"
@@ -219,6 +224,22 @@ any) => {
                                     <option value="cash">cash</option>
                                     <option value="cashless">cashless</option>
                                   </select>
+                                ) : j.title === "Waiver" ? ( // ✅ ADD THIS BLOCK
+                                  <select
+                                    className="form-select form-select-sm"
+                                    value={String(j.data)}
+                                    onChange={(e) =>
+                                      onCellChange &&
+                                      onCellChange(
+                                        Number(key),
+                                        j.title,
+                                        e.target.value === "true",
+                                      )
+                                    }
+                                  >
+                                    <option value="true">Yes</option>
+                                    <option value="false">No </option>
+                                  </select>
                                 ) : (
                                   <input
                                     type={j.title === "Fee" ? "number" : "text"}
@@ -233,6 +254,12 @@ any) => {
                                       )
                                     }
                                   />
+                                )
+                              ) : j.type === "boolean" ? (
+                                j.data ? (
+                                  "Yes"
+                                ) : (
+                                  `No`
                                 )
                               ) : j.data || j.data === 0 ? (
                                 j.data

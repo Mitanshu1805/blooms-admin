@@ -298,6 +298,21 @@ function COController() {
             updated[orderIndex].cash || updated[orderIndex].cashless || "0.00";
           updated[orderIndex].cash = "0.00";
         }
+      } else if (fieldTitle === "Customer") {
+        updated[orderIndex] = {
+          ...updated[orderIndex],
+          contact_person: value,
+        };
+      } else if (fieldTitle === "Order ID") {
+        updated[orderIndex] = {
+          ...updated[orderIndex],
+          oid: value,
+        };
+      } else if (fieldTitle === "Waiver") {
+        updated[orderIndex] = {
+          ...updated[orderIndex],
+          has_waiver: value,
+        };
       }
 
       console.log("Updated order:", updated[orderIndex]);
@@ -312,7 +327,10 @@ function COController() {
         String(edited.cashless ?? "0.00") ||
       String(original.materials_fee ?? "0.00") !==
         String(edited.materials_fee ?? "0.00") ||
-      original.actual_payment_mode !== edited.actual_payment_mode
+      original.actual_payment_mode !== edited.actual_payment_mode ||
+      original.contact_person !== edited.contact_person ||
+      original.oid !== edited.oid || // ✅ ADD THIS
+      original.has_waiver !== edited.has_waiver
     );
   };
 
@@ -321,18 +339,35 @@ function COController() {
       .filter((edited: any, index: number) =>
         isOrderChanged(crewOrdersListData[index], edited),
       )
-      .map((order: any) => {
+      .map((order: any, index: number) => {
+        const original = crewOrdersListData[index];
+
         const fee = Number(order.cashless ?? 0) || Number(order.cash ?? 0) || 0;
 
         const isCash = order.actual_payment_mode === "cash";
 
-        return {
+        const payload: any = {
           order_id: order.order_id,
           payment_mode: isCash ? "cash" : "cashless",
           cash: isCash ? fee.toFixed(2) : "0.00",
           cashless: isCash ? "0.00" : fee.toFixed(2),
           materials_fee: String(order.materials_fee ?? "0.00"),
+          time_slot: order?.time_slot,
+          has_waiver: order?.has_waiver,
+          contact_person: order?.contact_person,
         };
+
+        // ✅ Only add contact_person if changed
+        // if (original.contact_person !== order.contact_person) {
+        //   payload.contact_person = order.contact_person;
+        // }
+
+        // ✅ Only add oid if changed
+        if (original.oid !== order.oid) {
+          payload.oid = order.oid;
+        }
+
+        return payload;
       });
   };
 

@@ -48,6 +48,8 @@ export const CrewOrdersTableData = (
       {
         title: "Customer",
         data: item?.contact_person,
+        editable: true,
+        fieldName: "contact_person",
       },
       {
         title: "Time slot",
@@ -56,6 +58,8 @@ export const CrewOrdersTableData = (
       {
         title: "Order ID",
         data: item.oid,
+        editable: true,
+        fieldName: "oid",
       },
       {
         title: "Cash/Cashless",
@@ -77,7 +81,11 @@ export const CrewOrdersTableData = (
 
       {
         title: "Waiver",
-        data: item?.has_waiver ? "Yes" : `No (${waiver}%)`,
+        // data: item?.has_waiver ? "Yes" : `No (${waiver}%)`,
+        data: item?.has_waiver ?? false,
+        editable: true,
+        fieldName: "has_waiver",
+        type: "boolean",
       },
       {
         title: "Credit/Debit",
@@ -114,6 +122,8 @@ export const CrewOrdersTableData = (
         {
           title: "Customer",
           data: item?.contact_person,
+          editable: true,
+          fieldName: "contact_person",
         },
         {
           title: "Time slot",
@@ -122,6 +132,8 @@ export const CrewOrdersTableData = (
         {
           title: "Order ID",
           data: item.oid,
+          editable: true,
+          fieldName: "oid",
         },
         {
           title: "Cash/Cashless",
@@ -143,6 +155,7 @@ export const CrewOrdersTableData = (
         {
           title: "Waiver",
           data: "-",
+          // editable: false,
         },
         {
           title: "Credit/Debit",
