@@ -128,6 +128,9 @@ export const CrewOrdersTableData = (
         {
           title: "Time slot",
           data: moment.utc(item?.time_slot).format("DD-MM-YYYY"),
+          clickable: true,
+          actionType: "editTimeSlot",
+          orderId: item?.order_id,
         },
         {
           title: "Order ID",

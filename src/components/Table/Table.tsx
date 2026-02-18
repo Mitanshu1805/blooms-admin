@@ -26,6 +26,8 @@ const TableComponent = ({
   pointsRedeem,
   isEditMode = false,
   onCellChange,
+  onTimeSlotClick,
+  showTimeSlotTable,
 }: // editItem,
 any) => {
   // console.log("editItem in perm table data >>>", editItem);
@@ -207,7 +209,23 @@ any) => {
                             </Td>
                           ) : (
                             <Td key={i}>
-                              {isEditMode && j.editable ? (
+                              {/* ✅ 1️⃣ TIME SLOT CLICK HANDLER */}
+                              {j.clickable ? (
+                                <span
+                                  style={{
+                                    cursor: "pointer",
+                                    color: "#0d6efd",
+                                    textDecoration: "underline",
+                                  }}
+                                  onClick={() =>
+                                    onTimeSlotClick &&
+                                    onTimeSlotClick(j.orderId)
+                                  }
+                                >
+                                  {j.data}
+                                </span>
+                              ) : /* ✅ 2️⃣ EDIT MODE HANDLING */
+                              isEditMode && j.editable ? (
                                 j.title === "Cash/Cashless" ? (
                                   <select
                                     className="form-select form-select-sm"
@@ -224,7 +242,7 @@ any) => {
                                     <option value="cash">cash</option>
                                     <option value="cashless">cashless</option>
                                   </select>
-                                ) : j.title === "Waiver" ? ( // ✅ ADD THIS BLOCK
+                                ) : j.title === "Waiver" ? (
                                   <select
                                     className="form-select form-select-sm"
                                     value={String(j.data)}
@@ -238,7 +256,7 @@ any) => {
                                     }
                                   >
                                     <option value="true">Yes</option>
-                                    <option value="false">No </option>
+                                    <option value="false">No</option>
                                   </select>
                                 ) : (
                                   <input
@@ -255,13 +273,15 @@ any) => {
                                     }
                                   />
                                 )
-                              ) : j.type === "boolean" ? (
+                              ) : /* ✅ 3️⃣ BOOLEAN DISPLAY */
+                              j.type === "boolean" ? (
                                 j.data ? (
                                   "Yes"
                                 ) : (
-                                  `No`
+                                  "No"
                                 )
-                              ) : j.data || j.data === 0 ? (
+                              ) : /* ✅ 4️⃣ NORMAL DISPLAY */
+                              j.data || j.data === 0 ? (
                                 j.data
                               ) : (
                                 "-"

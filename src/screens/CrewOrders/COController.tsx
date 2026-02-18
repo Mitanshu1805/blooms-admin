@@ -11,6 +11,7 @@ import {
   CrewOrdersUpdate,
 } from "./COApis";
 import moment from "moment";
+import { OrderItem } from "../OrderDetails/ODApis";
 
 function COController() {
   const { state } = useLocation();
@@ -29,6 +30,12 @@ function COController() {
   const [remarks, setRemarks] = useState("");
   const [editableOrders, setEditableOrders] = useState<any[]>([]);
   const [isEditMode, setIsEditMode] = useState(false);
+  const [orderData, setOrderData] = useState<any[]>([]);
+  const [timeSlotTable, setTimeSlotTable] = useState(false);
+  const [showTimeSlotModal, setShowTimeSlotModal] = useState(false);
+  const [selectedSlot, setSelectedSlot] = useState("");
+  const [slotData, setSlotData] = useState<any>(null);
+  const [errors, setErrors] = useState<any>({});
 
   const limit = 200;
 
@@ -38,6 +45,12 @@ function COController() {
     },
     [limit],
   );
+
+  useEffect(() => {
+    console.log("editableOrders type:", typeof editableOrders);
+    console.log("isArray:", Array.isArray(editableOrders));
+    console.log("value:", editableOrders);
+  }, [editableOrders]);
 
   useEffect(() => {
     const currency =
@@ -330,11 +343,80 @@ function COController() {
       original.actual_payment_mode !== edited.actual_payment_mode ||
       original.contact_person !== edited.contact_person ||
       original.oid !== edited.oid || // ✅ ADD THIS
-      original.has_waiver !== edited.has_waiver
+      original.has_waiver !== edited.has_waiver ||
+      original.time_slot !== edited.time_slot
     );
   };
 
+  const validateOrders = () => {
+    for (let i = 0; i < editableOrders.length; i++) {
+      const order = editableOrders[i];
+
+      // 🚨 Customer name validation
+      if (!order.contact_person || order.contact_person.trim() === "") {
+        alert(`Customer name cannot be empty (Order ${order.order_id})`);
+        return false;
+      }
+
+      // 🚨 Order ID validation
+      if (!order.oid || String(order.oid).trim() === "") {
+        alert(`Order ID cannot be empty (Order ${order.order_id})`);
+        return false;
+      }
+
+      // 🚨 Fee validation
+      const fee =
+        Number(order.cash ?? 0) ||
+        Number(order.cashless ?? 0) ||
+        Number(order.materials_fee ?? 0);
+
+      if (isNaN(fee) || fee < 0) {
+        alert(`Invalid fee in Order ${order.order_id}`);
+        return false;
+      }
+    }
+
+    return true;
+  };
+
+  const OrdersValidator = () => {
+    let newErrors: any = {};
+    let isValid = true;
+
+    editableOrders.forEach((order, index) => {
+      const orderKey = order.order_id;
+
+      // 🔹 Customer Name
+      if (!order.contact_person || order.contact_person.trim() === "") {
+        newErrors[`${orderKey}_contact_person`] = "Customer name is required";
+        isValid = false;
+      }
+
+      // 🔹 Order ID
+      if (!order.oid || String(order.oid).trim() === "") {
+        newErrors[`${orderKey}_oid`] = "Order ID is required";
+        isValid = false;
+      }
+
+      // 🔹 Fee validation
+      const fee =
+        Number(order.cash ?? 0) ||
+        Number(order.cashless ?? 0) ||
+        Number(order.materials_fee ?? 0);
+
+      if (isNaN(fee) || fee < 0) {
+        newErrors[`${orderKey}_fee`] = "Invalid fee amount";
+        isValid = false;
+      }
+    });
+
+    setErrors(newErrors);
+    return isValid;
+  };
+
   const buildUpdatePayload = () => {
+    console.log("editableOrders>>>>>>>>>", editableOrders);
+
     return editableOrders
       .filter((edited: any, index: number) =>
         isOrderChanged(crewOrdersListData[index], edited),
@@ -371,6 +453,30 @@ function COController() {
       });
   };
 
+  const onTimeSlotClick = async (orderId: string) => {
+    setTimeSlotTable(!timeSlotTable);
+    try {
+      console.log("Fetching order:", orderId);
+
+      const orderDataResponse: any = await OrderItem(orderId, setIsLoading);
+
+      console.log("Order details:", orderDataResponse);
+      setOrderData(orderDataResponse);
+      setSlotData(orderDataResponse?.data?.data);
+      setSelectedSlot(
+        moment.utc(orderDataResponse?.data?.data?.time_slot).format("HH:mm"),
+      );
+      setShowTimeSlotModal(true);
+    } catch (error) {
+      console.error("Time slot fetch failed", error);
+    }
+  };
+
+  const showTimeSlotTable = () => {
+    console.log("we here");
+    // onTimeSlotClick;
+  };
+
   return (
     <div>
       <COComponent
@@ -399,9 +505,24 @@ function COController() {
         isEditMode={isEditMode}
         setIsEditMode={setIsEditMode}
         editableOrders={editableOrders}
+        setEditableOrders={setEditableOrders}
         handleCellChange={handleCellChange}
         buildUpdatePayload={buildUpdatePayload}
         setIsLoading={setIsLoading}
+        onTimeSlotClick={onTimeSlotClick}
+        orderData={orderData}
+        setOrderData={setOrderData}
+        showTimeSlotTable={showTimeSlotTable}
+        timeSlotTable={timeSlotTable}
+        setTimeSlotTable={setTimeSlotTable}
+        showTimeSlotModal={showTimeSlotModal}
+        slotData={slotData}
+        selectedSlot={selectedSlot}
+        setSelectedSlot={setSelectedSlot}
+        setShowTimeSlotModal={setShowTimeSlotModal}
+        validateOrders={validateOrders}
+        errors={errors}
+        OrdersValidator={OrdersValidator}
       />
     </div>
   );

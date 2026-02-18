@@ -88,7 +88,7 @@ function ODController() {
   const orderItemDataA = async () => {
     const itemDataResponse: any = await OrderItem(
       state?.data?.order_id,
-      setIsLoading
+      setIsLoading,
     );
     setItem(itemDataResponse?.data?.data);
     setTimeSlotValue(itemDataResponse?.data?.data?.time_slot);
@@ -111,7 +111,7 @@ function ODController() {
       const response = await CardAmountCharge(
         item.order_id,
         detailsData.order_amount,
-        setIsLoading
+        setIsLoading,
       );
       if (response?.status === 201 || 200) {
         orderItemDataA();
@@ -125,7 +125,7 @@ function ODController() {
       detailsData.order_amount,
       item?.order_id,
       item?.client_id,
-      setIsLoading
+      setIsLoading,
     );
     if (response?.status === 201 || 200) {
       orderItemDataA();
@@ -141,7 +141,7 @@ function ODController() {
       moment(timeSlotValue).format("YYYY-MM-DDTHH:mm:ss"),
       item?.order_id,
       item?.client_id,
-      setIsLoading
+      setIsLoading,
     );
     if (response?.status === 201 || 200) {
       orderItemDataA();
@@ -151,7 +151,7 @@ function ODController() {
     const response = await OrderMobileShow(
       item?.order_id,
       !item?.is_mobile_hidden,
-      setIsLoading
+      setIsLoading,
     );
     if (response?.status === 201 || 200) {
       orderItemDataA();
@@ -163,7 +163,7 @@ function ODController() {
       detailsData.note_reply,
       item?.order_id,
       item?.client_id,
-      setIsLoading
+      setIsLoading,
     );
     if (response?.status === 201 || 200) {
       orderItemDataA();
@@ -179,7 +179,7 @@ function ODController() {
       buttonName,
       item?.order_id,
       item?.client_id,
-      setIsLoading
+      setIsLoading,
     );
     if (response?.status === 201 || 200) {
       orderItemDataA();
@@ -191,7 +191,7 @@ function ODController() {
       const response = await InvoiceImageDelete(
         orderDetailsDeleteValue?.subitem,
         item?.order_id,
-        setIsLoading
+        setIsLoading,
       );
       if (response?.status === 200) {
         orderItemDataA();
@@ -202,7 +202,7 @@ function ODController() {
       const response = await QuoteImageDelete(
         orderDetailsDeleteValue?.subitem,
         item?.order_id,
-        setIsLoading
+        setIsLoading,
       );
       if (response?.status === 200) {
         orderItemDataA();
@@ -213,7 +213,7 @@ function ODController() {
       const response = await OrderImageDelete(
         orderDetailsDeleteValue?.subitem,
         item?.order_id,
-        setIsLoading
+        setIsLoading,
       );
       if (response?.status === 200) {
         orderItemDataA();
@@ -224,7 +224,7 @@ function ODController() {
       const response = await OtherImageDelete(
         orderDetailsDeleteValue?.subitem,
         item?.order_id,
-        setIsLoading
+        setIsLoading,
       );
       if (response?.status === 200) {
         orderItemDataA();
@@ -236,7 +236,7 @@ function ODController() {
   const ratesDropA = async (service_id: any) => {
     const itemDataResponse: any = await RatesDropDownA(
       service_id,
-      setIsLoading
+      setIsLoading,
     );
     const itemData = itemDataResponse?.data;
     const updatedData = itemData?.data?.map((option: any) => ({
@@ -250,7 +250,7 @@ function ODController() {
     const response = await ReceiptUploadA(
       dataUrl,
       item?.order_id,
-      setIsLoading
+      setIsLoading,
     );
     if (response?.status === 201 || 200) {
       orderItemDataA();
@@ -316,7 +316,7 @@ function ODController() {
     const response = await MultiFileUploadA(
       files,
       item?.order_id,
-      setIsLoading
+      setIsLoading,
     );
     if (response?.status === 201 || response?.status === 200) {
       toggleMultiFile();
@@ -406,18 +406,18 @@ function ODController() {
   const CrewTimeSlotList = async () => {
     const itemDataResponse: any = await TimeSlotCrewListA(
       item?.time_slot,
-      setIsLoading
+      setIsLoading,
     );
     console.log(itemDataResponse);
 
     const selectedCrew = itemDataResponse?.data?.find((findItem: any) =>
       findItem?.time_slots?.some(
-        (someItem: any) => someItem.order_id === item?.order_id
-      )
+        (someItem: any) => someItem.order_id === item?.order_id,
+      ),
     );
     if (selectedCrew) {
       const selectedSlot = selectedCrew?.time_slots.find(
-        (findItem: any) => findItem.order_id === item?.order_id
+        (findItem: any) => findItem.order_id === item?.order_id,
       );
       const selectedValue = {
         crew_id: selectedCrew?.crew_id,
@@ -432,6 +432,8 @@ function ODController() {
   };
 
   const toggleAssignCrew = () => {
+    console.log("we are here");
+
     setIsAssignCrew(!isAssignCrew);
     CrewTimeSlotList();
     setBookSlot("");
@@ -471,7 +473,7 @@ function ODController() {
     category: any,
     name: any,
     DeleteSubmitHandler: () => void,
-    CancelDeleteSubmitHandler: () => void
+    CancelDeleteSubmitHandler: () => void,
   ) => {
     return isOpen ? (
       <DeletePopup
@@ -512,7 +514,7 @@ function ODController() {
       status,
       item?.order_id,
       item?.client_id,
-      setIsLoading
+      setIsLoading,
     );
     if (response?.status === 201 || 200) {
       orderItemDataA();
@@ -568,7 +570,7 @@ function ODController() {
         "Order",
         item?.oid,
         DeleteSubmitHandler,
-        toggleDeletePopup
+        toggleDeletePopup,
       )}
 
       {renderDeletePopup(
@@ -578,12 +580,12 @@ function ODController() {
         orderDetailsDeleteValue?.key === "invoice"
           ? "Invoice"
           : orderDetailsDeleteValue?.key === "quote"
-          ? "Quote"
-          : orderDetailsDeleteValue?.key === "order_images"
-          ? "Order Image"
-          : "Other Document",
+            ? "Quote"
+            : orderDetailsDeleteValue?.key === "order_images"
+              ? "Order Image"
+              : "Other Document",
         ImageDeleteSubmitHandler,
-        toggleOrderDetailsPopup
+        toggleOrderDetailsPopup,
       )}
       {openReceipt ? (
         <GenerateReceipt

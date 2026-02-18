@@ -5,10 +5,10 @@ const Api = axios.create({
   // baseURL: 'http://192.168.23.7:3002/api/',
   // baseURL: "http://192.168.23.23:3002/api/",
   // baseURL: "http://0.0.0.0:3000/api/",
-  // baseURL: "http://192.168.23.23:3002/api/",
+  baseURL: "http://192.168.23.23:3002/api/",
   // baseURL: "https://dev.api.blooms.sg/api/",
   // baseURL: "https://dev.admin.blooms.sg/api/",
-  baseURL: "http://192.168.23.8:3002/api/",
+  // baseURL: "http://192.168.23.8:3002/api/",
   // baseURL: "http://192.168.23.16:3002/api/",
 });
 
@@ -22,7 +22,7 @@ Api.interceptors.request.use(
   },
   (error) => {
     return Promise.reject(error);
-  }
+  },
 );
 
 Api.interceptors.response.use(
@@ -36,7 +36,7 @@ Api.interceptors.response.use(
       }
     }
     return Promise.reject(error);
-  }
+  },
 );
 
 export default Api;

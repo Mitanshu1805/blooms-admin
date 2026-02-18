@@ -17,6 +17,8 @@ function AssignCrew({
 }: any) {
   const orderSlot = item?.time_slot;
   const generateTimeSlots = () => {
+    console.log(item);
+
     const timeSlot = [];
     const firstSlot = moment(item?.first_slot, "HH:mm");
     const lastSlot = moment(item?.last_slot, "HH:mm");
@@ -88,7 +90,7 @@ function AssignCrew({
         ...crewDetails,
         ...generateTimeSlots().map((time: string) => {
           const currentSlot = currentCrewTimeSlots?.find(
-            (slot: any) => slot.time_slot === time
+            (slot: any) => slot.time_slot === time,
           );
 
           return {
@@ -98,8 +100,8 @@ function AssignCrew({
                 ? "cb"
                 : "b"
               : orderUTCSlot === time
-              ? ""
-              : "d",
+                ? ""
+                : "d",
             crew_id: item?.crew_id,
             order_id: currentSlot?.order_id,
           };
@@ -112,10 +114,10 @@ function AssignCrew({
     return listData;
   };
 
-
   const renderTable = () => {
     const HeaderData = generateHeaderData(generateTimeSlots());
     const listData = generateListData();
+    console.log(HeaderData, listData);
 
     if (isLoading) {
       return <TableLoader />;
@@ -137,7 +139,6 @@ function AssignCrew({
                 <Tbody key={rowIndex}>
                   <Tr>
                     {rowData.map((cellData: any, cellIndex: number) => {
-
                       return (
                         <Td
                           key={cellIndex}
@@ -155,22 +156,23 @@ function AssignCrew({
                               cellData.data === "b"
                                 ? "#fd8f82"
                                 : bookSlot?.crew_id === cellData?.crew_id &&
-                                  bookSlot?.title === cellData?.title
-                                ? "#4caf50"
-                                : cellData.data === "cb"
-                                ? "#4caf5070"
-                                : cellData.data === "d"
-                                ? "#00000020"
-                                : "transparent",
+                                    bookSlot?.title === cellData?.title
+                                  ? "#4caf50"
+                                  : cellData.data === "cb"
+                                    ? "#4caf5070"
+                                    : cellData.data === "d"
+                                      ? "#00000020"
+                                      : "transparent",
                             color:
                               cellData.data === "b"
                                 ? "#fd8f82"
                                 : bookSlot?.crew_id === cellData?.crew_id &&
-                                  bookSlot?.title === cellData?.title
-                                ? "#4caf50"
-                                : cellData.data === "cb" || cellData.data === "d"
-                                ? "transparent"
-                                : "black",
+                                    bookSlot?.title === cellData?.title
+                                  ? "#4caf50"
+                                  : cellData.data === "cb" ||
+                                      cellData.data === "d"
+                                    ? "transparent"
+                                    : "black",
                           }}
                         >
                           {cellData.data ? cellData.data : null}

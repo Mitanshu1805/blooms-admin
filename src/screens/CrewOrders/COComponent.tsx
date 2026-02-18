@@ -1,4 +1,5 @@
 import {
+  AssignCrew,
   Button,
   DatePickerComponent,
   DropDown,
@@ -8,6 +9,7 @@ import {
 import { CrewOrdersTableData } from "./CrewOrdersTableData";
 import "./CrewOrders.scss";
 import { CrewOrdersUpdate } from "./COApis";
+import EditTimeSlot from "../../components/Screen/OrderComponent/EditTimeSlot";
 
 interface CrewOrdersProps {
   selectedPage: number;
@@ -37,6 +39,21 @@ interface CrewOrdersProps {
   handleCellChange: any;
   buildUpdatePayload: any;
   setIsLoading: any;
+  onTimeSlotClick: any;
+  orderData: any;
+  setOrderData: any;
+  showTimeSlotTable: any;
+  timeSlotTable: any;
+  setTimeSlotTable: any;
+  showTimeSlotModal: any;
+  slotData: any;
+  selectedSlot: any;
+  setSelectedSlot: any;
+  setShowTimeSlotModal: any;
+  setEditableOrders: any;
+  validateOrders: any;
+  errors: any;
+  OrdersValidator: any;
 }
 
 function COComponent({
@@ -64,9 +81,24 @@ function COComponent({
   isEditMode,
   setIsEditMode,
   editableOrders,
+  setEditableOrders,
   handleCellChange,
   buildUpdatePayload,
   setIsLoading,
+  onTimeSlotClick,
+  orderData,
+  setOrderData,
+  showTimeSlotTable,
+  timeSlotTable,
+  setTimeSlotTable,
+  showTimeSlotModal,
+  slotData,
+  selectedSlot,
+  setSelectedSlot,
+  setShowTimeSlotModal,
+  validateOrders,
+  errors,
+  OrdersValidator,
 }: CrewOrdersProps) {
   const headerData = [
     "No",
@@ -90,6 +122,7 @@ function COComponent({
 
   console.log("netSettlement>>>", netSettlement);
   console.log(crewOrdersListData);
+  console.log("Order Data in comp", orderData);
 
   return (
     <div className="details-list-card card">
@@ -180,9 +213,10 @@ function COComponent({
                 name="Save"
                 onClick={async () => {
                   try {
+                    if (!OrdersValidator()) return;
                     const payload = buildUpdatePayload();
                     console.log("Updating orders payload:", payload);
-
+                    if (payload.length === 0) return;
                     await CrewOrdersUpdate(payload, setIsLoading);
 
                     setCrewOrdersListData([...editableOrders]);
@@ -248,9 +282,34 @@ function COComponent({
           listData={listData}
           isEditMode={isEditMode}
           onCellChange={handleCellChange}
+          onTimeSlotClick={onTimeSlotClick}
           // onEditHandler={onEditHandler}
+          showTimeSlotTable={showTimeSlotTable}
         />
       </div>
+      {/* {timeSlotTable ? <EditTimeSlot /> : null} */}
+      {showTimeSlotModal &&
+        (() => {
+          const updatedOrder = editableOrders.find(
+            (order: any) => order.order_id === slotData?.order_id,
+          );
+
+          const mergedItem = {
+            ...slotData, // keeps first_slot, last_slot, timing_of_each_slot
+            ...updatedOrder, // overrides time_slot if edited
+          };
+
+          return (
+            <EditTimeSlot
+              item={mergedItem}
+              selectedSlot={selectedSlot}
+              orderId={slotData?.order_id}
+              editableOrders={editableOrders}
+              setEditableOrders={setEditableOrders}
+              onClose={() => setShowTimeSlotModal(false)}
+            />
+          );
+        })()}
     </div>
   );
 }
