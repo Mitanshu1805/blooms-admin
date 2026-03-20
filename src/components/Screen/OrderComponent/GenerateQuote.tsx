@@ -69,7 +69,7 @@ const Quote = ({
                   <div className="content-div">
                     <EditableField
                       value={moment(quoteData?.date).format(
-                        "dddd, MMM DD, YYYY, hh:mm a"
+                        "dddd, MMM DD, YYYY, hh:mm a",
                       )}
                       label="Date"
                     />
@@ -147,6 +147,12 @@ const Quote = ({
                       editable={true}
                       isEditing={true}
                       setIsEditing={setIsEditing}
+                      onInputChange={(e: any) => {
+                        setQuoteData((prevValue: any) => ({
+                          ...prevValue,
+                          quote_id: e.target.value,
+                        }));
+                      }}
                     />
                     <EditableField
                       value={quoteData.service}

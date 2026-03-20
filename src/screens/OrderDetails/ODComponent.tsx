@@ -16,6 +16,7 @@ import DateTimePicker from "react-datetime-picker";
 import SwitchComponent from "../../components/Toggle/Toggle";
 import AutoResizeTextarea from "../../components/InputText/AutoResizeTextArea";
 import { useState } from "react";
+import { log } from "console";
 
 interface ODProps {
   isLoading: boolean;
@@ -37,6 +38,8 @@ interface ODProps {
   setIsInvoiceOpen: (val: boolean) => void;
   isQuoteOpen: boolean;
   setIsQuoteOpen: (val: boolean) => void;
+  isQuoteHistoryOpen: boolean;
+  setIsQuoteHistoryOpen: (val: boolean) => void;
   isOrderOpen: boolean;
   setIsOrderOpen: (val: boolean) => void;
   isOtherOpen: boolean;
@@ -72,6 +75,8 @@ function ODComponent({
   setIsInvoiceOpen,
   isQuoteOpen,
   setIsQuoteOpen,
+  isQuoteHistoryOpen,
+  setIsQuoteHistoryOpen,
   isOrderOpen,
   setIsOrderOpen,
   isOtherOpen,
@@ -119,6 +124,7 @@ function ODComponent({
   const handleClick = () => {
     setTestModal(true);
   };
+  console.log(timeSlotValue);
 
   const listData = OrderDetailsTableData(item);
   const [text, setText] = useState("");
@@ -165,6 +171,7 @@ function ODComponent({
     { label: "Job complete report", title: item?.job_complete_report },
   ];
   console.log("RightOrderDetailsData >> ", RightOrderDetailsData);
+  console.log(item);
 
   const renderNewOrderDetails = () => (
     <div className="od-details-container row">
@@ -210,7 +217,15 @@ function ODComponent({
                 <span>{item.label}</span>
               </div>
               <span>:</span>
-              <div className="od-customer-info-container-item-title">
+              <div
+                className="od-customer-info-container-item-title"
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  flexWrap: "wrap",
+                  gap: "8px",
+                }}
+              >
                 {isTimeSlotEdit && item?.label === "Time slot" ? (
                   <DateTimePicker
                     className={"content-details-input"}
@@ -230,22 +245,51 @@ function ODComponent({
                       : "-"}
                   </span>
                 )}
-                {item?.label === "Time slot" && !isTimeSlotEdit ? (
-                  <div className="" onClick={toggleTimeSlotEdit}>
+
+                {item?.label === "Time slot" && !isTimeSlotEdit && (
+                  <div
+                    onClick={toggleTimeSlotEdit}
+                    style={{
+                      cursor: "pointer",
+                      display: "flex",
+                      alignItems: "center",
+                    }}
+                  >
                     <i className="bx bx-edit-alt icon-primary-color" />
-                    {/* <i className='bx bx-check icon-primary-color' /> */}
                   </div>
-                ) : null}
-                {item?.label === "Time slot" && isTimeSlotEdit ? (
-                  <>
-                    <div className="" onClick={onEditDone}>
+                )}
+
+                {item?.label === "Time slot" && isTimeSlotEdit && (
+                  <div
+                    style={{
+                      display: "flex",
+                      gap: "6px",
+                      alignItems: "center",
+                    }}
+                  >
+                    <div
+                      onClick={onEditDone}
+                      style={{
+                        cursor: "pointer",
+                        display: "flex",
+                        alignItems: "center",
+                      }}
+                    >
                       <i className="bx bx-check icon-primary-color" />
                     </div>
-                    <div className="" onClick={onEditCancel}>
+
+                    <div
+                      onClick={onEditCancel}
+                      style={{
+                        cursor: "pointer",
+                        display: "flex",
+                        alignItems: "center",
+                      }}
+                    >
                       <i className="bx bx-x icon-primary-color" />
                     </div>
-                  </>
-                ) : null}
+                  </div>
+                )}
               </div>
             </div>
           ))}
@@ -408,6 +452,20 @@ function ODComponent({
                 label={"quote"}
                 toggleOrderDetailsPopup={toggleOrderDetailsPopup}
               />
+
+              {item?.quote_history?.length > 0 && (
+                <MultiAccordion
+                  name={"Quote History"}
+                  active={isQuoteHistoryOpen}
+                  onClick={() => setIsQuoteHistoryOpen(!isQuoteHistoryOpen)}
+                  // item={item?.quote_history?.map((q: any) => q.quote)}
+                  item={item?.quote_history}
+                  label={"quote_history"}
+                  toggleOrderDetailsPopup={toggleOrderDetailsPopup}
+                  showDelete={false}
+                />
+              )}
+
               <MultiAccordion
                 name={"Order Images"}
                 active={isOrderOpen}

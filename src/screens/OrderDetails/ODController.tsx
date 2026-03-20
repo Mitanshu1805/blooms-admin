@@ -54,6 +54,7 @@ function ODController() {
   const [isPreview, setIsPreview] = useState(false);
   const [isInvoiceOpen, setIsInvoiceOpen] = useState(false);
   const [isQuoteOpen, setIsQuoteOpen] = useState(false);
+  const [isQuoteHistoryOpen, setIsQuoteHistoryOpen] = useState(false);
   const [isOrderOpen, setIsOrderOpen] = useState(false);
   const [isOtherOpen, setIsOtherOpen] = useState(false);
   const [isReviewOpen, setIsReviewOpen] = useState(false);
@@ -204,7 +205,7 @@ function ODController() {
         item?.order_id,
         setIsLoading,
       );
-      if (response?.status === 200) {
+      if (response?.status === 200 || response?.status === 201) {
         orderItemDataA();
         toggleOrderDetailsPopup();
       }
@@ -542,6 +543,8 @@ function ODController() {
         setIsInvoiceOpen={setIsInvoiceOpen}
         isQuoteOpen={isQuoteOpen}
         setIsQuoteOpen={setIsQuoteOpen}
+        isQuoteHistoryOpen={isQuoteHistoryOpen}
+        setIsQuoteHistoryOpen={setIsQuoteHistoryOpen}
         isOrderOpen={isOrderOpen}
         setIsOrderOpen={setIsOrderOpen}
         isOtherOpen={isOtherOpen}

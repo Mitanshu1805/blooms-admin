@@ -12,6 +12,8 @@ function SingleAccordion({
   label,
   toggleOrderDetailsPopup,
 }: any) {
+  console.log(item);
+
   return (
     <div>
       <Accordion

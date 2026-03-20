@@ -4,7 +4,7 @@ import { AlertType, alertService } from "../../utils/alert.service";
 
 export const OrderItem = async (
   item: any,
-  setIsLoading: (val: boolean) => void
+  setIsLoading: (val: boolean) => void,
 ) => {
   try {
     setIsLoading(true);
@@ -32,7 +32,7 @@ export const OrderNoteReply = async (
   item: any,
   order_id: string,
   client_id: string,
-  setIsLoading: (val: boolean) => void
+  setIsLoading: (val: boolean) => void,
 ) => {
   try {
     setIsLoading(true);
@@ -68,7 +68,7 @@ export const OrderAmount = async (
   item: any,
   order_id: string,
   client_id: string,
-  setIsLoading: (val: boolean) => void
+  setIsLoading: (val: boolean) => void,
 ) => {
   try {
     setIsLoading(true);
@@ -104,7 +104,7 @@ export const OrderTimeslot = async (
   item: any,
   order_id: string,
   client_id: string,
-  setIsLoading: (val: boolean) => void
+  setIsLoading: (val: boolean) => void,
 ) => {
   try {
     setIsLoading(true);
@@ -139,7 +139,7 @@ export const OrderTimeslot = async (
 export const OrderMobileShow = async (
   order_id: string,
   is_mobile_hidden: boolean,
-  setIsLoading: (val: boolean) => void
+  setIsLoading: (val: boolean) => void,
 ) => {
   try {
     setIsLoading(true);
@@ -174,7 +174,7 @@ export const OrderStatus = async (
   item: any,
   order_id: string,
   client_id: string,
-  setIsLoading: (val: boolean) => void
+  setIsLoading: (val: boolean) => void,
 ) => {
   try {
     setIsLoading(true);
@@ -209,7 +209,7 @@ export const OrderStatus = async (
 export const InvoiceImageDelete = async (
   item: any,
   order_id: string,
-  setIsLoading: (val: boolean) => void
+  setIsLoading: (val: boolean) => void,
 ) => {
   try {
     setIsLoading(true);
@@ -243,15 +243,15 @@ export const InvoiceImageDelete = async (
 export const QuoteImageDelete = async (
   item: any,
   order_id: string,
-  setIsLoading: (val: boolean) => void
+  setIsLoading: (val: boolean) => void,
 ) => {
   try {
     setIsLoading(true);
     const response = await ApiCall({
-      endpoint: "order/invoice/delete",
+      endpoint: "order/quote/delete",
       method: "POST",
       data: {
-        quote: item.split("/").pop(),
+        // quote: item.split("/").pop(),
         order_id: order_id,
       },
     });
@@ -277,7 +277,7 @@ export const QuoteImageDelete = async (
 export const OrderImageDelete = async (
   item: any,
   order_id: string,
-  setIsLoading: (val: boolean) => void
+  setIsLoading: (val: boolean) => void,
 ) => {
   try {
     setIsLoading(true);
@@ -312,7 +312,7 @@ export const OrderImageDelete = async (
 export const OtherImageDelete = async (
   item: any,
   order_id: string,
-  setIsLoading: (val: boolean) => void
+  setIsLoading: (val: boolean) => void,
 ) => {
   try {
     setIsLoading(true);
@@ -347,7 +347,7 @@ export const OtherImageDelete = async (
 export const MultiFileUploadA = async (
   files: any[],
   order_id: string,
-  setIsLoading: (value: boolean) => void
+  setIsLoading: (value: boolean) => void,
 ) => {
   try {
     setIsLoading(true);
@@ -383,7 +383,7 @@ export const MultiFileUploadA = async (
 
 export const RatesDropDownA = async (
   service_id: string,
-  setIsLoading: (val: boolean) => void
+  setIsLoading: (val: boolean) => void,
 ) => {
   try {
     setIsLoading(true);
@@ -416,7 +416,7 @@ export const RatesDropDownA = async (
 export const ReceiptUploadA = async (
   file: any,
   order_id: string,
-  setIsLoading: (value: boolean) => void
+  setIsLoading: (value: boolean) => void,
 ) => {
   try {
     setIsLoading(true);
@@ -451,7 +451,7 @@ export const ReceiptUploadA = async (
 export const QuoteUpload = async (
   file: any,
   order_id: string,
-  setIsLoading: (value: boolean) => void
+  setIsLoading: (value: boolean) => void,
 ) => {
   try {
     setIsLoading(true);
@@ -486,7 +486,7 @@ export const QuoteUpload = async (
 
 export const TimeSlotCrewListA = async (
   item: any,
-  setIsLoading: (val: boolean) => void
+  setIsLoading: (val: boolean) => void,
 ) => {
   try {
     setIsLoading(true);
@@ -513,7 +513,7 @@ export const TimeSlotCrewListA = async (
 export const BookTimeSlotCrewA = async (
   item: any,
   bookSlot: any,
-  setIsLoading: (val: boolean) => void
+  setIsLoading: (val: boolean) => void,
 ) => {
   const parsedDate = moment(item?.time_slot).format("YYYY-MM-DD");
   const newTimeSlotString = `${parsedDate}T${bookSlot.title}:00.000Z`;
@@ -552,7 +552,7 @@ export const BookTimeSlotCrewA = async (
 export const CardAmountCharge = async (
   order_id: string,
   order_amount: any,
-  setIsLoading: (val: boolean) => void
+  setIsLoading: (val: boolean) => void,
 ) => {
   try {
     setIsLoading(true);
@@ -587,7 +587,7 @@ export const OrderWaiver = async (
   item: any,
   order_id: string,
   client_id: string,
-  setIsLoading: (val: boolean) => void
+  setIsLoading: (val: boolean) => void,
 ) => {
   try {
     setIsLoading(true);
