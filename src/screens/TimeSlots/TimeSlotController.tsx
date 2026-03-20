@@ -10,6 +10,8 @@ import {
   UpdateCancellationLimit,
   CancellationTimeLimit,
   servicesSameDayBooking,
+  servicesTomorrowDisableTime,
+  servicesSameDayBookingCharge,
 } from "./TimeSlotApis";
 import {
   format,
@@ -34,6 +36,8 @@ function TimeSlotController() {
   const [specificDate, setSpecificDate] = useState<any>(null);
   const [timeSlotList, setTimeSlotList] = useState<any>({});
   const [timelimit, setTimelimit] = useState("09:00");
+  const [chargeAmount, setChargeAmount] = useState("");
+
   const [cancellationTimeLimit, setCancellationTimeLimit] = useState<any>();
   const [sameDayBooking, setSameDayBooking] = useState<boolean>(false);
 
@@ -50,9 +54,12 @@ function TimeSlotController() {
 
   useEffect(() => {
     const service = serviceOptions?.find(
-      (service: any) => service.value === service_id
+      (service: any) => service.value === service_id,
     );
     setSelectedService(service);
+    console.log(selectedService);
+    setTimelimit(selectedService?.tomorrow_disable_time);
+    setChargeAmount(service?.same_day_booking_charge);
   }, [service_id]);
 
   const fetchData = async () => {
@@ -60,7 +67,7 @@ function TimeSlotController() {
     setTerritoryOptions(SpecializeTerritory?.data?.data);
 
     const globalTimeLimit: any = await GetGlobalTimeLimit();
-    setTimelimit(globalTimeLimit?.data?.data);
+    // setTimelimit(globalTimeLimit?.data?.data);
   };
 
   const fetchCancellationTimeLimit = async () => {
@@ -71,6 +78,8 @@ function TimeSlotController() {
   const ServiceDropDownApi = async () => {
     const SpecializeService: any = await SpecializeServiceList(location_id);
     setServiceOptions(SpecializeService?.data?.data);
+
+    console.log(SpecializeService);
   };
 
   const TimeSlotListApi = async (month: any) => {
@@ -95,7 +104,7 @@ function TimeSlotController() {
   const handleTimeSlotController = async (cancellation_limit: string) => {
     const response = await UpdateCancellationLimit(
       cancellation_limit,
-      setIsLoading
+      setIsLoading,
     );
     if (response?.status == 200) {
       fetchCancellationTimeLimit();
@@ -122,7 +131,7 @@ function TimeSlotController() {
             {timeSlotList &&
             Object.hasOwnProperty.call(
               timeSlotList,
-              format(day, "dd-MM-yyyy")
+              format(day, "dd-MM-yyyy"),
             ) ? (
               <div className="time-slots">
                 {timeSlotList![format(day, "dd-MM-yyyy")]?.map(
@@ -130,7 +139,7 @@ function TimeSlotController() {
                     <div key={index} className="time-slot month-card selected">
                       {slot}
                     </div>
-                  )
+                  ),
                 )}
               </div>
             ) : null}
@@ -146,7 +155,7 @@ function TimeSlotController() {
       timeSlotList &&
         Object.hasOwnProperty.call(timeSlotList, format(day, "dd-MM-yyyy"))
         ? timeSlotList[format(day, "dd-MM-yyyy")]
-        : []
+        : [],
     );
     setIsOpenPop(!isOpenPop);
   };
@@ -169,7 +178,7 @@ function TimeSlotController() {
           hour: "2-digit",
           minute: "2-digit",
           hour12: false,
-        })
+        }),
       );
       currentTime.setHours(currentTime.getHours() + eachTimeHours);
       currentTime.setMinutes(currentTime.getMinutes() + eachTimeMinutes);
@@ -185,7 +194,7 @@ function TimeSlotController() {
       service_id,
       location_id,
       specificDate,
-      disabledTimeSlots
+      disabledTimeSlots,
     );
     if (response?.status === 200) {
       toggleTimePopup(new Date());
@@ -204,10 +213,47 @@ function TimeSlotController() {
     }
   };
 
+  const tomorrowDisableTimeSubmitHandler = async () => {
+    if (timelimit) {
+      const res: any = await servicesTomorrowDisableTime(
+        service_id,
+        location_id,
+        timelimit,
+        setIsLoading,
+      );
+
+      if (res) {
+        ServiceDropDownApi();
+      }
+    } else {
+      alertService.alert({
+        type: AlertType.Error,
+        message: "Enter valid time",
+      });
+    }
+  };
+
+  const sameDayBookingChargeSubmitHandler = async (
+    service_id: string,
+    location_id: string,
+    same_day_booking_charge: string,
+  ) => {
+    const response = await servicesSameDayBookingCharge(
+      service_id,
+      location_id,
+      same_day_booking_charge,
+      setIsLoading,
+    );
+
+    if (response?.status === 200) {
+      fetchData();
+    }
+  };
+
   const handleSwitchChange = async (
     service_id: string,
     location_id: string,
-    same_day_booking: boolean
+    same_day_booking: boolean,
   ) => {
     console.log("Here");
 
@@ -215,7 +261,7 @@ function TimeSlotController() {
       service_id,
       location_id,
       same_day_booking,
-      setIsLoading
+      setIsLoading,
     );
 
     if (response?.status === 200) {
@@ -239,13 +285,18 @@ function TimeSlotController() {
         format={format}
         isNotSelected={location_id && service_id}
         location_id={location_id}
+        setTimelimit={setTimelimit}
         timelimit={timelimit}
         handleTimelimitChange={setTimelimit}
         globalTimelimitSubmitHandler={globalTimelimitSubmitHandler}
+        tomorrowDisableTimeSubmitHandler={tomorrowDisableTimeSubmitHandler}
         handleSwitchChange={handleSwitchChange}
         sameDayBooking={sameDayBooking}
         setSameDayBooking={setSameDayBooking}
         selectedService={selectedService}
+        sameDayBookingChargeSubmitHandler={sameDayBookingChargeSubmitHandler}
+        chargeAmount={chargeAmount}
+        setChargeAmount={setChargeAmount}
       />
       {isOpenPop && service_id ? (
         <TimeSlotPopup

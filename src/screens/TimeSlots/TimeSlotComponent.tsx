@@ -24,10 +24,15 @@ interface TimeSlotsProps {
   handleTimelimitChange: (val: any) => void;
   handleTimeSlotController: (val: any) => void;
   globalTimelimitSubmitHandler: (val: any) => void;
+  tomorrowDisableTimeSubmitHandler: (val: any) => void;
+  sameDayBookingChargeSubmitHandler: any;
   handleSwitchChange: any;
   sameDayBooking: any;
   setSameDayBooking: any;
   selectedService: any;
+  chargeAmount: any;
+  setChargeAmount: any;
+  setTimelimit: any;
 }
 
 function TimeSlotComponent({
@@ -47,10 +52,15 @@ function TimeSlotComponent({
   handleTimeSlotController,
   handleTimelimitChange,
   globalTimelimitSubmitHandler,
+  tomorrowDisableTimeSubmitHandler,
+  sameDayBookingChargeSubmitHandler,
   sameDayBooking,
   setSameDayBooking,
   selectedService,
   handleSwitchChange,
+  chargeAmount,
+  setChargeAmount,
+  setTimelimit,
 }: TimeSlotsProps) {
   const canUpdate = hasPermission("disable_timeslots", "update");
   const canDelete = hasPermission("disable_timeslots", "delete");
@@ -62,11 +72,16 @@ function TimeSlotComponent({
     setLocalCancellationLimit(cancellationTimeLimit || "");
   }, [cancellationTimeLimit]);
 
+  useEffect(() => {
+    if (selectedService?.tomorrow_disable_time) {
+      setTimelimit(selectedService.tomorrow_disable_time);
+    }
+  }, [selectedService]);
   if (!canView) {
     return <div>You do not have permission to view this page.</div>;
   }
 
-  console.log(serviceOptions, selectedService);
+  console.log(territoryOptions, serviceOptions, selectedService);
 
   return (
     <div>
@@ -78,73 +93,140 @@ function TimeSlotComponent({
         </div>
 
         <div className="details-list-table">
-          <div className="dropdown-container">
-            <DropDown
-              style={{ width: "300px" }}
-              label={"Select Territory"}
-              onChange={(e: any) => {
-                setLocation_id(e.target.value);
-              }}
-              data={territoryOptions}
-            />
-            <div className="second-dropdown">
-              <DropDown
-                style={{ width: "300px" }}
-                label={"Select Service"}
-                onChange={(e: any) => {
-                  setService_id(e.target.value);
-                }}
-                data={location_id ? serviceOptions : ""}
-              />
+          <div className="container">
+            <div className="col">
+              <div className="dropdown-container">
+                <DropDown
+                  style={{ width: "300px" }}
+                  label={"Select Territory"}
+                  onChange={(e: any) => {
+                    setLocation_id(e.target.value);
+                  }}
+                  data={territoryOptions}
+                />
+                <div className="second-dropdown">
+                  <DropDown
+                    style={{ width: "300px" }}
+                    label={"Select Service"}
+                    onChange={(e: any) => {
+                      setService_id(e.target.value);
+                    }}
+                    data={location_id ? serviceOptions : ""}
+                  />
+                </div>
+              </div>
+              {location_id && selectedService?.value && (
+                <>
+                  <div className="d-flex flex-row flex-wrap">
+                    <div style={{ width: "300px" }} className="mr-3">
+                      <label
+                        className="inputText-label d-flex"
+                        htmlFor={"First Slot"}
+                      >
+                        Urgent booking charge
+                      </label>
+                      <div className="d-flex flex-row align-items-center gap-2 w-100">
+                        <Input
+                          type="number"
+                          inputContainerClassName="w-100"
+                          placeholder="Enter charge"
+                          value={chargeAmount}
+                          onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                            setChargeAmount(e.target.value)
+                          }
+                        />
+
+                        {canUpdate && (
+                          <button
+                            onClick={() =>
+                              sameDayBookingChargeSubmitHandler(
+                                selectedService?.value,
+                                location_id,
+                                chargeAmount,
+                              )
+                            }
+                            className="month-button"
+                            style={{ marginBottom: "20px" }}
+                          >
+                            <div className="month-card selected mr-0">
+                              Update
+                            </div>
+                          </button>
+                        )}
+                      </div>
+                    </div>
+                    <div style={{ width: "300px" }}>
+                      <label
+                        className="inputText-label d-flex"
+                        htmlFor={"First Slot"}
+                      >
+                        Disable tomorrow's timeslots
+                      </label>
+                      <div className="d-flex flex-row align-items-center gap-2">
+                        <TimePicker
+                          className={"time-picker-input-container flex-grow-1"}
+                          id="start-time"
+                          value={timelimit}
+                          // onChange={handleTimelimitChange}
+                          onChange={(value: string | null) =>
+                            setTimelimit(value || "")
+                          }
+                          format={"HH:mm"}
+                          clockIcon={true}
+                          disableClock={true}
+                        />
+                        {canUpdate && (
+                          <button
+                            onClick={tomorrowDisableTimeSubmitHandler}
+                            className="month-button"
+                          >
+                            <div className="month-card selected mr-0">Save</div>
+                          </button>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                  <div className="d-flex align-items-center">
+                    <span>Allow Same Day Booking:</span>
+                    <ToggleComp
+                      checked={selectedService?.sameday_booking}
+                      onChange={(value: boolean) => {
+                        setSameDayBooking(value);
+                        handleSwitchChange(
+                          selectedService?.value,
+                          location_id,
+                          value,
+                        );
+                      }}
+                    />
+                  </div>
+                </>
+              )}
+
+              {isNotSelected && (
+                <div className="months-container">
+                  {months.map((month: any, index: number) => (
+                    <button
+                      key={index}
+                      onClick={() => handleMonthSelect(month)}
+                      className="month-button"
+                    >
+                      <div
+                        className={
+                          moment(selectedMonth).format("DD-MM-YYYY") ===
+                          moment(month).format("DD-MM-YYYY")
+                            ? "month-card selected"
+                            : "month-card"
+                        }
+                      >
+                        {format(month, "MMMM yyyy")}
+                      </div>
+                    </button>
+                  ))}
+                </div>
+              )}
             </div>
           </div>
-          {location_id && selectedService?.value && (
-            <div
-              style={{
-                marginTop: "15px",
-                display: "flex",
-                alignItems: "center",
-                gap: "10px",
-              }}
-            >
-              {/* <span>Allow Same Day Booking:</span> */}
-
-              <ToggleComp
-                checked={selectedService?.sameday_booking}
-                onChange={(value: boolean) => {
-                  setSameDayBooking(value);
-                  handleSwitchChange(
-                    selectedService?.value,
-                    location_id,
-                    value,
-                  );
-                }}
-              />
-            </div>
-          )}
-
-          {isNotSelected && (
-            <div className="months-container">
-              {months.map((month: any, index: number) => (
-                <button
-                  key={index}
-                  onClick={() => handleMonthSelect(month)}
-                  className="month-button"
-                >
-                  <div
-                    className={
-                      moment(selectedMonth).format("DD-MM-YYYY") ===
-                      moment(month).format("DD-MM-YYYY")
-                        ? "month-card selected"
-                        : "month-card"
-                    }
-                  >
-                    {format(month, "MMMM yyyy")}
-                  </div>
-                </button>
-              ))}
-            </div>
-          )}
         </div>
         {selectedMonth && (
           <div className="selected-month">

@@ -54,7 +54,7 @@ export const UpdateTimeSlotList = async (
   service_id: string,
   location_id: string,
   specificDate: any,
-  disabledTimeSlots: any
+  disabledTimeSlots: any,
 ) => {
   try {
     const response = await ApiCall({
@@ -140,7 +140,7 @@ export const CancellationTimeLimit = async () =>
 
 export const UpdateCancellationLimit = async (
   cancellation_limit: string,
-  setIsLoading: (val: boolean) => void
+  setIsLoading: (val: boolean) => void,
 ) => {
   try {
     setIsLoading(true);
@@ -174,7 +174,7 @@ export const servicesSameDayBooking = async (
   service_id: string,
   location_id: string,
   same_day_booking: boolean,
-  setIsLoading: (val: boolean) => void
+  setIsLoading: (val: boolean) => void,
 ) => {
   try {
     setIsLoading(true);
@@ -185,6 +185,78 @@ export const servicesSameDayBooking = async (
         service_id,
         location_id,
         same_day_booking,
+      },
+    });
+    if (response?.status === 200) {
+      alertService.alert({
+        type: AlertType.Success,
+        message: response?.data?.message,
+      });
+    }
+    return response;
+  } catch (error: any) {
+    if (error?.data?.message) {
+      alertService.alert({
+        type: AlertType.Error,
+        message: error?.data?.message,
+      });
+    }
+  } finally {
+    setIsLoading(false);
+  }
+};
+
+export const servicesTomorrowDisableTime = async (
+  service_id: string,
+  location_id: string,
+  tomorrow_disable_time: string,
+  setIsLoading: (val: boolean) => void,
+) => {
+  try {
+    setIsLoading(true);
+    const response = await ApiCall({
+      endpoint: "services/tomorrow/disabletime",
+      method: "POST",
+      data: {
+        service_id,
+        location_id,
+        tomorrow_disable_time,
+      },
+    });
+    if (response?.status === 200) {
+      alertService.alert({
+        type: AlertType.Success,
+        message: response?.data?.message,
+      });
+    }
+    return response;
+  } catch (error: any) {
+    if (error?.data?.message) {
+      alertService.alert({
+        type: AlertType.Error,
+        message: error?.data?.message,
+      });
+    }
+  } finally {
+    setIsLoading(false);
+  }
+};
+
+export const servicesSameDayBookingCharge = async (
+  service_id: string,
+  location_id: string,
+  same_day_booking_charge: string,
+  setIsLoading: (val: boolean) => void,
+) => {
+  try {
+    setIsLoading(true);
+    const response = await ApiCall({
+      endpoint: "services/sameday/booking/charge",
+      method: "POST",
+      data: {
+        service_id,
+        location_id,
+        same_day_booking_charge,
       },
     });
     if (response?.status === 200) {

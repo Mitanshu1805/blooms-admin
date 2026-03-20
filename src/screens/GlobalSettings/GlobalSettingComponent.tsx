@@ -175,7 +175,7 @@ function GlobalSettingComponent({
                   <tr key={charge.charge_id}>
                     <td>{index + 1}</td>
                     <td>{charge.charge_name}</td>
-                    <td>₹ {charge.charge_amount}</td>
+                    <td>{charge.charge_amount}</td>
                     <td>
                       <div style={{ display: "flex", gap: "8px" }}>
                         <button
