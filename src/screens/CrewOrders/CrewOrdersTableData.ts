@@ -162,7 +162,10 @@ export const CrewOrdersTableData = (
         },
         {
           title: "Credit/Debit",
-          data: item?.cashless ? item?.materials_fee : "0.00",
+          data:
+            item?.actual_payment_mode === "cashless"
+              ? item?.materials_fee
+              : "0.00",
         },
         {
           title: "Nett",
