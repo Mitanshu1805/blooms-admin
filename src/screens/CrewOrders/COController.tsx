@@ -36,6 +36,7 @@ function COController() {
   const [selectedSlot, setSelectedSlot] = useState("");
   const [slotData, setSlotData] = useState<any>(null);
   const [errors, setErrors] = useState<any>({});
+  const [fetchParams, setFetchParams] = useState<any>(null);
 
   const limit = 200;
 
@@ -91,6 +92,11 @@ function COController() {
     startDate: string,
     endDate: string,
   ) => {
+    setFetchParams({
+      currency,
+      startDate,
+      endDate,
+    });
     const rolesDataResponse: any = await CrewOrderList(
       size,
       selectedPage,
@@ -112,6 +118,14 @@ function COController() {
       setCrewOrdersListData([]);
       setNetSettlement([]);
     }
+  };
+
+  const refetchOrders = async () => {
+    if (!fetchParams) return;
+
+    const { currency, startDate, endDate } = fetchParams;
+
+    await fetchData(currency, startDate, endDate);
   };
 
   const handleCountryChange = (value: string) => {
@@ -297,19 +311,32 @@ function COController() {
           }
         }
       } else if (fieldTitle === "Cash/Cashless") {
-        updated[orderIndex] = {
-          ...updated[orderIndex],
-          actual_payment_mode: value,
-        };
-
-        if (value === "cash") {
-          updated[orderIndex].cash =
-            updated[orderIndex].cashless || updated[orderIndex].cash || "0.00";
-          updated[orderIndex].cashless = "0.00";
+        if (isMaterialRow) {
+          // ✅ Material row fix
+          updated[orderIndex] = {
+            ...updated[orderIndex],
+            materials_fee_payment_mode: value,
+          };
         } else {
-          updated[orderIndex].cashless =
-            updated[orderIndex].cash || updated[orderIndex].cashless || "0.00";
-          updated[orderIndex].cash = "0.00";
+          // ✅ Service row (existing logic)
+          updated[orderIndex] = {
+            ...updated[orderIndex],
+            actual_payment_mode: value,
+          };
+
+          if (value === "cash") {
+            updated[orderIndex].cash =
+              updated[orderIndex].cashless ||
+              updated[orderIndex].cash ||
+              "0.00";
+            updated[orderIndex].cashless = "0.00";
+          } else {
+            updated[orderIndex].cashless =
+              updated[orderIndex].cash ||
+              updated[orderIndex].cashless ||
+              "0.00";
+            updated[orderIndex].cash = "0.00";
+          }
         }
       } else if (fieldTitle === "Customer") {
         updated[orderIndex] = {
@@ -341,6 +368,8 @@ function COController() {
       String(original.materials_fee ?? "0.00") !==
         String(edited.materials_fee ?? "0.00") ||
       original.actual_payment_mode !== edited.actual_payment_mode ||
+      original.materials_fee_payment_mode !==
+        edited.materials_fee_payment_mode ||
       original.contact_person !== edited.contact_person ||
       original.oid !== edited.oid || // ✅ ADD THIS
       original.has_waiver !== edited.has_waiver ||
@@ -413,15 +442,13 @@ function COController() {
     setErrors(newErrors);
     return isValid;
   };
-
   const buildUpdatePayload = () => {
-    console.log("editableOrders>>>>>>>>>", editableOrders);
-
     return editableOrders
-      .filter((edited: any, index: number) =>
+      .map((edited: any, index: number) => ({ edited, index }))
+      .filter(({ edited, index }) =>
         isOrderChanged(crewOrdersListData[index], edited),
       )
-      .map((order: any, index: number) => {
+      .map(({ edited: order, index }) => {
         const original = crewOrdersListData[index];
 
         const fee = Number(order.cashless ?? 0) || Number(order.cash ?? 0) || 0;
@@ -434,24 +461,70 @@ function COController() {
           cash: isCash ? fee.toFixed(2) : "0.00",
           cashless: isCash ? "0.00" : fee.toFixed(2),
           materials_fee: String(order.materials_fee ?? "0.00"),
+          materials_fee_payment_mode:
+            order.materials_fee_payment_mode || "cash",
           time_slot: order?.time_slot,
           has_waiver: order?.has_waiver,
           contact_person: order?.contact_person,
         };
 
-        // ✅ Only add contact_person if changed
-        // if (original.contact_person !== order.contact_person) {
-        //   payload.contact_person = order.contact_person;
-        // }
-
-        // ✅ Only add oid if changed
-        if (original.oid !== order.oid) {
+        // ✅ FIXED oid check (with correct original)
+        if (
+          String(original.oid ?? "").trim() !== String(order.oid ?? "").trim()
+        ) {
           payload.oid = order.oid;
         }
 
         return payload;
       });
   };
+  //     const buildUpdatePayload = () => {
+  //       console.log("editableOrders>>>>>>>>>", editableOrders);
+
+  //       return editableOrders
+  //         .filter((edited: any, index: number) =>
+  //           isOrderChanged(crewOrdersListData[index], edited),
+  //         )
+  //         .map((order: any, index: number) => {
+  //           const original = crewOrdersListData[index];
+
+  //           const fee = Number(order.cashless ?? 0) || Number(order.cash ?? 0) || 0;
+
+  //           const isCash = order.actual_payment_mode === "cash";
+  //           // const isCashMaterial = order?.materials_fee_payment_mode === "cash";
+
+  //           const payload: any = {
+  //             order_id: order.order_id,
+  //             payment_mode: isCash ? "cash" : "cashless",
+  //             cash: isCash ? fee.toFixed(2) : "0.00",
+  //             cashless: isCash ? "0.00" : fee.toFixed(2),
+  //             materials_fee: String(order.materials_fee ?? "0.00"),
+  //             materials_fee_payment_mode:
+  //               order.materials_fee_payment_mode || "cash",
+  //             time_slot: order?.time_slot,
+  //             has_waiver: order?.has_waiver,
+  //             contact_person: order?.contact_person,
+  //           };
+
+  //           // ✅ Only add contact_person if changed
+  //           // if (original.contact_person !== order.contact_person) {
+  //           //   payload.contact_person = order.contact_person;
+  //           // }
+
+  //           // ✅ Only add oid if changed
+  //           if (original.oid !== order.oid) {
+  //             payload.oid = order.oid;
+  //           }
+
+  //           console.log("OID compare:", {
+  //   original: original.oid,
+  //   edited: order.oid,
+  //   equal: original.oid === order.oid,
+  // });
+
+  //           return payload;
+  //         });
+  //     };
 
   const onTimeSlotClick = async (orderId: string) => {
     setTimeSlotTable(!timeSlotTable);
@@ -475,6 +548,31 @@ function COController() {
   const showTimeSlotTable = () => {
     console.log("we here");
     // onTimeSlotClick;
+  };
+
+  const handleSaveOrders = async () => {
+    try {
+      if (!OrdersValidator()) return;
+
+      const payload = buildUpdatePayload();
+      console.log("Updating orders payload:", payload);
+
+      if (payload.length === 0) return;
+
+      // ✅ Call update API
+      await CrewOrdersUpdate(payload, setIsLoading);
+
+      // ❌ REMOVE this (no local overwrite)
+      // setCrewOrdersListData([...editableOrders]);
+
+      // ✅ Refetch fresh data
+      await refetchOrders(); // adjust endDate if needed
+
+      // ✅ Exit edit mode
+      setIsEditMode(false);
+    } catch (error) {
+      console.error("Failed to update crew orders", error);
+    }
   };
 
   return (
@@ -523,6 +621,7 @@ function COController() {
         validateOrders={validateOrders}
         errors={errors}
         OrdersValidator={OrdersValidator}
+        handleSaveOrders={handleSaveOrders}
       />
     </div>
   );

@@ -227,21 +227,50 @@ any) => {
                               ) : /* ✅ 2️⃣ EDIT MODE HANDLING */
                               isEditMode && j.editable ? (
                                 j.title === "Cash/Cashless" ? (
-                                  <select
-                                    className="form-select form-select-sm"
-                                    value={j.data ?? ""}
-                                    onChange={(e) =>
-                                      onCellChange &&
-                                      onCellChange(
-                                        Number(key),
-                                        j.title,
-                                        e.target.value,
-                                      )
-                                    }
-                                  >
-                                    <option value="cash">cash</option>
-                                    <option value="cashless">cashless</option>
-                                  </select>
+                                  j.isMaterialRow ? (
+                                    // ✅ Material Row Dropdown
+                                    <select
+                                      className="form-select form-select-sm"
+                                      value={j.data ?? ""}
+                                      onChange={(e) =>
+                                        onCellChange &&
+                                        onCellChange(
+                                          Number(key),
+                                          j.title,
+                                          e.target.value,
+                                        )
+                                      }
+                                    >
+                                      <option value="cash">cash</option>
+                                      <option value="cashless">cashless</option>
+                                      {/* <option value="card-payment">
+                                        card-payment
+                                      </option>
+                                      <option value="touch-n-go">
+                                        touch-n-go
+                                      </option>
+                                      <option value="sgPaynow">sgPaynow</option>
+                                      <option value="contract">contract</option>
+                                      <option value="cdc">cdc</option> */}
+                                    </select>
+                                  ) : (
+                                    // ✅ Service Row Dropdown
+                                    <select
+                                      className="form-select form-select-sm"
+                                      value={j.data ?? ""}
+                                      onChange={(e) =>
+                                        onCellChange &&
+                                        onCellChange(
+                                          Number(key),
+                                          j.title,
+                                          e.target.value,
+                                        )
+                                      }
+                                    >
+                                      <option value="cash">cash</option>
+                                      <option value="cashless">cashless</option>
+                                    </select>
+                                  )
                                 ) : j.title === "Waiver" ? (
                                   <select
                                     className="form-select form-select-sm"

@@ -54,6 +54,7 @@ interface CrewOrdersProps {
   validateOrders: any;
   errors: any;
   OrdersValidator: any;
+  handleSaveOrders: any;
 }
 
 function COComponent({
@@ -99,6 +100,7 @@ function COComponent({
   validateOrders,
   errors,
   OrdersValidator,
+  handleSaveOrders,
 }: CrewOrdersProps) {
   const headerData = [
     "No",
@@ -211,56 +213,62 @@ function COComponent({
                   marginRight: "5px",
                 }}
                 name="Save"
-                onClick={async () => {
-                  try {
-                    if (!OrdersValidator()) return;
-                    const payload = buildUpdatePayload();
-                    console.log("Updating orders payload:", payload);
-                    if (payload.length === 0) return;
-                    await CrewOrdersUpdate(payload, setIsLoading);
+                // onClick={async () => {
+                //   try {
+                //     if (!OrdersValidator()) return;
+                //     const payload = buildUpdatePayload();
+                //     console.log("Updating orders payload:", payload);
+                //     if (payload.length === 0) return;
+                //     await CrewOrdersUpdate(payload, setIsLoading);
 
-                    setCrewOrdersListData([...editableOrders]);
+                //     setCrewOrdersListData([...editableOrders]);
 
-                    let newNetSettlement = 0;
+                //     let newNetSettlement = 0;
 
-                    editableOrders.forEach((item: any) => {
-                      const order_amount = Number(item?.cashless ?? "0")
-                        ? item.cashless
-                        : item?.cash;
+                //     editableOrders.forEach((item: any) => {
+                //       const order_amount = Number(item?.cashless ?? "0")
+                //         ? item.cashless
+                //         : item?.cash;
 
-                      const calWaiver =
-                        waiver > 0 && waiver <= 100 ? waiver : 10;
+                //       const calWaiver =
+                //         waiver > 0 && waiver <= 100 ? waiver : 10;
 
-                      if (Number(item?.cashless ?? 0)) {
-                        newNetSettlement += item.has_waiver
-                          ? Number(order_amount)
-                          : (Number(order_amount) * (100 - calWaiver)) / 100;
-                      } else {
-                        newNetSettlement += item.has_waiver
-                          ? 0
-                          : (-1 * Number(order_amount) * calWaiver) / 100;
-                      }
+                //       if (Number(item?.cashless ?? 0)) {
+                //         newNetSettlement += item.has_waiver
+                //           ? Number(order_amount)
+                //           : (Number(order_amount) * (100 - calWaiver)) / 100;
+                //       } else {
+                //         newNetSettlement += item.has_waiver
+                //           ? 0
+                //           : (-1 * Number(order_amount) * calWaiver) / 100;
+                //       }
 
-                      if (
-                        item?.materials_fee &&
-                        Number(item?.materials_fee) !== 0 &&
-                        item?.actual_payment_mode === "cashless"
-                      ) {
-                        newNetSettlement += Number(item?.materials_fee);
-                      }
-                    });
+                //       if (
+                //         item?.materials_fee &&
+                //         Number(item?.materials_fee) !== 0 &&
+                //         item?.actual_payment_mode === "cashless"
+                //       ) {
+                //         newNetSettlement += Number(item?.materials_fee);
+                //       }
+                //     });
 
-                    setNetSettlement(newNetSettlement.toFixed(2));
-                    setIsEditMode(false);
-                  } catch (error) {
-                    console.error("Failed to update crew orders", error);
-                  }
-                }}
+                //     setNetSettlement(newNetSettlement.toFixed(2));
+                //     setIsEditMode(false);
+                //   } catch (error) {
+                //     console.error("Failed to update crew orders", error);
+                //   }
+                // }}
+                onClick={handleSaveOrders}
               />
 
               <Button
                 name="Cancel"
-                onClick={() => setIsEditMode(false)}
+                onClick={() => {
+                  setEditableOrders(
+                    JSON.parse(JSON.stringify(crewOrdersListData)),
+                  );
+                  setIsEditMode(false);
+                }}
                 style={{
                   backgroundColor: "#FD8D82",
                   color: "white",

@@ -67,6 +67,7 @@ export const CrewOrdersTableData = (
         data: item?.actual_payment_mode,
         editable: true,
         fieldName: "actual_payment_mode",
+        isMaterialRow: false,
       },
       {
         title: "Type",
@@ -111,7 +112,7 @@ export const CrewOrdersTableData = (
     const rows = [baseRow];
 
     if (item?.materials_fee && Number(item?.materials_fee) !== 0) {
-      if (item?.actual_payment_mode == "cashless") {
+      if (item?.materials_fee_payment_mode == "cashless") {
         accumulatedNett += Number(item?.materials_fee);
       }
       const materialRow = [
@@ -141,9 +142,10 @@ export const CrewOrdersTableData = (
         {
           title: "Cash/Cashless",
           // data: item?.cashless ? "cashless" : "cash",
-          data: item?.actual_payment_mode,
+          data: item?.materials_fee_payment_mode,
           editable: true,
-          fieldName: "actual_payment_mode",
+          fieldName: "materials_fee_payment_mode",
+          isMaterialRow: true,
         },
         {
           title: "Type",
@@ -163,7 +165,7 @@ export const CrewOrdersTableData = (
         {
           title: "Credit/Debit",
           data:
-            item?.actual_payment_mode === "cashless"
+            item?.materials_fee_payment_mode === "cashless"
               ? item?.materials_fee
               : "0.00",
         },
