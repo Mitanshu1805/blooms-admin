@@ -84,10 +84,10 @@ const MultiAccordion = ({
                             >
                               {/* 👁️ Eye */}
                               <div
-                                className="edit"
+                                className="icon-btn"
                                 onClick={() => window.open(file, "_blank")}
                               >
-                                <Image src={Eye} />
+                                <Image src={Eye} style={{ height: "60px" }} />
                               </div>
 
                               {/* ❌ Delete */}
